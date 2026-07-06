@@ -4,7 +4,6 @@ import validator from "validator";
 import { Button } from "../shared/button/Button";
 import { FaBeer } from "react-icons/fa";
 import { FormInputError } from "../shared/formInputError/FormInputError";
-import { Link } from "react-router-dom";
 import { FormType } from "./types";
 
 export const FlightForm = () => {
@@ -291,7 +290,6 @@ export const FlightForm = () => {
         <FaBeer />
       </Button>
       <Button disabled={isButtonDisabled()} label="Send" />
-      <Link to="/passenger">Go to Passenger Form</Link>
     </>
   );
 };
