@@ -4,3 +4,5 @@ export enum FormType {
   DATE_TIME_LOCAL = "datetime-local",
   NUMBER = "number",
 }
+
+export type Status = "scheduled" | "delayed" | "cancelled" | "landed";
