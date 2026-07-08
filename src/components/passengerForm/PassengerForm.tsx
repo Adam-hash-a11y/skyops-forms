@@ -1,217 +1,112 @@
-import React, { useState } from "react";
-import validator from "validator";
+import React, { useReducer } from "react";
 import { Button } from "../shared/button/Button";
 import { FaBeer } from "react-icons/fa";
 import { FormInputError } from "../shared/formInputError/FormInputError";
 import { FormInput } from "../shared/formInput/FlightFormInput";
 import { FormType } from "../flightForm/types";
+import { passengerReducer, initialState } from "./reducer";
+import { SET_ERROR, SET_FIELD } from "./action";
 
 export const PassengerForm = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [passportNumber, setPassportNumber] = useState("");
-  const [nationality, setNationality] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [state, dispatch] = useReducer(passengerReducer, initialState);
 
-  const [errors, setErrors] = useState({
-    firstName: "",
-    lastName: "",
-    passportNumber: "",
-    nationality: "",
-    dateOfBirth: "",
-    email: "",
-    phoneNumber: "",
-  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: SET_FIELD, field: e.target.name, value: e.target.value });
+  };
 
   const handleValidation = () => {
-    if (firstName.length >= 3) {
-      setErrors((prev) => ({ ...prev, firstName: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        firstName: "First name must be at least 3 characters",
-      }));
-    }
-
-    if (lastName.length >= 3) {
-      setErrors((prev) => ({ ...prev, lastName: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        lastName: "Last name must be at least 3 characters",
-      }));
-    }
-
-    if (passportNumber.length >= 6) {
-      setErrors((prev) => ({ ...prev, passportNumber: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        passportNumber: "Passport number must be at least 6 characters",
-      }));
-    }
-
-    if (nationality.length > 0) {
-      setErrors((prev) => ({ ...prev, nationality: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        nationality: "Nationality is required",
-      }));
-    }
-
-    if (
-      validator.isISO8601(dateOfBirth) &&
-      new Date(dateOfBirth) < new Date()
-    ) {
-      setErrors((prev) => ({ ...prev, dateOfBirth: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        dateOfBirth: "Date of birth must be a valid past date",
-      }));
-    }
-
-    if (validator.isEmail(email)) {
-      setErrors((prev) => ({ ...prev, email: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        email: "Email must be valid",
-      }));
-    }
-
-    if (phoneNumber.length >= 8) {
-      setErrors((prev) => ({ ...prev, phoneNumber: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        phoneNumber: "Phone number must be at least 8 characters",
-      }));
-    }
-  };
-
-  const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFirstName(e.target.value);
-  };
-
-  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLastName(e.target.value);
-  };
-
-  const handlePassportNumberChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setPassportNumber(e.target.value);
-  };
-
-  const handleNationalityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNationality(e.target.value);
-  };
-
-  const handleDateOfBirthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDateOfBirth(e.target.value);
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhoneNumber(e.target.value);
-  };
-
-  const isButtonDisabled = () => {
-    return (
-      firstName.length === 0 ||
-      lastName.length === 0 ||
-      passportNumber.length === 0 ||
-      nationality.length === 0 ||
-      dateOfBirth.length === 0 ||
-      email.length === 0 ||
-      phoneNumber.length === 0
-    );
+    dispatch({ type: SET_ERROR });
   };
 
   return (
     <>
       <h2>Passenger Form</h2>
       <FormInput
-        name="First Name"
+        name="firstName"
         type={FormType.TEXT}
-        value={firstName}
+        value={state.firstName}
         placeholder="First Name"
         id="FirstNameInput"
-        handleChange={handleFirstNameChange}
+        handleChange={handleChange}
       />
-      <FormInputError error={errors.firstName} />
+      {state.errors.firstName && (
+        <FormInputError error={state.errors.firstName} />
+      )}
 
       <FormInput
-        name="Last Name"
+        name="lastName"
         type={FormType.TEXT}
-        value={lastName}
+        value={state.lastName}
         placeholder="Last Name"
         id="LastNameInput"
-        handleChange={handleLastNameChange}
+        handleChange={handleChange}
       />
-      <FormInputError error={errors.lastName} />
+      {state.errors.lastName && (
+        <FormInputError error={state.errors.lastName} />
+      )}
 
       <FormInput
-        name="Passport Number"
+        name="passportNumber"
         type={FormType.TEXT}
-        value={passportNumber}
+        value={state.passportNumber}
         placeholder="Passport Number"
         id="PassportNumberInput"
-        handleChange={handlePassportNumberChange}
+        handleChange={handleChange}
       />
-      <FormInputError error={errors.passportNumber} />
+      {state.errors.passportNumber && (
+        <FormInputError error={state.errors.passportNumber} />
+      )}
 
       <FormInput
-        name="Nationality"
+        name="nationality"
         type={FormType.TEXT}
-        value={nationality}
+        value={state.nationality}
         placeholder="Nationality"
         id="NationalityInput"
-        handleChange={handleNationalityChange}
+        handleChange={handleChange}
       />
-      <FormInputError error={errors.nationality} />
+      {state.errors.nationality && (
+        <FormInputError error={state.errors.nationality} />
+      )}
 
       <FormInput
-        name="Date of Birth"
+        name="dateOfBirth"
         type={FormType.DATE_TIME_LOCAL}
-        value={dateOfBirth}
+        value={state.dateOfBirth}
         placeholder="Date of Birth"
         id="DateOfBirthInput"
-        handleChange={handleDateOfBirthChange}
+        handleChange={handleChange}
       />
-      <FormInputError error={errors.dateOfBirth} />
+      {state.errors.dateOfBirth && (
+        <FormInputError error={state.errors.dateOfBirth} />
+      )}
 
       <FormInput
-        name="Email"
+        name="email"
         type={FormType.TEXT}
-        value={email}
+        value={state.email}
         placeholder="Email"
         id="EmailInput"
-        handleChange={handleEmailChange}
+        handleChange={handleChange}
       />
-      <FormInputError error={errors.email} />
+      {state.errors.email && <FormInputError error={state.errors.email} />}
 
       <FormInput
-        name="Phone Number"
+        name="phoneNumber"
         type={FormType.TEXT}
-        value={phoneNumber}
+        value={state.phoneNumber}
         placeholder="Phone Number"
         id="PhoneNumberInput"
-        handleChange={handlePhoneNumberChange}
+        handleChange={handleChange}
       />
-      <FormInputError error={errors.phoneNumber} />
+      {state.errors.phoneNumber && (
+        <FormInputError error={state.errors.phoneNumber} />
+      )}
 
       <Button handleButton={handleValidation} label="Validate">
         <FaBeer />
       </Button>
-      <Button disabled={isButtonDisabled()} label="Send" />
+      <Button disabled={state.disabled} label="Send" />
     </>
   );
 };
