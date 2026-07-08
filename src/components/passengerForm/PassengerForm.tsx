@@ -1,11 +1,24 @@
 import React, { useReducer } from "react";
-import { Button } from "../shared/button/Button";
+import styled from "styled-components";
+import { Button, ButtonVariant } from "../shared/button/Button";
 import { FaBeer } from "react-icons/fa";
 import { FormInputError } from "../shared/formInputError/FormInputError";
 import { FormInput } from "../shared/formInput/FlightFormInput";
 import { FormType } from "../flightForm/types";
 import { passengerReducer, initialState } from "./reducer";
 import { SET_ERROR, SET_FIELD } from "./action";
+
+const FormWrapper = styled.div`
+  max-width: 400px;
+`;
+
+const Title = styled.h2`
+  margin-bottom: 20px;
+`;
+
+const ButtonRow = styled.div`
+  margin-top: 16px;
+`;
 
 export const PassengerForm = () => {
   const [state, dispatch] = useReducer(passengerReducer, initialState);
@@ -19,8 +32,8 @@ export const PassengerForm = () => {
   };
 
   return (
-    <>
-      <h2>Passenger Form</h2>
+    <FormWrapper>
+      <Title>Passenger Form</Title>
       <FormInput
         name="firstName"
         type={FormType.TEXT}
@@ -103,10 +116,20 @@ export const PassengerForm = () => {
         <FormInputError error={state.errors.phoneNumber} />
       )}
 
-      <Button handleButton={handleValidation} label="Validate">
-        <FaBeer />
-      </Button>
-      <Button disabled={state.disabled} label="Send" />
-    </>
+      <ButtonRow>
+        <Button
+          handleButton={handleValidation}
+          label="Validate"
+          variant={ButtonVariant.SECONDARY}
+        >
+          <FaBeer />
+        </Button>
+        <Button
+          disabled={state.disabled}
+          label="Send"
+          variant={ButtonVariant.PRIMARY}
+        />
+      </ButtonRow>
+    </FormWrapper>
   );
 };

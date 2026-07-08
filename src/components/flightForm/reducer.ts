@@ -1,6 +1,7 @@
 import validator from "validator";
-import { SET_ERROR, SET_FIELD } from "./action";
+import { RESET, SET_ERROR, SET_FIELD, SUBMIT } from "./action";
 import type { Status } from "./types";
+import { flights } from "../../data/flightData";
 
 interface State {
   flightNumber: string;
@@ -57,15 +58,27 @@ export const flightReducer = (state: State, action: any) => {
         ...state,
         [action.field]: action.value,
         disabled:
-          state.flightNumber.length === 0 ||
-          state.airline.length === 0 ||
-          state.origin.length === 0 ||
-          state.destination.length === 0 ||
-          state.departureTime.length === 0 ||
-          state.arrivalTime.length === 0 ||
-          state.status.length === 0 ||
-          state.bookedSeats === 0 ||
-          state.totalSeats === 0,
+          (action.field === "flightNumber" ? action.value : state.flightNumber)
+            .length === 0 ||
+          (action.field === "airline" ? action.value : state.airline).length ===
+            0 ||
+          (action.field === "origin" ? action.value : state.origin).length ===
+            0 ||
+          (action.field === "destination" ? action.value : state.destination)
+            .length === 0 ||
+          (action.field === "departureTime"
+            ? action.value
+            : state.departureTime
+          ).length === 0 ||
+          (action.field === "arrivalTime" ? action.value : state.arrivalTime)
+            .length === 0 ||
+          (action.field === "status" ? action.value : state.status).length ===
+            0 ||
+          (action.field === "bookedSeats"
+            ? action.value
+            : state.bookedSeats) === 0 ||
+          (action.field === "totalSeats" ? action.value : state.totalSeats) ===
+            0,
       };
     case SET_ERROR: {
       const newErrors = { ...state.errors };
@@ -132,32 +145,45 @@ export const flightReducer = (state: State, action: any) => {
         newErrors.arrivalTime = "departure time must be before arrival time";
       }
 
-      if (validator.isInt(String(state.totalSeats), { min: 1 })) {
+      if (Number(state.totalSeats) > 0) {
         newErrors.totalSeats = "";
       } else {
         newErrors.totalSeats = "Total seats must be a positive number";
       }
 
-      if (validator.isInt(String(state.bookedSeats), { min: 0 })) {
+      if (Number(state.bookedSeats) >= 0) {
         newErrors.bookedSeats = "";
       } else {
         newErrors.bookedSeats = "Booked seats must be a valid number";
       }
 
-      if (
-        validator.isInt(String(state.totalSeats), { min: 1 }) &&
-        validator.isInt(String(state.bookedSeats), { min: 0 }) &&
-        state.bookedSeats > state.totalSeats
-      ) {
+      if (Number(state.bookedSeats) > Number(state.totalSeats)) {
         newErrors.bookedSeats = "Booked seats can't exceed total seats";
         newErrors.totalSeats = "Booked seats can't exceed total seats";
       }
-
       return {
         ...state,
         errors: newErrors,
       };
     }
+    case SUBMIT: {
+      console.log("SUBMIT fired, current state:", state);
+      flights.push({
+        flightNumber: state.flightNumber,
+        airline: state.airline,
+        origin: state.origin,
+        destination: state.destination,
+        departureTime: state.departureTime,
+        arrivalTime: state.arrivalTime,
+        status: state.status,
+        bookedSeats: state.bookedSeats,
+        totalSeats: state.totalSeats,
+      });
+      console.log("flights array now:", flights);
+      return state;
+    }
+    case RESET:
+      return initialState;
 
     default:
       return state;
