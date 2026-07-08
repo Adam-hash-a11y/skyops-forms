@@ -1,11 +1,24 @@
 import React, { useReducer } from "react";
+import styled from "styled-components";
 import { FormInput } from "../shared/formInput/FlightFormInput";
-import { Button } from "../shared/button/Button";
+import { Button, ButtonVariant } from "../shared/button/Button";
 import { FaBeer } from "react-icons/fa";
 import { FormInputError } from "../shared/formInputError/FormInputError";
 import { FormType } from "./types";
 import { flightReducer, initialState } from "./reducer";
-import { SET_ERROR, SET_FIELD } from "./action";
+import { RESET, SET_ERROR, SET_FIELD, SUBMIT } from "./action";
+
+const FormWrapper = styled.div`
+  max-width: 400px;
+`;
+
+const Title = styled.h2`
+  margin-bottom: 20px;
+`;
+
+const ButtonRow = styled.div`
+  margin-top: 16px;
+`;
 
 export const FlightForm = () => {
   const [state, dispatch] = useReducer(flightReducer, initialState);
@@ -18,9 +31,17 @@ export const FlightForm = () => {
     dispatch({ type: SET_ERROR });
   };
 
+  const handleSend = () => {
+    dispatch({ type: SUBMIT });
+  };
+
+  const handleReset = () => {
+    dispatch({ type: RESET });
+  };
+
   return (
-    <>
-      <h2>Flight Form </h2>
+    <FormWrapper>
+      <Title>Flight Form</Title>
       <FormInput
         name="flightNumber"
         type={FormType.TEXT}
@@ -29,7 +50,6 @@ export const FlightForm = () => {
         id="FlightNumberInput"
         handleChange={handleChange}
       />
-
       {state.errors.flightNumber && (
         <FormInputError error={state.errors.flightNumber} />
       )}
@@ -43,6 +63,7 @@ export const FlightForm = () => {
         handleChange={handleChange}
       />
       {state.errors.airline && <FormInputError error={state.errors.airline} />}
+
       <FormInput
         name="origin"
         type={FormType.TEXT}
@@ -121,10 +142,27 @@ export const FlightForm = () => {
       {state.errors.bookedSeats && (
         <FormInputError error={state.errors.bookedSeats} />
       )}
-      <Button handleButton={handleValidation} label="Validate">
-        <FaBeer />
-      </Button>
-      <Button disabled={state.disabled} label="Send" />
-    </>
+
+      <ButtonRow>
+        <Button
+          handleButton={handleValidation}
+          label="Validate"
+          variant={ButtonVariant.SECONDARY}
+        >
+          <FaBeer />
+        </Button>
+        <Button
+          disabled={state.disabled}
+          label="Send"
+          handleButton={handleSend}
+          variant={ButtonVariant.PRIMARY}
+        />
+        <Button
+          handleButton={handleReset}
+          label="Reset"
+          variant={ButtonVariant.DANGER}
+        />
+      </ButtonRow>
+    </FormWrapper>
   );
 };
