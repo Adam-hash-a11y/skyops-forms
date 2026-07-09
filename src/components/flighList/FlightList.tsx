@@ -1,5 +1,7 @@
 import styled from "styled-components";
-import { flights } from "../../data/flightData";
+import { flights, type Flight } from "../../data/flightData";
+import { Button, ButtonVariant } from "../shared/button/Button";
+import { useState } from "react";
 
 const Title = styled.h2`
   margin-bottom: 20px;
@@ -30,10 +32,17 @@ const Meta = styled.p`
 `;
 
 export const FlightsList = () => {
+  const [allFlights, setAllFlights] = useState<Flight[]>([...flights]);
+
+  const handleDelete = (index: number) => {
+    setAllFlights((prev) => prev.filter((item, i) => i !== index));
+  };
   return (
     <>
       <Title>Flights List</Title>
-      {flights.map((flight, index) => (
+      <pre>{JSON.stringify(allFlights)}</pre>
+      <pre>{JSON.stringify(flights)}</pre>
+      {allFlights.map((flight, index) => (
         <Card key={index}>
           <FlightHeader>
             {flight.flightNumber} — {flight.airline}
@@ -45,6 +54,11 @@ export const FlightsList = () => {
           <Meta>
             Seats: {flight.bookedSeats}/{flight.totalSeats}
           </Meta>
+          <Button
+            handleButton={() => handleDelete(index)}
+            label="DELETE"
+            variant={ButtonVariant.DANGER}
+          />
         </Card>
       ))}
     </>
