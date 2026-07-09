@@ -2,7 +2,7 @@ import { FormType } from "../../flightForm/types";
 interface Props {
   name: string;
   type: FormType;
-  value: string;
+  value: string | number;
   placeholder: string;
   id: string;
   handleChange: (event: any) => void;
