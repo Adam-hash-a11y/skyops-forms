@@ -6,6 +6,7 @@ import { FaBeer } from "react-icons/fa";
 import { FormInputError } from "../shared/formInputError/FormInputError";
 import { FormType } from "./types";
 import { flightReducer, initialState } from "./reducer";
+import { Bounce, ToastContainer, toast } from "react-toastify";
 import { RESET, SET_ERROR, SET_FIELD, SUBMIT } from "./action";
 
 const FormWrapper = styled.div`
@@ -32,7 +33,34 @@ export const FlightForm = () => {
   };
 
   const handleSend = () => {
-    dispatch({ type: SUBMIT });
+    try {
+      // throw new Error("Something went wrong!");
+      dispatch({ type: SUBMIT });
+      toast.success("🦄 Flight  Added", {
+        style: { backgroundColor: "#4CAF50", color: "#fff" },
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    } catch (err) {
+      toast.error("Flight was not added", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
+    }
   };
 
   const handleReset = () => {
@@ -157,6 +185,7 @@ export const FlightForm = () => {
           handleButton={handleSend}
           variant={ButtonVariant.PRIMARY}
         />
+        <ToastContainer stacked />
         <Button
           handleButton={handleReset}
           label="Reset"
