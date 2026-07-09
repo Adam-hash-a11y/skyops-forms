@@ -5,7 +5,7 @@ import { PassengerForm } from "../components/passengerForm/PassengerForm";
 import { NotFound } from "../components/notFound/NotFound";
 import { RootLayout } from "../components/rootLayout/RootLayout";
 import { Home } from "../components/home/Home";
-import { FlightsList } from "../components/flightList/FlightList";
+import { FlightsList } from "../components/flighList/FlightList";
 export const App = () => {
   return (
     <Routes>
