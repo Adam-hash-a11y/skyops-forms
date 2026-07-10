@@ -43,19 +43,24 @@ export const initialState: State = {
 
 export const passengerReducer = (state: State, action: any) => {
   switch (action.type) {
-    case SET_FIELD:
-      return {
+    case SET_FIELD: {
+      const newState = {
         ...state,
         [action.field]: action.value,
-        disabled:
-          state.firstName.length === 0 ||
-          state.lastName.length === 0 ||
-          state.passportNumber.length === 0 ||
-          state.nationality.length === 0 ||
-          state.dateOfBirth.length === 0 ||
-          state.email.length === 0 ||
-          state.phoneNumber.length === 0,
       };
+
+      return {
+        ...newState,
+        disabled:
+          newState.firstName.length === 0 ||
+          newState.lastName.length === 0 ||
+          newState.passportNumber.length === 0 ||
+          newState.nationality.length === 0 ||
+          newState.dateOfBirth.length === 0 ||
+          newState.email.length === 0 ||
+          newState.phoneNumber.length === 0,
+      };
+    }
 
     case SET_ERROR: {
       const newErrors = { ...state.errors };
