@@ -1,0 +1,117 @@
+import React, { useReducer } from "react";
+import { Button } from "../shared/button/Button";
+import { FaBeer } from "react-icons/fa";
+import { FormInputError } from "../shared/formInputError/FormInputError";
+import { FormInput } from "../shared/formInput/FlightFormInput";
+import { Link } from "react-router-dom";
+import { FormType } from "../flightForm/types";
+import { intialstatePassenger, PassengerReducer } from "./reducer";
+import { SET_FIELD_PASSENGER, SET_PASSENGER_ERROR } from "./action";
+
+export const PassengerForm = () => {
+  const [state, dispatch] = useReducer(PassengerReducer, intialstatePassenger);
+
+  const handlePassengerInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({
+      type: SET_FIELD_PASSENGER,
+      payload: { value: e.target.value, name: e.target.name },
+    });
+  };
+
+  const handlePassengerValidation = () => {
+    dispatch({ type: SET_PASSENGER_ERROR });
+  };
+
+  return (
+    <>
+      <h2>Passenger Form</h2>
+      <FormInput
+        name="firstName"
+        type={FormType.TEXT}
+        value={state.firstName}
+        placeholder="First Name"
+        id="FirstNameInput"
+        handleChange={handlePassengerInput}
+      />
+      {state.errors.firstName && (
+        <FormInputError error={state.errors.firstName} />
+      )}
+
+      <FormInput
+        name="lastName"
+        type={FormType.TEXT}
+        value={state.lastName}
+        placeholder="Last Name"
+        id="LastNameInput"
+        handleChange={handlePassengerInput}
+      />
+      {state.errors.lastName && (
+        <FormInputError error={state.errors.lastName} />
+      )}
+
+      <FormInput
+        name="passportNumber"
+        type={FormType.TEXT}
+        value={state.passportNumber}
+        placeholder="Passport Number"
+        id="PassportNumberInput"
+        handleChange={handlePassengerInput}
+      />
+      {state.errors.passportNumber && (
+        <FormInputError error={state.errors.passportNumber} />
+      )}
+
+      <FormInput
+        name="nationality"
+        type={FormType.TEXT}
+        value={state.nationality}
+        placeholder="Nationality"
+        id="NationalityInput"
+        handleChange={handlePassengerInput}
+      />
+      {state.errors.nationality && (
+        <FormInputError error={state.errors.nationality} />
+      )}
+
+      <FormInput
+        name="dateOfBirth"
+        type={FormType.DATE_TIME_LOCAL}
+        value={state.dateOfBirth}
+        placeholder="Date of Birth"
+        id="DateOfBirthInput"
+        handleChange={handlePassengerInput}
+      />
+      {state.errors.dateOfBirth && (
+        <FormInputError error={state.errors.dateOfBirth} />
+      )}
+
+      <FormInput
+        name="email"
+        type={FormType.TEXT}
+        value={state.email}
+        placeholder="Email"
+        id="EmailInput"
+        handleChange={handlePassengerInput}
+      />
+      {state.errors.email && <FormInputError error={state.errors.email} />}
+
+      <FormInput
+        name="phoneNumber"
+        type={FormType.TEXT}
+        value={state.phoneNumber}
+        placeholder="Phone Number"
+        id="PhoneNumberInput"
+        handleChange={handlePassengerInput}
+      />
+      {state.errors.phoneNumber && (
+        <FormInputError error={state.errors.phoneNumber} />
+      )}
+
+      <Button handleButton={handlePassengerValidation} label="Validate">
+        <FaBeer />
+      </Button>
+      <Button disabled={state.isDisabled} label="Send" />
+      <Link to="/flight">Go to Flight Form</Link>
+    </>
+  );
+};
