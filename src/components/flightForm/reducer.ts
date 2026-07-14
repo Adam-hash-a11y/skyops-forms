@@ -24,6 +24,7 @@ interface State {
     totalSeats: string;
     bookedSeats: string;
   };
+  isDisabled: boolean;
 }
 
 export const intialState: State = {
@@ -47,12 +48,30 @@ export const intialState: State = {
     totalSeats: "",
     bookedSeats: "",
   },
+  isDisabled: true,
 };
 
 export const flightReducer = (state: State, action: any) => {
   switch (action.type) {
-    case SET_FIELD:
-      return { ...state, [action.payload.name]: action.payload.value };
+    case SET_FIELD: {
+      const newState = {
+        ...state,
+        [action.payload.name]: action.payload.value,
+      };
+      return {
+        ...newState,
+        isDisabled:
+          newState.flightNumber.length === 0 ||
+          newState.airline.length === 0 ||
+          newState.origin.length === 0 ||
+          newState.destination.length === 0 ||
+          newState.departureTime.length === 0 ||
+          newState.arrivalTime.length === 0 ||
+          newState.status.length === 0 ||
+          newState.bookedSeats.toString().length === 0 ||
+          newState.totalSeats.toString().length === 0,
+      };
+    }
     case SET_ERROR: {
       const newErrors = { ...state.errors };
       if (/^SKYOPS-\d{3,}$/.test(state.flightNumber)) {
