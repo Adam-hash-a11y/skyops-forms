@@ -1,5 +1,6 @@
 import validator from "validator";
 import { SET_FIELD_PASSENGER, SET_PASSENGER_ERROR } from "./action";
+import { isDisabled } from "@testing-library/user-event/dist/cjs/utils/index.js";
 
 interface State {
   firstName: string;
@@ -58,22 +59,20 @@ export const PassengerReducer = (state: State, action: any) => {
       //     isDisabled: isDisabledbtn,
       //     [action.payload.name]: action.payload.value,
       //   };
+
       const newState = {
         ...state,
         [action.payload.name]: action.payload.value,
       };
-
-      const isDisabledbtn =
-        newState.firstName.length === 0 ||
-        newState.lastName.length === 0 ||
-        newState.passportNumber.length === 0 ||
-        newState.dateOfBirth.length === 0 ||
-        newState.nationality.length === 0 ||
-        newState.phoneNumber.length === 0;
-
       return {
         ...newState,
-        isDisabled: isDisabledbtn,
+        isDisabled:
+          newState.firstName.length === 0 ||
+          newState.lastName.length === 0 ||
+          newState.passportNumber.length === 0 ||
+          newState.dateOfBirth.length === 0 ||
+          newState.nationality.length === 0 ||
+          newState.phoneNumber.length === 0,
       };
     }
 
@@ -92,7 +91,7 @@ export const PassengerReducer = (state: State, action: any) => {
       if (state.passportNumber.length >= 6) {
         newErrors.passportNumber = "";
       } else {
-        newErrors.passportNumber = "passport  must be at least 3 charachters";
+        newErrors.passportNumber = "passport  must be at least 6 charachters";
       }
       if (
         state.nationality.length === 2 &&
