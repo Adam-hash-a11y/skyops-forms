@@ -25,20 +25,6 @@ export const FlightForm = () => {
     dispatch({ type: SET_ERROR });
   };
 
-  // const isButtonDisabled = () => {
-  //   return (
-  //     flightNumber.length == 0 ||
-  //     airline.length == 0 ||
-  //     origin.length == 0 ||
-  //     destination.length == 0 ||
-  //     departureTime.length == 0 ||
-  //     arrivalTime.length == 0 ||
-  //     status.length == 0 ||
-  //     bookedSeats.length == 0 ||
-  //     totalSeats.length == 0
-  //   );
-  // };
-
   return (
     <>
       <h2>Flight Form </h2>
@@ -146,7 +132,7 @@ export const FlightForm = () => {
       <Button handleButton={handleErrors} label="Validate">
         <FaBeer />
       </Button>
-      {/* <Button disabled={isButtonDisabled()} label="Send" /> */}
+      <Button disabled={state.isDisabled} label="Send" />
       <Link to="/passenger">Go to Passenger Form</Link>
     </>
   );
