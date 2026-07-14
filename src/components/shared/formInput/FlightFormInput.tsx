@@ -17,7 +17,7 @@ export const FormInput: React.FunctionComponent<Props> = ({
 }) => {
   if (type == "select") {
     return (
-      <select value={value} onChange={handleChange}>
+      <select name={name} value={value} onChange={handleChange}>
         <option value="scheduled">Scheduled</option>
         <option value="delayed">Delayed</option>
         <option value="cancelled">Cancelled</option>
