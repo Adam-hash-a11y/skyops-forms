@@ -1,5 +1,28 @@
 import { useState } from "react";
 import { flightArray, type FlightData } from "../data/flightData";
+import styled from "styled-components";
+
+const FlightCard = styled.ul`
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  justify-content: space-around;
+`;
+
+const FlightItem = styled.li`
+  font-size: 0.85rem;
+  color: #334155;
+  background-color: #f1f5f9;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  white-space: nowrap;
+`;
 
 export const FlightList = () => {
   const [flights, setFlights] = useState<FlightData[]>([...flightArray]);
@@ -8,17 +31,17 @@ export const FlightList = () => {
       {console.log("here array", flightArray)}
       {console.log("state", flights)}
       {flights.map((flight, index) => (
-        <ul key={index}>
-          <li>{flight.flightNumber}</li>
-          <li>{flight.airline}</li>
-          <li>{flight.arrivalTime}</li>
-          <li>{flight.departureTime}</li>
-          <li>{flight.origin}</li>
-          <li>{flight.destination}</li>
-          <li>{flight.status}</li>
-          <li>{flight.bookedSeats}</li>
-          <li>{flight.totalSeats}</li>
-        </ul>
+        <FlightCard key={index}>
+          <FlightItem>N:{flight.flightNumber}</FlightItem>
+          <FlightItem>Airline:{flight.airline}</FlightItem>
+          <FlightItem>Arrival:{flight.arrivalTime}</FlightItem>
+          <FlightItem>Departure:{flight.departureTime}</FlightItem>
+          <FlightItem>Origin{flight.origin}</FlightItem>
+          <FlightItem>Destination:{flight.destination}</FlightItem>
+          <FlightItem>Status:{flight.status}</FlightItem>
+          <FlightItem>Booked:{flight.bookedSeats}</FlightItem>
+          <FlightItem>Total:{flight.totalSeats}</FlightItem>
+        </FlightCard>
       ))}
     </>
   );
