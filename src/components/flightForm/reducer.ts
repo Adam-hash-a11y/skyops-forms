@@ -64,7 +64,7 @@ export const flightReducer = (state: State, action: any) => {
         departureTime: state.departureTime,
         arrivalTime: state.arrivalTime,
         status: state.status,
-        totalSeats: Number(state.status),
+        totalSeats: Number(state.totalSeats),
         bookedSeats: Number(state.bookedSeats),
       });
       console.log("flights array now:", flightArray);
@@ -132,7 +132,7 @@ export const flightReducer = (state: State, action: any) => {
       if (validator.isISO8601(state.departureTime)) {
         newErrors.departureTime = "";
       } else {
-        state.departureTime = "departure time must be a valid date";
+        newErrors.departureTime = "departure time must be a valid date";
       }
 
       if (validator.isISO8601(state.arrivalTime)) {
