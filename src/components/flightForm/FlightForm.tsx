@@ -7,7 +7,23 @@ import { Link } from "react-router-dom";
 import { FormType } from "./types";
 import { flightReducer, intialState } from "./reducer";
 import { CREATE_FLIGHT, SET_ERROR, SET_FIELD } from "./action";
-import { flightArray } from "../data/flightData";
+import styled from "styled-components";
+
+const FormWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const FormTitle = styled.h1`
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #4f46e5;
+  margin-bottom: 1rem;
+`;
 
 export const FlightForm = () => {
   const [state, dispatch] = useReducer(flightReducer, intialState);
@@ -31,8 +47,8 @@ export const FlightForm = () => {
   };
 
   return (
-    <>
-      <h2>Flight Form </h2>
+    <FormWrapper>
+      <FormTitle>Flight Form </FormTitle>
       <FormInput
         name="flightNumber"
         type={FormType.TEXT}
@@ -144,6 +160,6 @@ export const FlightForm = () => {
       />
       <Link to="/passenger">Go to Passenger Form</Link>
       <Link to="/flightlist">View Flights</Link>
-    </>
+    </FormWrapper>
   );
 };
