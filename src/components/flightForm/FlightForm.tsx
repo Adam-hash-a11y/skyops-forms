@@ -6,7 +6,8 @@ import { FormInputError } from "../shared/formInputError/FormInputError";
 import { Link } from "react-router-dom";
 import { FormType } from "./types";
 import { flightReducer, intialState } from "./reducer";
-import { SET_ERROR, SET_FIELD } from "./action";
+import { CREATE_FLIGHT, SET_ERROR, SET_FIELD } from "./action";
+import { flightArray } from "../data/flightData";
 
 export const FlightForm = () => {
   const [state, dispatch] = useReducer(flightReducer, intialState);
@@ -23,6 +24,10 @@ export const FlightForm = () => {
 
   const handleErrors = () => {
     dispatch({ type: SET_ERROR });
+  };
+
+  const flightCreation = () => {
+    dispatch({ type: CREATE_FLIGHT });
   };
 
   return (
@@ -132,8 +137,13 @@ export const FlightForm = () => {
       <Button handleButton={handleErrors} label="Validate">
         <FaBeer />
       </Button>
-      <Button disabled={state.isDisabled} label="Send" />
+      <Button
+        handleButton={flightCreation}
+        disabled={state.isDisabled}
+        label="Send"
+      />
       <Link to="/passenger">Go to Passenger Form</Link>
+      <Link to="/flightlist">View Flights</Link>
     </>
   );
 };
