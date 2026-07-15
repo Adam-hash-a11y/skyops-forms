@@ -1,7 +1,8 @@
 //in here we will create the interface which is represtation of how our state will look like
 
 import validator from "validator";
-import { SET_ERROR, SET_FIELD } from "./action";
+import { CREATE_FLIGHT, SET_ERROR, SET_FIELD } from "./action";
+import { flightArray } from "../data/flightData";
 
 interface State {
   flightNumber: string;
@@ -34,7 +35,7 @@ export const intialState: State = {
   destination: "",
   departureTime: "",
   arrivalTime: "",
-  status: "",
+  status: "Scheduled",
   totalSeats: 0,
   bookedSeats: 0,
   errors: {
@@ -53,6 +54,21 @@ export const intialState: State = {
 
 export const flightReducer = (state: State, action: any) => {
   switch (action.type) {
+    case CREATE_FLIGHT:
+      console.log("SUBMIT fired, current state:", state);
+      flightArray.push({
+        flightNumber: state.flightNumber,
+        airline: state.airline,
+        origin: state.origin,
+        destination: state.destination,
+        departureTime: state.departureTime,
+        arrivalTime: state.arrivalTime,
+        status: state.status,
+        totalSeats: Number(state.status),
+        bookedSeats: Number(state.bookedSeats),
+      });
+      console.log("flights array now:", flightArray);
+      return state;
     case SET_FIELD: {
       const newState = {
         ...state,
