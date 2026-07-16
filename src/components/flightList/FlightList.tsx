@@ -12,7 +12,7 @@ const FlightCard = styled.ul`
   background-color: white;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
-  justify-content: space-around;
+  justify-content: space-between;
 `;
 
 const FlightItem = styled.li`
@@ -32,15 +32,15 @@ export const FlightList = () => {
       {console.log("state", flights)}
       {flights.map((flight, index) => (
         <FlightCard key={index}>
-          <FlightItem>N:{flight.flightNumber}</FlightItem>
-          <FlightItem>Airline:{flight.airline}</FlightItem>
-          <FlightItem>Arrival:{flight.arrivalTime}</FlightItem>
-          <FlightItem>Departure:{flight.departureTime}</FlightItem>
-          <FlightItem>Origin{flight.origin}</FlightItem>
-          <FlightItem>Destination:{flight.destination}</FlightItem>
-          <FlightItem>Status:{flight.status}</FlightItem>
-          <FlightItem>Booked:{flight.bookedSeats}</FlightItem>
-          <FlightItem>Total:{flight.totalSeats}</FlightItem>
+          <FlightItem>Number: {flight.flightNumber}</FlightItem>
+          <FlightItem>Airline: {flight.airline}</FlightItem>
+          <FlightItem>Arrival: {flight.arrivalTime}</FlightItem>
+          <FlightItem>Departure: {flight.departureTime}</FlightItem>
+          <FlightItem>Origin: {flight.origin}</FlightItem>
+          <FlightItem>Destination: {flight.destination}</FlightItem>
+          <FlightItem>Status: {flight.status}</FlightItem>
+          <FlightItem>Booked: {flight.bookedSeats}</FlightItem>
+          <FlightItem>Total: {flight.totalSeats}</FlightItem>
         </FlightCard>
       ))}
     </>

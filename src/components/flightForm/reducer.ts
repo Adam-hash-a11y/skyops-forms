@@ -35,7 +35,7 @@ export const intialState: State = {
   destination: "",
   departureTime: "",
   arrivalTime: "",
-  status: "Scheduled",
+  status: "",
   totalSeats: 0,
   bookedSeats: 0,
   errors: {
@@ -170,6 +170,11 @@ export const flightReducer = (state: State, action: any) => {
         newErrors.totalSeats = "Booked seats can't exceed total seats";
       }
 
+      if (state.status === "") {
+        newErrors.status = "Choose the flight Status";
+      } else {
+        newErrors.status = "";
+      }
       return { ...state, errors: newErrors };
     } // hedhi heya e state mte3i li heya declaration const [state,dipatch]
     //   return hedhi { ...state, errors: newErrors } heya  state eli hneconst [state,dipatch]        ^^^

@@ -53,6 +53,9 @@ export const FormInput: React.FunctionComponent<Props> = ({
   if (type == "select") {
     return (
       <StyledSelect name={name} value={value} onChange={handleChange}>
+        <option value="" disabled>
+          -- Select a Status --
+        </option>
         <option value="scheduled">Scheduled</option>
         <option value="delayed">Delayed</option>
         <option value="cancelled">Cancelled</option>
