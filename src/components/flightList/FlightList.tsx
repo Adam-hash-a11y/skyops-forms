@@ -12,7 +12,7 @@ const FlightCard = styled.ul`
   background-color: white;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
-  justify-content: space-around;
+  justify-content: space-between;
 `;
 
 const FlightItem = styled.li`
