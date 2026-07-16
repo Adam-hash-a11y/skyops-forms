@@ -127,6 +127,8 @@ export const FlightForm = () => {
         handleChange={handleSetField}
       />
 
+      {state.errors.status && <FormInputError error={state.errors.status} />}
+
       <FormInput
         name="totalSeats"
         type={FormType.NUMBER}
