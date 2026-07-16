@@ -32,15 +32,15 @@ export const FlightList = () => {
       {console.log("state", flights)}
       {flights.map((flight, index) => (
         <FlightCard key={index}>
-          <FlightItem>N:{flight.flightNumber}</FlightItem>
-          <FlightItem>Airline:{flight.airline}</FlightItem>
-          <FlightItem>Arrival:{flight.arrivalTime}</FlightItem>
-          <FlightItem>Departure:{flight.departureTime}</FlightItem>
-          <FlightItem>Origin{flight.origin}</FlightItem>
-          <FlightItem>Destination:{flight.destination}</FlightItem>
-          <FlightItem>Status:{flight.status}</FlightItem>
-          <FlightItem>Booked:{flight.bookedSeats}</FlightItem>
-          <FlightItem>Total:{flight.totalSeats}</FlightItem>
+          <FlightItem>Number: {flight.flightNumber}</FlightItem>
+          <FlightItem>Airline: {flight.airline}</FlightItem>
+          <FlightItem>Arrival: {flight.arrivalTime}</FlightItem>
+          <FlightItem>Departure: {flight.departureTime}</FlightItem>
+          <FlightItem>Origin: {flight.origin}</FlightItem>
+          <FlightItem>Destination: {flight.destination}</FlightItem>
+          <FlightItem>Status: {flight.status}</FlightItem>
+          <FlightItem>Booked: {flight.bookedSeats}</FlightItem>
+          <FlightItem>Total: {flight.totalSeats}</FlightItem>
         </FlightCard>
       ))}
     </>
