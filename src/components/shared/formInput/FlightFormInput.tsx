@@ -11,9 +11,7 @@ interface Props {
 }
 
 const StyledInput = styled.input`
-  display: block;
   width: 100%;
-  max-width: 320px;
   padding: 10px 12px;
   margin-bottom: 6px;
   border: 1px solid #cbd5e1;
@@ -27,9 +25,7 @@ const StyledInput = styled.input`
 `;
 
 const StyledSelect = styled.select`
-  display: block;
   width: 100%;
-  max-width: 320px;
   padding: 10px 12px;
   margin-bottom: 6px;
   border: 1px solid #cbd5e1;
@@ -48,11 +44,14 @@ export const FormInput: React.FunctionComponent<Props> = ({
 }) => {
   if (type == "select") {
     return (
-      <StyledSelect value={value} onChange={handleChange}>
-        <option value="scheduled">Scheduled</option>
-        <option value="delayed">Delayed</option>
-        <option value="cancelled">Cancelled</option>
-        <option value="landed">Landed</option>
+      <StyledSelect value={value} name={name} onChange={handleChange}>
+        <option value="" disabled>
+          --Select a status--
+        </option>
+        <option value="Scheduled">Scheduled</option>
+        <option value="Delayed">Delayed</option>
+        <option value="Cancelled">Cancelled</option>
+        <option value="Landed">Landed</option>
       </StyledSelect>
     );
   }
