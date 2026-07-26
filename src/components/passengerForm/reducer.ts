@@ -1,5 +1,6 @@
 import validator from "validator";
-import { SET_ERROR, SET_FIELD } from "./action";
+import { SET_ERROR, SET_FIELD, SUMBIT_PASSENGER } from "./action";
+import { passengers } from "../../data/passengerData";
 
 interface State {
   firstName: string;
@@ -115,6 +116,20 @@ export const passengerReducer = (state: State, action: any) => {
         ...state,
         errors: newErrors,
       };
+    }
+
+    case SUMBIT_PASSENGER: {
+      passengers.push({
+        firstName: state.firstName,
+        lastName: state.lastName,
+        passportNumber: state.passportNumber,
+        email: state.email,
+        nationality: state.nationality,
+        dateOfBirth: state.dateOfBirth,
+        phoneNumber: state.phoneNumber,
+      });
+
+      return initialState;
     }
 
     default:

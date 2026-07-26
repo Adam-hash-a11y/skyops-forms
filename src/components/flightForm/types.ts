@@ -5,4 +5,4 @@ export enum FormType {
   NUMBER = "number",
 }
 
-export type Status = "scheduled" | "delayed" | "cancelled" | "landed";
+export type Status = "Scheduled" | "Delayed" | "Cancelled" | "Landed" | "";

@@ -1,5 +1,5 @@
 import validator from "validator";
-import { RESET, SET_ERROR, SET_FIELD, SUBMIT } from "./action";
+import { RESET, SET_ERROR, SET_FIELD, SUBMIT, type Action } from "./action";
 import type { Status } from "./types";
 import { flights } from "../../data/flightData";
 
@@ -34,7 +34,7 @@ export const initialState: State = {
   destination: "",
   departureTime: "",
   arrivalTime: "",
-  status: "scheduled",
+  status: "",
   bookedSeats: 0,
   totalSeats: 0,
   errors: {
@@ -51,35 +51,26 @@ export const initialState: State = {
   disabled: true,
 };
 
-export const flightReducer = (state: State, action: any) => {
+export const flightReducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case SET_FIELD:
-      return {
+    case SET_FIELD: {
+      const newState = {
         ...state,
         [action.field]: action.value,
-        disabled:
-          (action.field === "flightNumber" ? action.value : state.flightNumber)
-            .length === 0 ||
-          (action.field === "airline" ? action.value : state.airline).length ===
-            0 ||
-          (action.field === "origin" ? action.value : state.origin).length ===
-            0 ||
-          (action.field === "destination" ? action.value : state.destination)
-            .length === 0 ||
-          (action.field === "departureTime"
-            ? action.value
-            : state.departureTime
-          ).length === 0 ||
-          (action.field === "arrivalTime" ? action.value : state.arrivalTime)
-            .length === 0 ||
-          (action.field === "status" ? action.value : state.status).length ===
-            0 ||
-          (action.field === "bookedSeats"
-            ? action.value
-            : state.bookedSeats) === 0 ||
-          (action.field === "totalSeats" ? action.value : state.totalSeats) ===
-            0,
       };
+      return {
+        ...newState,
+        disabled:
+          newState.airline.length === 0 ||
+          newState.arrivalTime.length === 0 ||
+          newState.bookedSeats.toString().length === 0 ||
+          newState.totalSeats.toString().length === 0 ||
+          newState.departureTime.length === 0 ||
+          newState.origin.length === 0 ||
+          newState.destination.length === 0 ||
+          newState.status.length === 0,
+      };
+    }
     case SET_ERROR: {
       const newErrors = { ...state.errors };
 
@@ -180,7 +171,7 @@ export const flightReducer = (state: State, action: any) => {
         totalSeats: state.totalSeats,
       });
       console.log("flights array now:", flights);
-      return state;
+      return initialState;
     }
     case RESET:
       return initialState;

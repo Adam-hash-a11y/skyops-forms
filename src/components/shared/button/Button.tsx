@@ -19,15 +19,11 @@ const baseButtonStyles = css`
   padding: 10px 20px;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
-  margin: 6px 6px 6px 0;
-  display: inline-flex;
+  margin: 6px;
   align-items: center;
-  gap: 6px;
-  transition: background-color 0.15s ease;
-
   &:disabled {
     cursor: not-allowed;
     opacity: 0.5;

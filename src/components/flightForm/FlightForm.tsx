@@ -11,6 +11,10 @@ import { RESET, SET_ERROR, SET_FIELD, SUBMIT } from "./action";
 
 const FormWrapper = styled.div`
   max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Title = styled.h2`
@@ -37,7 +41,6 @@ export const FlightForm = () => {
       // throw new Error("Something went wrong!");
       dispatch({ type: SUBMIT });
       toast.success("🦄 Flight  Added", {
-        style: { backgroundColor: "#4CAF50", color: "#fff" },
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

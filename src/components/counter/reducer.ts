@@ -14,21 +14,27 @@ export const intialState: State = {
 
 export const counterReducer = (state: State, action: string) => {
   switch (action) {
-    case INCREMENT:
-      return {
-        ...state,
-        disabledPlusButton: state.value === 10,
+    case INCREMENT: {
+      const newState = {
         history: [...state.history, state.value <= 9 ? state.value + 1 : 10],
         value: state.value <= 9 ? state.value + 1 : 10,
       };
-
-    case DECREMENT:
       return {
-        ...state,
-        disabledPlusButton: state.value === 10,
+        ...newState,
+        disabledPlusButton: newState.value === 10,
+      };
+    }
+
+    case DECREMENT: {
+      const newState = {
         history: [...state.history, state.value > 0 ? state.value - 1 : 0],
         value: state.value > 0 ? state.value - 1 : 0,
       };
+      return {
+        ...newState,
+        disabledPlusButton: newState.value === 10,
+      };
+    }
 
     case RESET:
       return {
