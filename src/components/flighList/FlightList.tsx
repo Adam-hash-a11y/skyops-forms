@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { flights, type Flight } from "../../data/flightData";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { useState } from "react";
+import { DeleteModal } from "../shared/deleteModal/DeleteModal";
 
 const Title = styled.h2`
   margin-bottom: 20px;
@@ -33,16 +34,41 @@ const Meta = styled.p`
 
 export const FlightsList = () => {
   const [allFlights, setAllFlights] = useState<Flight[]>([...flights]);
+  const [filter, setFilter] = useState("");
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
+  const handleModalOpen = (index: number) => {
+    setOpenIndex(index);
+  };
+
+  const handleModalClose = () => {
+    setOpenIndex(null);
+  };
+
+  const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const filterTtext = e.target.value;
+    setFilter(filterTtext);
+  };
+
+  const displayedFlights = allFlights.filter((item) =>
+    filter === "" ? true : item.flightNumber.includes(filter),
+  );
   const handleDelete = (index: number) => {
-    setAllFlights((prev) => prev.filter((item, i) => i !== index));
+    setAllFlights((prev) => prev.filter((_item, i) => i !== index));
+    setOpenIndex(null);
   };
   return (
     <>
       <Title>Flights List</Title>
-      <pre>{JSON.stringify(allFlights)}</pre>
-      <pre>{JSON.stringify(flights)}</pre>
-      {allFlights.map((flight, index) => (
+      <pre>State :{JSON.stringify(allFlights)}</pre>
+      <pre>variable : {JSON.stringify(flights)}</pre>
+      <input
+        type="text"
+        placeholder="filter by"
+        value={filter}
+        onChange={handleChangeFilter}
+      />
+      {displayedFlights.map((flight, index) => (
         <Card key={index}>
           <FlightHeader>
             {flight.flightNumber} — {flight.airline}
@@ -55,10 +81,19 @@ export const FlightsList = () => {
             Seats: {flight.bookedSeats}/{flight.totalSeats}
           </Meta>
           <Button
-            handleButton={() => handleDelete(index)}
+            handleButton={() => handleModalOpen(index)}
             label="DELETE"
             variant={ButtonVariant.DANGER}
           />
+          {openIndex === index && (
+            <DeleteModal
+              itemKey={index}
+              label="Flight"
+              isOpen={true}
+              handleClose={handleModalClose}
+              handleDelete={() => handleDelete(index)}
+            />
+          )}
         </Card>
       ))}
     </>
