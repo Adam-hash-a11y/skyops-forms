@@ -1,6 +1,19 @@
-import validator from "validator";
-import { SET_ERROR, SET_FIELD, SUMBIT_PASSENGER } from "./action";
+import {
+  RESET_PASSENGER,
+  SET_FIELD,
+  SUMBIT_PASSENGER,
+  type Action,
+} from "./action";
 import { passengers } from "../../data/passengerData";
+import {
+  isValidDateOfBirth,
+  isValidEmail,
+  isValidFirstname,
+  isValidLastName,
+  isValidNationality,
+  isValidPassportNumber,
+  isValidPhoneNumber,
+} from "../../validators/passengerForm.validator";
 
 interface State {
   firstName: string;
@@ -42,7 +55,7 @@ export const initialState: State = {
   disabled: true,
 };
 
-export const passengerReducer = (state: State, action: any) => {
+export const passengerReducer = (state: State, action: Action) => {
   switch (action.type) {
     case SET_FIELD: {
       const newState = {
@@ -50,70 +63,25 @@ export const passengerReducer = (state: State, action: any) => {
         [action.field]: action.value,
       };
 
+      const newErrors = { ...newState.errors };
+
+      newErrors.firstName = isValidFirstname(newState.firstName);
+      newErrors.lastName = isValidLastName(newState.lastName);
+      newErrors.email = isValidEmail(newState.email);
+      newErrors.dateOfBirth = isValidDateOfBirth(newState.dateOfBirth);
+      newErrors.nationality = isValidNationality(newState.nationality);
+      newErrors.passportNumber = isValidPassportNumber(newState.passportNumber);
+      newErrors.phoneNumber = isValidPhoneNumber(newState.phoneNumber);
       return {
         ...newState,
         disabled:
-          newState.firstName.length === 0 ||
-          newState.lastName.length === 0 ||
-          newState.passportNumber.length === 0 ||
-          newState.nationality.length === 0 ||
-          newState.dateOfBirth.length === 0 ||
-          newState.email.length === 0 ||
-          newState.phoneNumber.length === 0,
-      };
-    }
-
-    case SET_ERROR: {
-      const newErrors = { ...state.errors };
-
-      if (state.firstName.length >= 3) {
-        newErrors.firstName = "";
-      } else {
-        newErrors.firstName = "First name must be at least 3 characters";
-      }
-
-      if (state.lastName.length >= 3) {
-        newErrors.lastName = "";
-      } else {
-        newErrors.lastName = "Last name must be at least 3 characters";
-      }
-
-      if (state.passportNumber.length >= 6) {
-        newErrors.passportNumber = "";
-      } else {
-        newErrors.passportNumber =
-          "Passport number must be at least 6 characters";
-      }
-
-      if (state.nationality.length > 0) {
-        newErrors.nationality = "";
-      } else {
-        newErrors.nationality = "Nationality is required";
-      }
-
-      if (
-        validator.isISO8601(state.dateOfBirth) &&
-        new Date(state.dateOfBirth) < new Date()
-      ) {
-        newErrors.dateOfBirth = "";
-      } else {
-        newErrors.dateOfBirth = "Date of birth must be a valid past date";
-      }
-
-      if (validator.isEmail(state.email)) {
-        newErrors.email = "";
-      } else {
-        newErrors.email = "Email must be valid";
-      }
-
-      if (state.phoneNumber.length >= 8) {
-        newErrors.phoneNumber = "";
-      } else {
-        newErrors.phoneNumber = "Phone number must be at least 8 characters";
-      }
-
-      return {
-        ...state,
+          newErrors.firstName !== "" ||
+          newErrors.lastName !== "" ||
+          newErrors.passportNumber !== "" ||
+          newErrors.nationality !== "" ||
+          newErrors.dateOfBirth !== "" ||
+          newErrors.email !== "" ||
+          newErrors.phoneNumber !== "",
         errors: newErrors,
       };
     }
@@ -129,6 +97,10 @@ export const passengerReducer = (state: State, action: any) => {
         phoneNumber: state.phoneNumber,
       });
 
+      return initialState;
+    }
+
+    case RESET_PASSENGER: {
       return initialState;
     }
 
