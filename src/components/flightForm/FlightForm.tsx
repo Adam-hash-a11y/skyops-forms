@@ -7,7 +7,7 @@ import { FormInputError } from "../shared/formInputError/FormInputError";
 import { FormType } from "./types";
 import { flightReducer, initialState } from "./reducer";
 import { Bounce, ToastContainer, toast } from "react-toastify";
-import { RESET, SET_ERROR, SET_FIELD, SUBMIT } from "./action";
+import { RESET, SET_FIELD, SUBMIT } from "./action";
 
 const FormWrapper = styled.div`
   max-width: 400px;
@@ -30,10 +30,6 @@ export const FlightForm = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: SET_FIELD, field: e.target.name, value: e.target.value });
-  };
-
-  const handleValidation = () => {
-    dispatch({ type: SET_ERROR });
   };
 
   const handleSend = () => {
@@ -80,6 +76,7 @@ export const FlightForm = () => {
         placeholder="Flight Number e.g SKYOPS-101"
         id="FlightNumberInput"
         handleChange={handleChange}
+        label="Flight Number"
       />
       {state.errors.flightNumber && (
         <FormInputError error={state.errors.flightNumber} />
@@ -92,10 +89,12 @@ export const FlightForm = () => {
         placeholder="Airline"
         id="FlightAirlineInput"
         handleChange={handleChange}
+        label="Airline"
       />
       {state.errors.airline && <FormInputError error={state.errors.airline} />}
 
       <FormInput
+        label="Origin"
         name="origin"
         type={FormType.TEXT}
         value={state.origin}
@@ -112,6 +111,7 @@ export const FlightForm = () => {
         placeholder="Destination"
         id="FlightDestinationInput"
         handleChange={handleChange}
+        label="Destination"
       />
       {state.errors.destination && (
         <FormInputError error={state.errors.destination} />
@@ -124,6 +124,7 @@ export const FlightForm = () => {
         placeholder="Departure Time"
         id="DepartureTimeInput"
         handleChange={handleChange}
+        label="Departure Time"
       />
       {state.errors.departureTime && (
         <FormInputError error={state.errors.departureTime} />
@@ -136,6 +137,7 @@ export const FlightForm = () => {
         placeholder="Arrival Time"
         id="ArrivalTimeInput"
         handleChange={handleChange}
+        label="Arrival Time"
       />
       {state.errors.arrivalTime && (
         <FormInputError error={state.errors.arrivalTime} />
@@ -148,6 +150,7 @@ export const FlightForm = () => {
         placeholder="Status"
         id="StatusInput"
         handleChange={handleChange}
+        label="Status"
       />
 
       <FormInput
@@ -157,6 +160,7 @@ export const FlightForm = () => {
         placeholder="Total Seats"
         id="TotalSeatsInput"
         handleChange={handleChange}
+        label="Total Seats"
       />
       {state.errors.totalSeats && (
         <FormInputError error={state.errors.totalSeats} />
@@ -169,19 +173,20 @@ export const FlightForm = () => {
         placeholder="Booked Seats"
         id="BookedSeatsInput"
         handleChange={handleChange}
+        label="Booked Seats"
       />
       {state.errors.bookedSeats && (
         <FormInputError error={state.errors.bookedSeats} />
       )}
 
       <ButtonRow>
-        <Button
+        {/* <Button
           handleButton={handleValidation}
           label="Validate"
           variant={ButtonVariant.SECONDARY}
         >
           <FaBeer />
-        </Button>
+        </Button> */}
         <Button
           disabled={state.disabled}
           label="Send"
