@@ -8,6 +8,7 @@ interface Props {
   placeholder: string;
   id: string;
   handleChange: (event: any) => void;
+  label: string;
 }
 
 const StyledInput = styled.input`
@@ -34,35 +35,49 @@ const StyledSelect = styled.select`
   background: white;
 `;
 
+const StyledLabel = styled.label`
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  margin-bottom: 6px;
+`;
+
 export const FormInput: React.FunctionComponent<Props> = ({
   name,
   type,
   value,
   placeholder,
   id,
+  label,
   handleChange,
 }) => {
   if (type == "select") {
     return (
-      <StyledSelect value={value} name={name} onChange={handleChange}>
-        <option value="" disabled>
-          --Select a status--
-        </option>
-        <option value="Scheduled">Scheduled</option>
-        <option value="Delayed">Delayed</option>
-        <option value="Cancelled">Cancelled</option>
-        <option value="Landed">Landed</option>
-      </StyledSelect>
+      <>
+        <StyledLabel htmlFor={id}>{label}:</StyledLabel>
+        <StyledSelect value={value} name={name} id={id} onChange={handleChange}>
+          <option value="" disabled>
+            --Select a status--
+          </option>
+          <option value="Scheduled">Scheduled</option>
+          <option value="Delayed">Delayed</option>
+          <option value="Cancelled">Cancelled</option>
+          <option value="Landed">Landed</option>
+        </StyledSelect>
+      </>
     );
   }
   return (
-    <StyledInput
-      name={name}
-      type={type}
-      value={value}
-      placeholder={placeholder}
-      id={id}
-      onChange={handleChange}
-    />
+    <>
+      <StyledLabel htmlFor={id}>{label}:</StyledLabel>
+      <StyledInput
+        name={name}
+        type={type}
+        value={value}
+        placeholder={placeholder}
+        id={id}
+        onChange={handleChange}
+      />
+    </>
   );
 };
