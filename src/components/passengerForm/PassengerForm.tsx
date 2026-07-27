@@ -6,7 +6,7 @@ import { FormInputError } from "../shared/formInputError/FormInputError";
 import { FormInput } from "../shared/formInput/FlightFormInput";
 import { FormType } from "../flightForm/types";
 import { passengerReducer, initialState } from "./reducer";
-import { SET_ERROR, SET_FIELD, SUMBIT_PASSENGER } from "./action";
+import { RESET_PASSENGER, SET_FIELD, SUMBIT_PASSENGER } from "./action";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 
 const FormWrapper = styled.div`
@@ -28,8 +28,8 @@ export const PassengerForm = () => {
     dispatch({ type: SET_FIELD, field: e.target.name, value: e.target.value });
   };
 
-  const handleValidation = () => {
-    dispatch({ type: SET_ERROR });
+  const handleReset = () => {
+    dispatch({ type: RESET_PASSENGER });
   };
 
   const handleSend = () => {
@@ -59,6 +59,7 @@ export const PassengerForm = () => {
         placeholder="First Name"
         id="FirstNameInput"
         handleChange={handleChange}
+        label="First Name"
       />
       {state.errors.firstName && (
         <FormInputError error={state.errors.firstName} />
@@ -71,6 +72,7 @@ export const PassengerForm = () => {
         placeholder="Last Name"
         id="LastNameInput"
         handleChange={handleChange}
+        label="Last Name"
       />
       {state.errors.lastName && (
         <FormInputError error={state.errors.lastName} />
@@ -83,6 +85,7 @@ export const PassengerForm = () => {
         placeholder="Passport Number"
         id="PassportNumberInput"
         handleChange={handleChange}
+        label="Passport Number "
       />
       {state.errors.passportNumber && (
         <FormInputError error={state.errors.passportNumber} />
@@ -95,6 +98,7 @@ export const PassengerForm = () => {
         placeholder="Nationality"
         id="NationalityInput"
         handleChange={handleChange}
+        label="Nationality"
       />
       {state.errors.nationality && (
         <FormInputError error={state.errors.nationality} />
@@ -107,6 +111,7 @@ export const PassengerForm = () => {
         placeholder="Date of Birth"
         id="DateOfBirthInput"
         handleChange={handleChange}
+        label="Date of birth"
       />
       {state.errors.dateOfBirth && (
         <FormInputError error={state.errors.dateOfBirth} />
@@ -119,6 +124,7 @@ export const PassengerForm = () => {
         placeholder="Email"
         id="EmailInput"
         handleChange={handleChange}
+        label="Email"
       />
       {state.errors.email && <FormInputError error={state.errors.email} />}
 
@@ -129,24 +135,30 @@ export const PassengerForm = () => {
         placeholder="Phone Number"
         id="PhoneNumberInput"
         handleChange={handleChange}
+        label="Phone Number"
       />
       {state.errors.phoneNumber && (
         <FormInputError error={state.errors.phoneNumber} />
       )}
 
       <ButtonRow>
-        <Button
+        {/* <Button
           handleButton={handleValidation}
           label="Validate"
           variant={ButtonVariant.SECONDARY}
         >
           <FaBeer />
-        </Button>
+        </Button> */}
         <Button
           handleButton={handleSend}
           disabled={state.disabled}
           label="Send"
           variant={ButtonVariant.PRIMARY}
+        />
+        <Button
+          handleButton={handleReset}
+          label="Reset"
+          variant={ButtonVariant.DANGER}
         />
       </ButtonRow>
     </FormWrapper>
