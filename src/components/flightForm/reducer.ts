@@ -1,7 +1,18 @@
-import validator from "validator";
-import { RESET, SET_ERROR, SET_FIELD, SUBMIT, type Action } from "./action";
+import { RESET, SET_FIELD, SUBMIT, type Action } from "./action";
 import type { Status } from "./types";
 import { flights } from "../../data/flightData";
+import {
+  isValidFlightNumber,
+  isValidaAirLine,
+  isValidOrigin,
+  isValidDestination,
+  isValidDepartureTime,
+  isValidTotalSeats,
+  isValidBookedSeats,
+  isSameOriginDestination,
+  isDepartureBeforeArrival,
+  isBookedWithinTotal,
+} from "../../validators/flightForm.validator";
 
 interface State {
   flightNumber: string;
@@ -58,102 +69,49 @@ export const flightReducer = (state: State, action: Action): State => {
         ...state,
         [action.field]: action.value,
       };
-      return {
-        ...newState,
-        disabled:
-          newState.airline.length === 0 ||
-          newState.arrivalTime.length === 0 ||
-          newState.bookedSeats.toString().length === 0 ||
-          newState.totalSeats.toString().length === 0 ||
-          newState.departureTime.length === 0 ||
-          newState.origin.length === 0 ||
-          newState.destination.length === 0 ||
-          newState.status.length === 0,
-      };
-    }
-    case SET_ERROR: {
-      const newErrors = { ...state.errors };
+      const newErrors = { ...newState.errors };
+      newErrors.flightNumber = isValidFlightNumber(newState.flightNumber);
+      newErrors.airline = isValidaAirLine(newState.airline);
+      newErrors.origin = isValidOrigin(newState.origin);
+      newErrors.destination = isValidDestination(newState.destination);
+      newErrors.departureTime = isValidDepartureTime(newState.departureTime);
+      newErrors.arrivalTime = isValidDepartureTime(newState.arrivalTime);
+      newErrors.totalSeats = isValidTotalSeats(Number(newState.totalSeats));
+      newErrors.bookedSeats = isValidBookedSeats(Number(newState.bookedSeats));
 
-      if (/^SKYOPS-\d{3,}$/.test(state.flightNumber)) {
-        newErrors.flightNumber = "";
-      } else {
-        newErrors.flightNumber = "Flight number must start with SKYOPS-";
-      }
-
-      if (state.airline.length < 5) {
-        newErrors.airline = "Airline must be of length 5";
-      } else {
-        newErrors.airline = "";
-      }
-
-      if (
-        state.origin.length === 3 &&
-        state.origin === state.origin.toUpperCase()
-      ) {
-        newErrors.origin = "";
-      } else {
-        newErrors.origin = "Origin must be of length 3 and upper case";
-      }
-
-      if (
-        state.destination.length === 3 &&
-        state.destination === state.destination.toUpperCase()
-      ) {
-        newErrors.destination = "";
-      } else {
-        newErrors.destination =
-          "Destination must be of length 3 and upper case";
-      }
-
-      if (
-        state.destination.length === 3 &&
-        state.destination === state.destination.toUpperCase() &&
-        state.origin.length === 3 &&
-        state.origin === state.origin.toUpperCase() &&
-        state.destination === state.origin
-      ) {
-        newErrors.destination = "Origin and destination can't be the same";
+      if (isSameOriginDestination(newState.origin, newState.destination)) {
         newErrors.origin = "Origin and destination can't be the same";
+        newErrors.destination = "Origin and destination can't be the same";
       }
 
-      if (validator.isISO8601(state.departureTime)) {
-        newErrors.departureTime = "";
-      } else {
-        newErrors.departureTime = "departure time must be a valid date";
-      }
-
-      if (validator.isISO8601(state.arrivalTime)) {
-        newErrors.arrivalTime = "";
-      } else {
-        newErrors.arrivalTime = "arrival time must be a valid date";
-      }
-
-      const dep = new Date(state.departureTime).getTime();
-      const arr = new Date(state.arrivalTime).getTime();
-
-      if (!Number.isNaN(dep) && !Number.isNaN(arr) && dep >= arr) {
+      if (
+        !isDepartureBeforeArrival(newState.departureTime, newState.arrivalTime)
+      ) {
         newErrors.departureTime = "departure time must be before arrival time";
         newErrors.arrivalTime = "departure time must be before arrival time";
       }
 
-      if (Number(state.totalSeats) > 0) {
-        newErrors.totalSeats = "";
-      } else {
-        newErrors.totalSeats = "Total seats must be a positive number";
-      }
-
-      if (Number(state.bookedSeats) >= 0) {
-        newErrors.bookedSeats = "";
-      } else {
-        newErrors.bookedSeats = "Booked seats must be a valid number";
-      }
-
-      if (Number(state.bookedSeats) > Number(state.totalSeats)) {
+      if (
+        !isBookedWithinTotal(
+          Number(newState.bookedSeats),
+          Number(newState.totalSeats),
+        )
+      ) {
         newErrors.bookedSeats = "Booked seats can't exceed total seats";
         newErrors.totalSeats = "Booked seats can't exceed total seats";
       }
       return {
-        ...state,
+        ...newState,
+        disabled:
+          newErrors.flightNumber != "" ||
+          newErrors.airline != "" ||
+          newErrors.arrivalTime != "" ||
+          newErrors.bookedSeats.toString() != "" ||
+          newErrors.totalSeats.toString() != "" ||
+          newErrors.departureTime != "" ||
+          newErrors.origin != "" ||
+          newErrors.destination != "" ||
+          newErrors.status != "",
         errors: newErrors,
       };
     }
