@@ -7,7 +7,7 @@ import { FormInputError } from "../shared/formInputError/FormInputError";
 import { FormType } from "./types";
 import { flightReducer, initialState } from "./reducer";
 import { Bounce, ToastContainer, toast } from "react-toastify";
-import { RESET, SET_FIELD, SUBMIT } from "./action";
+import { RESET, SET_FIELD, SET_TOUCHED, SUBMIT } from "./action";
 
 const FormWrapper = styled.div`
   max-width: 400px;
@@ -28,8 +28,24 @@ const ButtonRow = styled.div`
 export const FlightForm = () => {
   const [state, dispatch] = useReducer(flightReducer, initialState);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: SET_FIELD, field: e.target.name, value: e.target.value });
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    dispatch({
+      type: SET_FIELD,
+      field: e.target.name ,
+      value: e.target.value,
+    });
+  };
+
+  const handleBlur = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    dispatch({ type: SET_TOUCHED, field: e.target.name });
   };
 
   const handleSend = () => {
@@ -77,8 +93,9 @@ export const FlightForm = () => {
         id="FlightNumberInput"
         handleChange={handleChange}
         label="Flight Number"
+        handleBlur={handleBlur}
       />
-      {state.errors.flightNumber && (
+      {state.touched.flightNumber && state.errors.flightNumber && (
         <FormInputError error={state.errors.flightNumber} />
       )}
 
@@ -90,8 +107,11 @@ export const FlightForm = () => {
         id="FlightAirlineInput"
         handleChange={handleChange}
         label="Airline"
+        handleBlur={handleBlur}
       />
-      {state.errors.airline && <FormInputError error={state.errors.airline} />}
+      {state.touched.airline && state.errors.airline && (
+        <FormInputError error={state.errors.airline} />
+      )}
 
       <FormInput
         label="Origin"
@@ -101,8 +121,11 @@ export const FlightForm = () => {
         placeholder="Origin"
         id="FlightOriginInput"
         handleChange={handleChange}
+        handleBlur={handleBlur}
       />
-      {state.errors.origin && <FormInputError error={state.errors.origin} />}
+      {state.touched.origin && state.errors.origin && (
+        <FormInputError error={state.errors.origin} />
+      )}
 
       <FormInput
         name="destination"
@@ -112,8 +135,9 @@ export const FlightForm = () => {
         id="FlightDestinationInput"
         handleChange={handleChange}
         label="Destination"
+        handleBlur={handleBlur}
       />
-      {state.errors.destination && (
+      {state.touched.destination && state.errors.destination && (
         <FormInputError error={state.errors.destination} />
       )}
 
@@ -125,8 +149,9 @@ export const FlightForm = () => {
         id="DepartureTimeInput"
         handleChange={handleChange}
         label="Departure Time"
+        handleBlur={handleBlur}
       />
-      {state.errors.departureTime && (
+      {state.touched.departureTime && state.errors.departureTime && (
         <FormInputError error={state.errors.departureTime} />
       )}
 
@@ -138,8 +163,9 @@ export const FlightForm = () => {
         id="ArrivalTimeInput"
         handleChange={handleChange}
         label="Arrival Time"
+        handleBlur={handleBlur}
       />
-      {state.errors.arrivalTime && (
+      {state.touched.arrivalTime && state.errors.arrivalTime && (
         <FormInputError error={state.errors.arrivalTime} />
       )}
 
@@ -151,7 +177,11 @@ export const FlightForm = () => {
         id="StatusInput"
         handleChange={handleChange}
         label="Status"
+        handleBlur={handleBlur}
       />
+      {state.touched.status && state.errors.status && (
+        <FormInputError error={state.errors.status} />
+      )}
 
       <FormInput
         name="totalSeats"
@@ -161,8 +191,9 @@ export const FlightForm = () => {
         id="TotalSeatsInput"
         handleChange={handleChange}
         label="Total Seats"
+        handleBlur={handleBlur}
       />
-      {state.errors.totalSeats && (
+      {state.touched.totalSeats && state.errors.totalSeats && (
         <FormInputError error={state.errors.totalSeats} />
       )}
 
@@ -174,8 +205,9 @@ export const FlightForm = () => {
         id="BookedSeatsInput"
         handleChange={handleChange}
         label="Booked Seats"
+        handleBlur={handleBlur}
       />
-      {state.errors.bookedSeats && (
+      {state.touched.bookedSeats && state.errors.bookedSeats && (
         <FormInputError error={state.errors.bookedSeats} />
       )}
 
