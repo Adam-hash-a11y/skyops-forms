@@ -15,7 +15,13 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     box-sizing: border-box;
   }
-    `;
+
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    background-color: #f4f3fb;
+    color: #1e1b2e;
+  }
+`;
 export const App = () => {
   return (
     <>
