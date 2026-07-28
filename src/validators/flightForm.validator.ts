@@ -8,26 +8,26 @@ export const isValidFlightNumber = (value: string): string => {
   }
 };
 
-export const isValidaAirLine = (value: string) => {
+export const isValidAirline = (value: string) => {
   if (value.length < 5) {
-    return "Airline must be of length 5";
+    return "Airline must be at least 5 characters";
   } else {
     return "";
   }
 };
 
 export const isValidOrigin = (value: string): string => {
-  if (value.length === 3 && value === value.toUpperCase()) {
+  if (/^[A-Z]{3}$/.test(value)) {
     return "";
   }
-  return "Origin must be of length 3 and upper case";
+  return "Origin must be 3 uppercase letters";
 };
 
 export const isValidDestination = (value: string): string => {
-  if (value.length === 3 && value === value.toUpperCase()) {
+  if (/^[A-Z]{3}$/.test(value)) {
     return "";
   }
-  return "Destination must be of length 3 and upper case";
+  return "Destination must be 3 uppercase letters";
 };
 
 export const isSameOriginDestination = (
@@ -41,6 +41,13 @@ export const isSameOriginDestination = (
     destination === destination.toUpperCase() &&
     origin === destination
   );
+};
+
+export const isValidStatus = (value: string): string => {
+  if (value === "") {
+    return "Status is required";
+  }
+  return "";
 };
 
 export const isValidDepartureTime = (value: string): string => {

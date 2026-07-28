@@ -7,7 +7,8 @@ interface Props {
   value: string | number;
   placeholder: string;
   id: string;
-  handleChange: (event: any) => void;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>  | React.ChangeEvent<HTMLSelectElement>) => void;
+  handleBlur: (event: React.ChangeEvent<HTMLInputElement>  | React.ChangeEvent<HTMLSelectElement>) => void;
   label: string;
 }
 
@@ -50,12 +51,19 @@ export const FormInput: React.FunctionComponent<Props> = ({
   id,
   label,
   handleChange,
+  handleBlur,
 }) => {
   if (type == "select") {
     return (
       <>
         <StyledLabel htmlFor={id}>{label}:</StyledLabel>
-        <StyledSelect value={value} name={name} id={id} onChange={handleChange}>
+        <StyledSelect
+          value={value}
+          name={name}
+          id={id}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        >
           <option value="" disabled>
             --Select a status--
           </option>
@@ -77,6 +85,7 @@ export const FormInput: React.FunctionComponent<Props> = ({
         placeholder={placeholder}
         id={id}
         onChange={handleChange}
+        onBlur={handleBlur}
       />
     </>
   );
