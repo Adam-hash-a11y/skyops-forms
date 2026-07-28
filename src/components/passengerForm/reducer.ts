@@ -1,6 +1,7 @@
 import {
   RESET_PASSENGER,
   SET_FIELD,
+  SET_PASSENGER_TOUCHED,
   SUMBIT_PASSENGER,
   type Action,
 } from "./action";
@@ -23,6 +24,15 @@ interface State {
   dateOfBirth: string;
   email: string;
   phoneNumber: string;
+  touched: {
+    firstName: boolean;
+    lastName: boolean;
+    passportNumber: boolean;
+    nationality: boolean;
+    dateOfBirth: boolean;
+    email: boolean;
+    phoneNumber: boolean;
+  };
   errors: {
     firstName: string;
     lastName: string;
@@ -42,6 +52,16 @@ export const initialState: State = {
   nationality: "",
   dateOfBirth: "",
   email: "",
+
+  touched: {
+    firstName: false,
+    lastName: false,
+    passportNumber: false,
+    nationality: false,
+    dateOfBirth: false,
+    email: false,
+    phoneNumber: false,
+  },
   phoneNumber: "",
   errors: {
     firstName: "",
@@ -98,6 +118,11 @@ export const passengerReducer = (state: State, action: Action) => {
       });
 
       return initialState;
+    }
+
+    case SET_PASSENGER_TOUCHED: {
+      const newTouched = { ...state.touched, [action.field]: true };
+      return { ...state, touched: newTouched };
     }
 
     case RESET_PASSENGER: {
