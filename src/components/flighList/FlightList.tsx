@@ -46,8 +46,8 @@ export const FlightsList = () => {
   };
 
   const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const filterTtext = e.target.value;
-    setFilter(filterTtext);
+    const filterText = e.target.value;
+    setFilter(filterText);
   };
 
   const displayedFlights = allFlights.filter((item) =>
@@ -68,34 +68,37 @@ export const FlightsList = () => {
         value={filter}
         onChange={handleChangeFilter}
       />
-      {displayedFlights.map((flight, index) => (
-        <Card key={index}>
-          <FlightHeader>
-            {flight.flightNumber} — {flight.airline}
-          </FlightHeader>
-          <Route>
-            {flight.origin} → {flight.destination}
-          </Route>
-          <Meta>Status: {flight.status}</Meta>
-          <Meta>
-            Seats: {flight.bookedSeats}/{flight.totalSeats}
-          </Meta>
-          <Button
-            handleButton={() => handleModalOpen(index)}
-            label="DELETE"
-            variant={ButtonVariant.DANGER}
-          />
-          {openIndex === index && (
-            <DeleteModal
-              itemKey={index}
-              label="Flight"
-              isOpen={true}
-              handleClose={handleModalClose}
-              handleDelete={() => handleDelete(index)}
+      {displayedFlights.map((flight, index) => {
+        const currentIndex = allFlights.indexOf(flight);
+        return (
+          <Card key={flight.flightNumber}>
+            <FlightHeader>
+              {flight.flightNumber} — {flight.airline}
+            </FlightHeader>
+            <Route>
+              {flight.origin} → {flight.destination}
+            </Route>
+            <Meta>Status: {flight.status}</Meta>
+            <Meta>
+              Seats: {flight.bookedSeats}/{flight.totalSeats}
+            </Meta>
+            <Button
+              handleButton={() => handleModalOpen(index)}
+              label="DELETE"
+              variant={ButtonVariant.DANGER}
             />
-          )}
-        </Card>
-      ))}
+            {openIndex === index && (
+              <DeleteModal
+                itemKey={currentIndex}
+                label="Flight"
+                isOpen={true}
+                handleClose={handleModalClose}
+                handleDelete={() => handleDelete(currentIndex)}
+              />
+            )}
+          </Card>
+        );
+      })}
     </>
   );
 };
