@@ -6,7 +6,12 @@ import { FormInputError } from "../shared/formInputError/FormInputError";
 import { FormInput } from "../shared/formInput/FlightFormInput";
 import { FormType } from "../flightForm/types";
 import { passengerReducer, initialState } from "./reducer";
-import { RESET_PASSENGER, SET_FIELD, SUMBIT_PASSENGER } from "./action";
+import {
+  RESET_PASSENGER,
+  SET_FIELD,
+  SET_PASSENGER_TOUCHED,
+  SUMBIT_PASSENGER,
+} from "./action";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 
 const FormWrapper = styled.div`
@@ -24,12 +29,24 @@ const ButtonRow = styled.div`
 export const PassengerForm = () => {
   const [state, dispatch] = useReducer(passengerReducer, initialState);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     dispatch({ type: SET_FIELD, field: e.target.name, value: e.target.value });
   };
 
   const handleReset = () => {
     dispatch({ type: RESET_PASSENGER });
+  };
+
+  const handleBlur = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    dispatch({ type: SET_PASSENGER_TOUCHED, field: e.target.name });
   };
 
   const handleSend = () => {
@@ -60,8 +77,9 @@ export const PassengerForm = () => {
         id="FirstNameInput"
         handleChange={handleChange}
         label="First Name"
+        handleBlur={handleBlur}
       />
-      {state.errors.firstName && (
+      {state.touched.firstName && state.errors.firstName && (
         <FormInputError error={state.errors.firstName} />
       )}
 
@@ -73,8 +91,9 @@ export const PassengerForm = () => {
         id="LastNameInput"
         handleChange={handleChange}
         label="Last Name"
+        handleBlur={handleBlur}
       />
-      {state.errors.lastName && (
+      {state.touched.lastName && state.errors.lastName && (
         <FormInputError error={state.errors.lastName} />
       )}
 
@@ -85,9 +104,10 @@ export const PassengerForm = () => {
         placeholder="Passport Number"
         id="PassportNumberInput"
         handleChange={handleChange}
+        handleBlur={handleBlur}
         label="Passport Number "
       />
-      {state.errors.passportNumber && (
+      {state.touched.passportNumber && state.errors.passportNumber && (
         <FormInputError error={state.errors.passportNumber} />
       )}
 
@@ -97,10 +117,11 @@ export const PassengerForm = () => {
         value={state.nationality}
         placeholder="Nationality"
         id="NationalityInput"
+        handleBlur={handleBlur}
         handleChange={handleChange}
         label="Nationality"
       />
-      {state.errors.nationality && (
+      {state.touched.nationality && state.errors.nationality && (
         <FormInputError error={state.errors.nationality} />
       )}
 
@@ -111,9 +132,10 @@ export const PassengerForm = () => {
         placeholder="Date of Birth"
         id="DateOfBirthInput"
         handleChange={handleChange}
+        handleBlur={handleBlur}
         label="Date of birth"
       />
-      {state.errors.dateOfBirth && (
+      {state.touched.dateOfBirth && state.errors.dateOfBirth && (
         <FormInputError error={state.errors.dateOfBirth} />
       )}
 
@@ -124,9 +146,12 @@ export const PassengerForm = () => {
         placeholder="Email"
         id="EmailInput"
         handleChange={handleChange}
+        handleBlur={handleBlur}
         label="Email"
       />
-      {state.errors.email && <FormInputError error={state.errors.email} />}
+      {state.touched.email && state.errors.email && (
+        <FormInputError error={state.errors.email} />
+      )}
 
       <FormInput
         name="phoneNumber"
@@ -135,9 +160,10 @@ export const PassengerForm = () => {
         placeholder="Phone Number"
         id="PhoneNumberInput"
         handleChange={handleChange}
+        handleBlur={handleBlur}
         label="Phone Number"
       />
-      {state.errors.phoneNumber && (
+      {state.touched.phoneNumber && state.errors.phoneNumber && (
         <FormInputError error={state.errors.phoneNumber} />
       )}
 
