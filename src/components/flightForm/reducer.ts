@@ -1,9 +1,8 @@
-import { RESET, SET_FIELD, SUBMIT, type Action } from "./action";
+import { RESET, SET_FIELD, SET_TOUCHED, SUBMIT, type Action } from "./action";
 import type { Status } from "./types";
 import { flights } from "../../data/flightData";
 import {
   isValidFlightNumber,
-  isValidaAirLine,
   isValidOrigin,
   isValidDestination,
   isValidDepartureTime,
@@ -12,9 +11,12 @@ import {
   isSameOriginDestination,
   isDepartureBeforeArrival,
   isBookedWithinTotal,
+  isValidArrivalTime,
+  isValidStatus,
+  isValidAirline,
 } from "../../validators/flightForm.validator";
 
-interface State {
+export interface State {
   flightNumber: string;
   airline: string;
   origin: string;
@@ -22,8 +24,19 @@ interface State {
   departureTime: string;
   arrivalTime: string;
   status: Status;
-  bookedSeats: number;
-  totalSeats: number;
+  bookedSeats: string;
+  totalSeats: string;
+  touched: {
+    flightNumber: boolean;
+    airline: boolean;
+    origin: boolean;
+    destination: boolean;
+    departureTime: boolean;
+    arrivalTime: boolean;
+    status: boolean;
+    bookedSeats: boolean;
+    totalSeats: boolean;
+  };
   errors: {
     flightNumber: string;
     airline: string;
@@ -46,8 +59,19 @@ export const initialState: State = {
   departureTime: "",
   arrivalTime: "",
   status: "",
-  bookedSeats: 0,
-  totalSeats: 0,
+  bookedSeats: "0",
+  totalSeats: "0",
+  touched: {
+    flightNumber: false,
+    airline: false,
+    origin: false,
+    destination: false,
+    departureTime: false,
+    arrivalTime: false,
+    status: false,
+    bookedSeats: false,
+    totalSeats: false,
+  },
   errors: {
     flightNumber: "",
     airline: "",
@@ -71,13 +95,14 @@ export const flightReducer = (state: State, action: Action): State => {
       };
       const newErrors = { ...newState.errors };
       newErrors.flightNumber = isValidFlightNumber(newState.flightNumber);
-      newErrors.airline = isValidaAirLine(newState.airline);
+      newErrors.airline = isValidAirline(newState.airline);
       newErrors.origin = isValidOrigin(newState.origin);
       newErrors.destination = isValidDestination(newState.destination);
       newErrors.departureTime = isValidDepartureTime(newState.departureTime);
-      newErrors.arrivalTime = isValidDepartureTime(newState.arrivalTime);
+      newErrors.arrivalTime = isValidArrivalTime(newState.arrivalTime);
       newErrors.totalSeats = isValidTotalSeats(Number(newState.totalSeats));
       newErrors.bookedSeats = isValidBookedSeats(Number(newState.bookedSeats));
+      newErrors.status = isValidStatus(newState.status);
 
       if (isSameOriginDestination(newState.origin, newState.destination)) {
         newErrors.origin = "Origin and destination can't be the same";
@@ -106,8 +131,8 @@ export const flightReducer = (state: State, action: Action): State => {
           newErrors.flightNumber != "" ||
           newErrors.airline != "" ||
           newErrors.arrivalTime != "" ||
-          newErrors.bookedSeats.toString() != "" ||
-          newErrors.totalSeats.toString() != "" ||
+          newErrors.bookedSeats != "" ||
+          newErrors.totalSeats != "" ||
           newErrors.departureTime != "" ||
           newErrors.origin != "" ||
           newErrors.destination != "" ||
@@ -125,15 +150,18 @@ export const flightReducer = (state: State, action: Action): State => {
         departureTime: state.departureTime,
         arrivalTime: state.arrivalTime,
         status: state.status,
-        bookedSeats: state.bookedSeats,
-        totalSeats: state.totalSeats,
+        bookedSeats: Number(state.bookedSeats),
+        totalSeats: Number(state.totalSeats),
       });
       console.log("flights array now:", flights);
       return initialState;
     }
     case RESET:
       return initialState;
-
+    case SET_TOUCHED: {
+      const newTouched = { ...state.touched, [action.field]: true };
+      return { ...state, touched: newTouched };
+    }
     default:
       return state;
   }
