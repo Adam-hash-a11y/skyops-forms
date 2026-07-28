@@ -1,5 +1,3 @@
-import type { State } from "./reducer";
-
 export const SET_FIELD = "set_field";
 export const SUBMIT = "submit";
 export const RESET = "reset";
