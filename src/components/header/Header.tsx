@@ -1,42 +1,66 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+
+const HeaderWrapper = styled.header`
+  background-color: white;
+  border-bottom: 1px solid #e2e2ea;
+`;
 
 const Nav = styled.nav`
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 16px 24px;
-  background-color: #0f172a;
+  padding: 18px 32px;
+  justify-content: space-between;
 `;
 
-const Title = styled.h2`
-  color: white;
+const Brand = styled.h2`
+  color: #1e1b2e;
   margin: 0;
-  margin-right: 20px;
-  font-size: 18px;
+  margin-right: 48px;
+  font-size: 19px;
+  font-weight: 700;
 `;
 
-const StyledLink = styled(Link)`
-  color: #cbd5e1;
+const LinkGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 30px;
+`;
+
+const StyledLink = styled(NavLink)`
+  color: #64748b;
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
+  padding: 10px 0;
+  border-bottom: 2px solid transparent;
 
   &:hover {
-    color: white;
+    color: #1e1b2e;
+  }
+
+  &.active {
+    color: #6d5ef8;
+    border-bottom: 2px solid #6d5ef8;
   }
 `;
 
 export const Header = () => {
   return (
-    <Nav>
-      <Title>SkyOps</Title>
-      <StyledLink to="/">Home</StyledLink>
-      <StyledLink to="/flight">Flight Form</StyledLink>
-      <StyledLink to="/passenger">Passenger Form</StyledLink>
-      <StyledLink to="/flights">Flights List</StyledLink>
-      <StyledLink to="/passengers">Passengers List</StyledLink>
-      <StyledLink to="/counter">Counter</StyledLink>
-    </Nav>
+    <HeaderWrapper>
+      <Nav>
+        <Brand>SkyOps</Brand>
+        <LinkGroup>
+          <StyledLink to="/" end>
+            Home
+          </StyledLink>
+          <StyledLink to="/flight">Flight Form</StyledLink>
+          <StyledLink to="/passenger">Passenger Form</StyledLink>
+          <StyledLink to="/flights">Flights List</StyledLink>
+          <StyledLink to="/passengers">Passengers List</StyledLink>
+          <StyledLink to="/counter">Counter</StyledLink>
+        </LinkGroup>
+      </Nav>
+    </HeaderWrapper>
   );
 };
