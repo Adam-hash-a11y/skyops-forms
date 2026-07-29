@@ -2,7 +2,6 @@ import React, { useReducer } from "react";
 import styled from "styled-components";
 import { FormInput } from "../shared/formInput/FlightFormInput";
 import { Button, ButtonVariant } from "../shared/button/Button";
-import { FaBeer } from "react-icons/fa";
 import { FormInputError } from "../shared/formInputError/FormInputError";
 import { FormType } from "./types";
 import { flightReducer, initialState } from "./reducer";
@@ -35,7 +34,7 @@ export const FlightForm = () => {
   ) => {
     dispatch({
       type: SET_FIELD,
-      field: e.target.name ,
+      field: e.target.name,
       value: e.target.value,
     });
   };
@@ -94,6 +93,8 @@ export const FlightForm = () => {
         handleChange={handleChange}
         label="Flight Number"
         handleBlur={handleBlur}
+        error={state.errors.flightNumber}
+        touched={state.touched.flightNumber}
       />
       {state.touched.flightNumber && state.errors.flightNumber && (
         <FormInputError error={state.errors.flightNumber} />
@@ -108,6 +109,8 @@ export const FlightForm = () => {
         handleChange={handleChange}
         label="Airline"
         handleBlur={handleBlur}
+        error={state.errors.airline}
+        touched={state.touched.airline}
       />
       {state.touched.airline && state.errors.airline && (
         <FormInputError error={state.errors.airline} />
@@ -122,6 +125,8 @@ export const FlightForm = () => {
         id="FlightOriginInput"
         handleChange={handleChange}
         handleBlur={handleBlur}
+        error={state.errors.origin}
+        touched={state.touched.origin}
       />
       {state.touched.origin && state.errors.origin && (
         <FormInputError error={state.errors.origin} />
@@ -136,6 +141,8 @@ export const FlightForm = () => {
         handleChange={handleChange}
         label="Destination"
         handleBlur={handleBlur}
+        error={state.errors.destination}
+        touched={state.touched.destination}
       />
       {state.touched.destination && state.errors.destination && (
         <FormInputError error={state.errors.destination} />
@@ -150,6 +157,8 @@ export const FlightForm = () => {
         handleChange={handleChange}
         label="Departure Time"
         handleBlur={handleBlur}
+        error={state.errors.departureTime}
+        touched={state.touched.departureTime}
       />
       {state.touched.departureTime && state.errors.departureTime && (
         <FormInputError error={state.errors.departureTime} />
@@ -164,6 +173,8 @@ export const FlightForm = () => {
         handleChange={handleChange}
         label="Arrival Time"
         handleBlur={handleBlur}
+        error={state.errors.arrivalTime}
+        touched={state.touched.arrivalTime}
       />
       {state.touched.arrivalTime && state.errors.arrivalTime && (
         <FormInputError error={state.errors.arrivalTime} />
@@ -178,6 +189,8 @@ export const FlightForm = () => {
         handleChange={handleChange}
         label="Status"
         handleBlur={handleBlur}
+        error={state.errors.status}
+        touched={state.touched.status}
       />
       {state.touched.status && state.errors.status && (
         <FormInputError error={state.errors.status} />
@@ -192,6 +205,8 @@ export const FlightForm = () => {
         handleChange={handleChange}
         label="Total Seats"
         handleBlur={handleBlur}
+        error={state.errors.totalSeats}
+        touched={state.touched.totalSeats}
       />
       {state.touched.totalSeats && state.errors.totalSeats && (
         <FormInputError error={state.errors.totalSeats} />
@@ -206,19 +221,14 @@ export const FlightForm = () => {
         handleChange={handleChange}
         label="Booked Seats"
         handleBlur={handleBlur}
+        error={state.errors.bookedSeats}
+        touched={state.touched.bookedSeats}
       />
       {state.touched.bookedSeats && state.errors.bookedSeats && (
         <FormInputError error={state.errors.bookedSeats} />
       )}
 
       <ButtonRow>
-        {/* <Button
-          handleButton={handleValidation}
-          label="Validate"
-          variant={ButtonVariant.SECONDARY}
-        >
-          <FaBeer />
-        </Button> */}
         <Button
           disabled={state.disabled}
           label="Send"
