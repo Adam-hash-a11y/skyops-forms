@@ -1,7 +1,6 @@
 import React, { useReducer } from "react";
 import styled from "styled-components";
 import { Button, ButtonVariant } from "../shared/button/Button";
-import { FaBeer } from "react-icons/fa";
 import { FormInputError } from "../shared/formInputError/FormInputError";
 import { FormInput } from "../shared/formInput/FlightFormInput";
 import { FormType } from "../flightForm/types";
@@ -78,6 +77,8 @@ export const PassengerForm = () => {
         handleChange={handleChange}
         label="First Name"
         handleBlur={handleBlur}
+        error={state.errors.firstName}
+        touched={state.touched.firstName}
       />
       {state.touched.firstName && state.errors.firstName && (
         <FormInputError error={state.errors.firstName} />
@@ -92,6 +93,8 @@ export const PassengerForm = () => {
         handleChange={handleChange}
         label="Last Name"
         handleBlur={handleBlur}
+        error={state.errors.lastName}
+        touched={state.touched.lastName}
       />
       {state.touched.lastName && state.errors.lastName && (
         <FormInputError error={state.errors.lastName} />
@@ -106,6 +109,8 @@ export const PassengerForm = () => {
         handleChange={handleChange}
         handleBlur={handleBlur}
         label="Passport Number "
+        error={state.errors.passportNumber}
+        touched={state.touched.passportNumber}
       />
       {state.touched.passportNumber && state.errors.passportNumber && (
         <FormInputError error={state.errors.passportNumber} />
@@ -120,6 +125,8 @@ export const PassengerForm = () => {
         handleBlur={handleBlur}
         handleChange={handleChange}
         label="Nationality"
+        error={state.errors.nationality}
+        touched={state.touched.nationality}
       />
       {state.touched.nationality && state.errors.nationality && (
         <FormInputError error={state.errors.nationality} />
@@ -134,6 +141,8 @@ export const PassengerForm = () => {
         handleChange={handleChange}
         handleBlur={handleBlur}
         label="Date of birth"
+        error={state.errors.dateOfBirth}
+        touched={state.touched.dateOfBirth}
       />
       {state.touched.dateOfBirth && state.errors.dateOfBirth && (
         <FormInputError error={state.errors.dateOfBirth} />
@@ -148,6 +157,8 @@ export const PassengerForm = () => {
         handleChange={handleChange}
         handleBlur={handleBlur}
         label="Email"
+        error={state.errors.email}
+        touched={state.touched.email}
       />
       {state.touched.email && state.errors.email && (
         <FormInputError error={state.errors.email} />
@@ -162,19 +173,14 @@ export const PassengerForm = () => {
         handleChange={handleChange}
         handleBlur={handleBlur}
         label="Phone Number"
+        error={state.errors.phoneNumber}
+        touched={state.touched.phoneNumber}
       />
       {state.touched.phoneNumber && state.errors.phoneNumber && (
         <FormInputError error={state.errors.phoneNumber} />
       )}
 
       <ButtonRow>
-        {/* <Button
-          handleButton={handleValidation}
-          label="Validate"
-          variant={ButtonVariant.SECONDARY}
-        >
-          <FaBeer />
-        </Button> */}
         <Button
           handleButton={handleSend}
           disabled={state.disabled}

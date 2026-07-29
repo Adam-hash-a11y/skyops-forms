@@ -160,7 +160,39 @@ export const flightReducer = (state: State, action: Action): State => {
       return initialState;
     case SET_TOUCHED: {
       const newTouched = { ...state.touched, [action.field]: true };
-      return { ...state, touched: newTouched };
+      const newErrors = { ...state.errors };
+
+      switch (action.field) {
+        case "flightNumber":
+          newErrors.flightNumber = isValidFlightNumber(state.flightNumber);
+          break;
+        case "airline":
+          newErrors.airline = isValidAirline(state.airline);
+          break;
+        case "origin":
+          newErrors.origin = isValidOrigin(state.origin);
+          break;
+        case "destination":
+          newErrors.destination = isValidDestination(state.destination);
+          break;
+        case "departureTime":
+          newErrors.departureTime = isValidDepartureTime(state.departureTime);
+          break;
+        case "arrivalTime":
+          newErrors.arrivalTime = isValidArrivalTime(state.arrivalTime);
+          break;
+        case "status":
+          newErrors.status = isValidStatus(state.status);
+          break;
+        case "totalSeats":
+          newErrors.totalSeats = isValidTotalSeats(Number(state.totalSeats));
+          break;
+        case "bookedSeats":
+          newErrors.bookedSeats = isValidBookedSeats(Number(state.bookedSeats));
+          break;
+      }
+
+      return { ...state, touched: newTouched, errors: newErrors };
     }
     default:
       return state;
