@@ -122,7 +122,40 @@ export const passengerReducer = (state: State, action: Action) => {
 
     case SET_PASSENGER_TOUCHED: {
       const newTouched = { ...state.touched, [action.field]: true };
-      return { ...state, touched: newTouched };
+      const newErrors = { ...state.errors };
+      switch (action.field) {
+        //       firstName: string;
+        // lastName: string;
+        // passportNumber: string;
+        // nationality: string;
+        // dateOfBirth: string;
+        // email: string;
+        // phoneNumber: string;
+        case "firstName":
+          newErrors.firstName = isValidFirstname(state.firstName);
+          break;
+        case "lastName":
+          newErrors.lastName = isValidLastName(state.lastName);
+          break;
+        case "passportNumber":
+          newErrors.passportNumber = isValidPassportNumber(
+            state.passportNumber,
+          );
+          break;
+        case "nationality":
+          newErrors.nationality = isValidNationality(state.nationality);
+          break;
+        case "dateOfBirth":
+          newErrors.dateOfBirth = isValidDateOfBirth(state.dateOfBirth);
+          break;
+        case "email":
+          newErrors.email = isValidEmail(state.email);
+          break;
+        case "phoneNumber":
+          newErrors.phoneNumber = isValidPhoneNumber(state.phoneNumber);
+          break;
+      }
+      return { ...state, touched: newTouched, errors: newErrors };
     }
 
     case RESET_PASSENGER: {
