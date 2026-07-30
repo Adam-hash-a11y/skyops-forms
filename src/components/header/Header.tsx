@@ -9,8 +9,10 @@ const HeaderWrapper = styled.header`
 const Nav = styled.nav`
   display: flex;
   align-items: center;
-  padding: 18px 32px;
   justify-content: space-between;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 18px 24px;
 `;
 
 const Brand = styled.h2`
@@ -34,6 +36,7 @@ const StyledLink = styled(NavLink)`
   font-weight: 500;
   padding: 10px 0;
   border-bottom: 2px solid transparent;
+  transition: color 0.15s ease;
 
   &:hover {
     color: #1e1b2e;
