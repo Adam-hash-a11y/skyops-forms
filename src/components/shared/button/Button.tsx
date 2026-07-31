@@ -16,6 +16,10 @@ interface Props {
 }
 
 const baseButtonStyles = css`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   padding: 10px 20px;
   border: none;
   border-radius: 6px;
@@ -23,7 +27,7 @@ const baseButtonStyles = css`
   font-weight: 700;
   cursor: pointer;
   margin: 6px;
-  align-items: center;
+
   &:disabled {
     cursor: not-allowed;
     opacity: 0.5;
@@ -69,15 +73,9 @@ const variants = {
 export const Button: React.FunctionComponent<Props> = (p) => {
   const StyledButton = variants[p.variant ?? ButtonVariant.SECONDARY];
 
-  if (p.children) {
-    return (
-      <StyledButton disabled={p.disabled} onClick={p.handleButton}>
-        {p.children} {p.label}
-      </StyledButton>
-    );
-  }
   return (
     <StyledButton disabled={p.disabled} onClick={p.handleButton}>
+      {p.children}
       {p.label}
     </StyledButton>
   );

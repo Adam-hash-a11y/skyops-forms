@@ -12,6 +12,7 @@ import {
   SUMBIT_PASSENGER,
 } from "./action";
 import { Bounce, toast, ToastContainer } from "react-toastify";
+import { FaCheck, FaXmark } from "react-icons/fa6";
 
 const FormWrapper = styled.div`
   max-width: 400px;
@@ -186,12 +187,16 @@ export const PassengerForm = () => {
           disabled={state.disabled}
           label="Send"
           variant={ButtonVariant.PRIMARY}
-        />
+        >
+          <FaCheck />
+        </Button>
         <Button
           handleButton={handleReset}
           label="Reset"
           variant={ButtonVariant.DANGER}
-        />
+        >
+          <FaXmark />
+        </Button>
       </ButtonRow>
     </FormWrapper>
   );

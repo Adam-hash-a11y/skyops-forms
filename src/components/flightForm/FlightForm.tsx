@@ -7,6 +7,7 @@ import { FormType } from "./types";
 import { flightReducer, initialState } from "./reducer";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import { RESET, SET_FIELD, SET_TOUCHED, SUBMIT } from "./action";
+import { FaCheck, FaXmark } from "react-icons/fa6";
 
 const FormWrapper = styled.div`
   max-width: 400px;
@@ -227,20 +228,24 @@ export const FlightForm = () => {
       {state.touched.bookedSeats && state.errors.bookedSeats && (
         <FormInputError error={state.errors.bookedSeats} />
       )}
-
+      <ToastContainer stacked />
       <ButtonRow>
         <Button
           disabled={state.disabled}
           label="Send"
           handleButton={handleSend}
           variant={ButtonVariant.PRIMARY}
-        />
-        <ToastContainer stacked />
+        >
+          <FaCheck />
+        </Button>
+
         <Button
           handleButton={handleReset}
           label="Reset"
           variant={ButtonVariant.DANGER}
-        />
+        >
+          <FaXmark />
+        </Button>
       </ButtonRow>
     </FormWrapper>
   );
