@@ -3,6 +3,7 @@ import { passengers, type Passenger } from "../../data/passengerData";
 import styled from "styled-components";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { DeleteModal } from "../shared/deleteModal/DeleteModal";
+import { FaTrash } from "react-icons/fa6";
 
 const Title = styled.h2`
   margin-bottom: 20px;
@@ -16,9 +17,16 @@ const Card = styled.div`
   background: white;
 `;
 
+const CardTopRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+`;
+
 const PassengerName = styled.p`
   font-weight: 700;
-  margin: 0 0 6px 0;
+  margin: 0;
 `;
 
 const Nationality = styled.p`
@@ -70,19 +78,23 @@ export const PassengerList = () => {
       />
       {displayedPassengers.map((passenger, index) => (
         <Card key={index}>
-          <PassengerName>
-            {passenger.firstName} {passenger.lastName}
-          </PassengerName>
+          <CardTopRow>
+            <PassengerName>
+              {passenger.firstName} {passenger.lastName}
+            </PassengerName>
+            <Button
+              handleButton={() => handleModalOpen(index)}
+              label="Delete"
+              variant={ButtonVariant.DANGER}
+            >
+              <FaTrash />
+            </Button>
+          </CardTopRow>
           <Nationality>{passenger.nationality}</Nationality>
           <Meta>DOB: {passenger.dateOfBirth}</Meta>
           <Meta>Passport: {passenger.passportNumber}</Meta>
           <Meta>Phone: {passenger.phoneNumber}</Meta>
           <Meta>Email: {passenger.email}</Meta>
-          <Button
-            handleButton={() => handleModalOpen(index)}
-            label="DELETE"
-            variant={ButtonVariant.DANGER}
-          />
           {openIndex === index && (
             <DeleteModal
               itemKey={index}
