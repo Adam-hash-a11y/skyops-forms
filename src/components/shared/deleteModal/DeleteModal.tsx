@@ -1,7 +1,7 @@
 import type React from "react";
 import styled from "styled-components";
 import { Button, ButtonVariant } from "../button/Button";
-import { FaBeer } from "react-icons/fa";
+import { FaTrash, FaXmark } from "react-icons/fa6";
 
 interface Props {
   label: string;
@@ -51,14 +51,14 @@ export const DeleteModal: React.FunctionComponent<Props> = ({
             label="Confirm"
             variant={ButtonVariant.DANGER}
           >
-            <FaBeer />
+            <FaTrash />
           </Button>
           <Button
             handleButton={handleClose}
             label="Cancel"
             variant={ButtonVariant.SECONDARY}
           >
-            <FaBeer />
+            <FaXmark />
           </Button>
         </ModalBox>
       </Overlay>

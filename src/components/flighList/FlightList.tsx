@@ -3,6 +3,7 @@ import { flights, type Flight } from "../../data/flightData";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { useState } from "react";
 import { DeleteModal } from "../shared/deleteModal/DeleteModal";
+import { FaTrash } from "react-icons/fa6";
 
 const Title = styled.h2`
   margin-bottom: 20px;
@@ -16,9 +17,16 @@ const Card = styled.div`
   background: white;
 `;
 
+const CardTopRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+`;
+
 const FlightHeader = styled.p`
   font-weight: 700;
-  margin: 0 0 6px 0;
+  margin: 0;
 `;
 
 const Route = styled.p`
@@ -60,8 +68,6 @@ export const FlightsList = () => {
   return (
     <>
       <Title>Flights List</Title>
-      <pre>State :{JSON.stringify(allFlights)}</pre>
-      <pre>variable : {JSON.stringify(flights)}</pre>
       <input
         type="text"
         placeholder="filter by"
@@ -72,9 +78,18 @@ export const FlightsList = () => {
         const currentIndex = allFlights.indexOf(flight);
         return (
           <Card key={flight.flightNumber}>
-            <FlightHeader>
-              {flight.flightNumber} — {flight.airline}
-            </FlightHeader>
+            <CardTopRow>
+              <FlightHeader>
+                {flight.flightNumber} — {flight.airline}
+              </FlightHeader>
+              <Button
+                handleButton={() => handleModalOpen(index)}
+                label="Delete"
+                variant={ButtonVariant.DANGER}
+              >
+                <FaTrash />
+              </Button>
+            </CardTopRow>
             <Route>
               {flight.origin} → {flight.destination}
             </Route>
@@ -82,11 +97,6 @@ export const FlightsList = () => {
             <Meta>
               Seats: {flight.bookedSeats}/{flight.totalSeats}
             </Meta>
-            <Button
-              handleButton={() => handleModalOpen(index)}
-              label="DELETE"
-              variant={ButtonVariant.DANGER}
-            />
             {openIndex === index && (
               <DeleteModal
                 itemKey={currentIndex}
