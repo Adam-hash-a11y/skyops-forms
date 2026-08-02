@@ -8,6 +8,7 @@ import { Home } from "../components/home/Home";
 import { FlightsList } from "../components/flighList/FlightList";
 import { createGlobalStyle } from "styled-components";
 import { PassengerList } from "../components/passengerList/PassengerList";
+import { DummyData } from "../components/dummyData/DummyData";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -30,6 +31,7 @@ export const App = () => {
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
           <Route path="flight" element={<FlightForm />} />
+          <Route path="dummydata" element={<DummyData />} />
           <Route path="counter" element={<Counter />} />
           <Route path="passenger" element={<PassengerForm />} />
           <Route path="flights" element={<FlightsList />} />
