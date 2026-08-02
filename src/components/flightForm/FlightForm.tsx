@@ -49,8 +49,9 @@ export const FlightForm = () => {
   };
 
   const handleSend = () => {
+    // throw new Error("Something went wrong!");
+    console.log("test");
     try {
-      // throw new Error("Something went wrong!");
       dispatch({ type: SUBMIT });
       toast.success("🦄 Flight  Added", {
         position: "top-right",
@@ -231,7 +232,7 @@ export const FlightForm = () => {
       <ToastContainer stacked />
       <ButtonRow>
         <Button
-          disabled={state.disabled}
+          disabled={false}  
           label="Send"
           handleButton={handleSend}
           variant={ButtonVariant.PRIMARY}
