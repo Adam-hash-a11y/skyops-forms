@@ -8,6 +8,7 @@ import { flightReducer, initialState } from "./reducer";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import { RESET, SET_FIELD, SET_TOUCHED, SUBMIT } from "./action";
 import { FaCheck, FaXmark } from "react-icons/fa6";
+import { createFlight } from "../../service/flightService";
 
 const FormWrapper = styled.div`
   max-width: 400px;
@@ -48,11 +49,24 @@ export const FlightForm = () => {
     dispatch({ type: SET_TOUCHED, field: e.target.name });
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     // throw new Error("Something went wrong!");
+
     console.log("test");
+
     try {
-      dispatch({ type: SUBMIT });
+      await createFlight(
+        state.flightNumber,
+        state.airline,
+        state.origin,
+        state.destination,
+        state.departureTime,
+        state.arrivalTime,
+        state.status,
+        state.totalSeats,
+        state.bookedSeats,
+      );
+
       toast.success("🦄 Flight  Added", {
         position: "top-right",
         autoClose: 5000,
@@ -232,7 +246,7 @@ export const FlightForm = () => {
       <ToastContainer stacked />
       <ButtonRow>
         <Button
-          disabled={false}  
+          disabled={false}
           label="Send"
           handleButton={handleSend}
           variant={ButtonVariant.PRIMARY}
