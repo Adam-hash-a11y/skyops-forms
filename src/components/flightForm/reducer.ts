@@ -90,58 +90,58 @@ export const initialState: State = {
 
 export const flightReducer = (state: State, action: Action): State => {
   switch (action.type) {
-    // case SET_FIELD: {
-    //   const newState = {
-    //     ...state,
-    //     [action.field]: action.value,
-    //   };
-    //   const newErrors = { ...newState.errors };
-    //   newErrors.flightNumber = isValidFlightNumber(newState.flightNumber);
-    //   newErrors.airline = isValidAirline(newState.airline);
-    //   newErrors.origin = isValidOrigin(newState.origin);
-    //   newErrors.destination = isValidDestination(newState.destination);
-    //   newErrors.departureTime = isValidDepartureTime(newState.departureTime);
-    //   newErrors.arrivalTime = isValidArrivalTime(newState.arrivalTime);
-    //   newErrors.totalSeats = isValidTotalSeats(Number(newState.totalSeats));
-    //   newErrors.bookedSeats = isValidBookedSeats(Number(newState.bookedSeats));
-    //   newErrors.status = isValidStatus(newState.status);
+    case SET_FIELD: {
+      const newState = {
+        ...state,
+        [action.field]: action.value,
+      };
+      const newErrors = { ...newState.errors };
+      newErrors.flightNumber = isValidFlightNumber(newState.flightNumber);
+      newErrors.airline = isValidAirline(newState.airline);
+      newErrors.origin = isValidOrigin(newState.origin);
+      newErrors.destination = isValidDestination(newState.destination);
+      newErrors.departureTime = isValidDepartureTime(newState.departureTime);
+      newErrors.arrivalTime = isValidArrivalTime(newState.arrivalTime);
+      newErrors.totalSeats = isValidTotalSeats(Number(newState.totalSeats));
+      newErrors.bookedSeats = isValidBookedSeats(Number(newState.bookedSeats));
+      newErrors.status = isValidStatus(newState.status);
 
-    //   if (isSameOriginDestination(newState.origin, newState.destination)) {
-    //     newErrors.origin = "Origin and destination can't be the same";
-    //     newErrors.destination = "Origin and destination can't be the same";
-    //   }
+      if (isSameOriginDestination(newState.origin, newState.destination)) {
+        newErrors.origin = "Origin and destination can't be the same";
+        newErrors.destination = "Origin and destination can't be the same";
+      }
 
-    //   if (
-    //     !isDepartureBeforeArrival(newState.departureTime, newState.arrivalTime)
-    //   ) {
-    //     newErrors.departureTime = "departure time must be before arrival time";
-    //     newErrors.arrivalTime = "departure time must be before arrival time";
-    //   }
+      if (
+        !isDepartureBeforeArrival(newState.departureTime, newState.arrivalTime)
+      ) {
+        newErrors.departureTime = "departure time must be before arrival time";
+        newErrors.arrivalTime = "departure time must be before arrival time";
+      }
 
-    //   if (
-    //     !isBookedWithinTotal(
-    //       Number(newState.bookedSeats),
-    //       Number(newState.totalSeats),
-    //     )
-    //   ) {
-    //     newErrors.bookedSeats = "Booked seats can't exceed total seats";
-    //     newErrors.totalSeats = "Booked seats can't exceed total seats";
-    //   }
-    //   return {
-    //     ...newState,
-    //     disabled:
-    //       newErrors.flightNumber != "" ||
-    //       newErrors.airline != "" ||
-    //       newErrors.arrivalTime != "" ||
-    //       newErrors.bookedSeats != "" ||
-    //       newErrors.totalSeats != "" ||
-    //       newErrors.departureTime != "" ||
-    //       newErrors.origin != "" ||
-    //       newErrors.destination != "" ||
-    //       newErrors.status != "",
-    //     errors: newErrors,
-    //   };
-    // }
+      if (
+        !isBookedWithinTotal(
+          Number(newState.bookedSeats),
+          Number(newState.totalSeats),
+        )
+      ) {
+        newErrors.bookedSeats = "Booked seats can't exceed total seats";
+        newErrors.totalSeats = "Booked seats can't exceed total seats";
+      }
+      return {
+        ...newState,
+        disabled:
+          newErrors.flightNumber != "" ||
+          newErrors.airline != "" ||
+          newErrors.arrivalTime != "" ||
+          newErrors.bookedSeats != "" ||
+          newErrors.totalSeats != "" ||
+          newErrors.departureTime != "" ||
+          newErrors.origin != "" ||
+          newErrors.destination != "" ||
+          newErrors.status != "",
+        errors: newErrors,
+      };
+    }
     case SUBMIT: {
       console.log("SUBMIT fired, current state:", state);
       // flights.push({
@@ -179,42 +179,42 @@ export const flightReducer = (state: State, action: Action): State => {
     }
     // case RESET:
     //   return initialState;
-    // case SET_TOUCHED: {
-    //   const newTouched = { ...state.touched, [action.field]: true };
-    //   const newErrors = { ...state.errors };
+    case SET_TOUCHED: {
+      const newTouched = { ...state.touched, [action.field]: true };
+      const newErrors = { ...state.errors };
 
-    //   switch (action.field) {
-    //     case "flightNumber":
-    //       newErrors.flightNumber = isValidFlightNumber(state.flightNumber);
-    //       break;
-    //     case "airline":
-    //       newErrors.airline = isValidAirline(state.airline);
-    //       break;
-    //     case "origin":
-    //       newErrors.origin = isValidOrigin(state.origin);
-    //       break;
-    //     case "destination":
-    //       newErrors.destination = isValidDestination(state.destination);
-    //       break;
-    //     case "departureTime":
-    //       newErrors.departureTime = isValidDepartureTime(state.departureTime);
-    //       break;
-    //     case "arrivalTime":
-    //       newErrors.arrivalTime = isValidArrivalTime(state.arrivalTime);
-    //       break;
-    //     case "status":
-    //       newErrors.status = isValidStatus(state.status);
-    //       break;
-    //     case "totalSeats":
-    //       newErrors.totalSeats = isValidTotalSeats(Number(state.totalSeats));
-    //       break;
-    //     case "bookedSeats":
-    //       newErrors.bookedSeats = isValidBookedSeats(Number(state.bookedSeats));
-    //       break;
-    //   }
+      switch (action.field) {
+        case "flightNumber":
+          newErrors.flightNumber = isValidFlightNumber(state.flightNumber);
+          break;
+        case "airline":
+          newErrors.airline = isValidAirline(state.airline);
+          break;
+        case "origin":
+          newErrors.origin = isValidOrigin(state.origin);
+          break;
+        case "destination":
+          newErrors.destination = isValidDestination(state.destination);
+          break;
+        case "departureTime":
+          newErrors.departureTime = isValidDepartureTime(state.departureTime);
+          break;
+        case "arrivalTime":
+          newErrors.arrivalTime = isValidArrivalTime(state.arrivalTime);
+          break;
+        case "status":
+          newErrors.status = isValidStatus(state.status);
+          break;
+        case "totalSeats":
+          newErrors.totalSeats = isValidTotalSeats(Number(state.totalSeats));
+          break;
+        case "bookedSeats":
+          newErrors.bookedSeats = isValidBookedSeats(Number(state.bookedSeats));
+          break;
+      }
 
-    //   return { ...state, touched: newTouched, errors: newErrors };
-    // }
+      return { ...state, touched: newTouched, errors: newErrors };
+    }
     default: {
       console.log("test redcuer");
       return state;

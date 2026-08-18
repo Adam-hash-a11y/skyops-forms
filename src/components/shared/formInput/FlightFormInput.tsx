@@ -57,33 +57,29 @@ const baseInputStyles = `
   }
 `;
 
-const NeutralInput = styled.input`
+const StyledInput = styled.input<{ $variant: string }>`
   ${baseInputStyles}
-  border: 1px solid #e2e2ea;
-  background: #ffffff;
+
+  border: 1px solid
+    ${({ $variant }) =>
+    $variant === "error"
+      ? "#dc2626"
+      : $variant === "success"
+        ? "#16a34a"
+        : "#e2e2ea"};
+
+  background: ${({ $variant }) =>
+    $variant === "error" ? "#fef2f2" : "#ffffff"};
 
   &:focus {
-    border-color: #6d5ef8;
+    border-color: ${({ $variant }) =>
+      $variant === "error"
+        ? "#dc2626"
+        : $variant === "success"
+          ? "#16a34a"
+          : "#6d5ef8"};
   }
 `;
-
-const ErrorInput = styled.input`
-  ${baseInputStyles}
-  border: 1px solid #dc2626;
-  background: #fef2f2;
-`;
-
-const SuccessInput = styled.input`
-  ${baseInputStyles}
-  border: 1px solid #16a34a;
-  background: #ffffff;
-`;
-
-const inputVariants = {
-  neutral: NeutralInput,
-  error: ErrorInput,
-  success: SuccessInput,
-};
 
 const baseSelectStyles = `
   width: 400px;
@@ -99,33 +95,29 @@ const baseSelectStyles = `
   }
 `;
 
-const NeutralSelect = styled.select`
+const StyledSelect = styled.select<{ $variant: string }>`
   ${baseSelectStyles}
-  border: 1px solid #e2e2ea;
-  background: #ffffff;
+
+  border: 1px solid
+    ${({ $variant }) =>
+    $variant === "error"
+      ? "#dc2626"
+      : $variant === "success"
+        ? "#16a34a"
+        : "#e2e2ea"};
+
+  background: ${({ $variant }) =>
+    $variant === "error" ? "#fef2f2" : "#ffffff"};
 
   &:focus {
-    border-color: #6d5ef8;
+    border-color: ${({ $variant }) =>
+      $variant === "error"
+        ? "#dc2626"
+        : $variant === "success"
+          ? "#16a34a"
+          : "#6d5ef8"};
   }
 `;
-
-const ErrorSelect = styled.select`
-  ${baseSelectStyles}
-  border: 1px solid #dc2626;
-  background: #fef2f2;
-`;
-
-const SuccessSelect = styled.select`
-  ${baseSelectStyles}
-  border: 1px solid #16a34a;
-  background: #ffffff;
-`;
-
-const selectVariants = {
-  neutral: NeutralSelect,
-  error: ErrorSelect,
-  success: SuccessSelect,
-};
 
 const SuccessIcon = styled(FaCircleCheck)`
   position: absolute;
@@ -165,15 +157,15 @@ export const FormInput: React.FunctionComponent<Props> = ({
   touched,
 }) => {
   const variant = getVariant(touched, error);
-  const StyledInput = inputVariants[variant];
-  const StyledSelect = selectVariants[variant];
 
-  if (type == "select") {
+  if (type === "select") {
     return (
       <Field>
         <StyledLabel htmlFor={id}>{label}</StyledLabel>
+
         <InputWrapper>
           <StyledSelect
+            $variant={variant}
             value={value}
             name={name}
             id={id}
@@ -183,12 +175,15 @@ export const FormInput: React.FunctionComponent<Props> = ({
             <option value="" disabled>
               --Select a status--
             </option>
+
             <option value="Scheduled">Scheduled</option>
             <option value="Delayed">Delayed</option>
             <option value="Cancelled">Cancelled</option>
             <option value="Landed">Landed</option>
           </StyledSelect>
+
           {variant === "success" && <SuccessIcon aria-hidden="true" />}
+
           {variant === "error" && <ErrorIcon aria-hidden="true" />}
         </InputWrapper>
       </Field>
@@ -198,8 +193,10 @@ export const FormInput: React.FunctionComponent<Props> = ({
   return (
     <Field>
       <StyledLabel htmlFor={id}>{label}</StyledLabel>
+
       <InputWrapper>
         <StyledInput
+          $variant={variant}
           name={name}
           type={type}
           value={value}
@@ -208,7 +205,9 @@ export const FormInput: React.FunctionComponent<Props> = ({
           onChange={handleChange}
           onBlur={handleBlur}
         />
+
         {variant === "success" && <SuccessIcon aria-hidden="true" />}
+
         {variant === "error" && <ErrorIcon aria-hidden="true" />}
       </InputWrapper>
     </Field>
