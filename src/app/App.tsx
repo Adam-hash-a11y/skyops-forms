@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import { FlightForm } from "../components/flightForm/FlightForm";
-import { Counter } from "../components/counter/counter";
 import { PassengerForm } from "../components/passengerForm/PassengerForm";
 import { NotFound } from "../components/notFound/NotFound";
 import { RootLayout } from "../components/rootLayout/RootLayout";
@@ -32,7 +31,6 @@ export const App = () => {
           <Route index element={<Home />} />
           <Route path="flight" element={<FlightForm />} />
           <Route path="dummydata" element={<DummyData />} />
-          <Route path="counter" element={<Counter />} />
           <Route path="passenger" element={<PassengerForm />} />
           <Route path="flights" element={<FlightsList />} />
           <Route path="passengers" element={<PassengerList />} />
