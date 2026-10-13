@@ -50,6 +50,11 @@ const baseInputStyles = `
   font: inherit;
   font-size: 14px;
   font-weight: 400;
+
+  &:focus-visible {
+    outline: 2px solid #1b63d6;
+    outline-offset: 1px;
+  }
 `;
 
 const StyledInput = styled.input<{ $error: boolean }>`
