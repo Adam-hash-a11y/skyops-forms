@@ -1,6 +1,5 @@
 import { FormType } from "../../flightForm/types";
 import styled from "styled-components";
-import { FaCircleCheck, FaCircleExclamation } from "react-icons/fa6";
 
 interface Props {
   name: string;
@@ -21,127 +20,64 @@ interface Props {
   label: string;
   error?: string;
   touched?: boolean;
+  options?: SelectOption[];
+  hint?: string;
 }
 
-function getVariant(touched?: boolean, error?: string) {
-  if (!touched) return "neutral";
-  if (error) return "error";
-  return "success";
+interface SelectOption {
+  value: string;
+  label: string;
 }
 
 const Field = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 16px;
-`;
-
-const InputWrapper = styled.div`
-  position: relative;
-`;
-
-const baseInputStyles = `
-  width: 400px;
-  padding: 11px 38px 11px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-family: inherit;
-  color: #1e1b2e;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
-
-  &::placeholder {
-    color: #94a3b8;
-  }
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-const StyledInput = styled.input<{ $variant: string }>`
-  ${baseInputStyles}
-
-  border: 1px solid
-    ${({ $variant }) =>
-    $variant === "error"
-      ? "#dc2626"
-      : $variant === "success"
-        ? "#16a34a"
-        : "#e2e2ea"};
-
-  background: ${({ $variant }) =>
-    $variant === "error" ? "#fef2f2" : "#ffffff"};
-
-  &:focus {
-    border-color: ${({ $variant }) =>
-      $variant === "error"
-        ? "#dc2626"
-        : $variant === "success"
-          ? "#16a34a"
-          : "#6d5ef8"};
-  }
-`;
-
-const baseSelectStyles = `
-  width: 400px;
-  padding: 11px 38px 11px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-family: inherit;
-  color: #1e1b2e;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-const StyledSelect = styled.select<{ $variant: string }>`
-  ${baseSelectStyles}
-
-  border: 1px solid
-    ${({ $variant }) =>
-    $variant === "error"
-      ? "#dc2626"
-      : $variant === "success"
-        ? "#16a34a"
-        : "#e2e2ea"};
-
-  background: ${({ $variant }) =>
-    $variant === "error" ? "#fef2f2" : "#ffffff"};
-
-  &:focus {
-    border-color: ${({ $variant }) =>
-      $variant === "error"
-        ? "#dc2626"
-        : $variant === "success"
-          ? "#16a34a"
-          : "#6d5ef8"};
-  }
-`;
-
-const SuccessIcon = styled(FaCircleCheck)`
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #16a34a;
-  font-size: 16px;
-`;
-
-const ErrorIcon = styled(FaCircleExclamation)`
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #dc2626;
-  font-size: 16px;
+  gap: 6px;
 `;
 
 const StyledLabel = styled.label`
   font-size: 13px;
-  font-weight: 600;
-  color: #1e1b2e;
-  margin-bottom: 6px;
+  color: #162033;
+  font-weight: 500;
+`;
+
+const baseInputStyles = `
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 6px;
+  color: #162033;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+
+  &:focus-visible {
+    outline: 2px solid #1b63d6;
+    outline-offset: 1px;
+  }
+`;
+
+const StyledInput = styled.input<{ $error: boolean }>`
+  ${baseInputStyles}
+  border: 1px solid ${(p) => (p.$error ? "#c0262d" : "#c9d2df")};
+  background: ${(p) => (p.$error ? "#fff8f8" : "#fff")};
+
+  &::placeholder {
+    color: #566377;
+    opacity: 0.8;
+  }
+`;
+
+const StyledSelect = styled.select<{ $error: boolean }>`
+  ${baseInputStyles}
+  border: 1px solid ${(p) => (p.$error ? "#c0262d" : "#c9d2df")};
+  background: ${(p) => (p.$error ? "#fff8f8" : "#fff")};
+`;
+
+const HintBox = styled.span`
+  color: #566377;
+  font-size: 12px;
+  font-weight: 400;
 `;
 
 export const FormInput: React.FunctionComponent<Props> = ({
@@ -155,48 +91,33 @@ export const FormInput: React.FunctionComponent<Props> = ({
   handleBlur,
   error,
   touched,
+  options = [],
+  hint,
 }) => {
-  const variant = getVariant(touched, error);
-
-  if (type === "select") {
-    return (
-      <Field>
-        <StyledLabel htmlFor={id}>{label}</StyledLabel>
-
-        <InputWrapper>
-          <StyledSelect
-            $variant={variant}
-            value={value}
-            name={name}
-            id={id}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          >
-            <option value="" disabled>
-              --Select a status--
-            </option>
-
-            <option value="Scheduled">Scheduled</option>
-            <option value="Delayed">Delayed</option>
-            <option value="Cancelled">Cancelled</option>
-            <option value="Landed">Landed</option>
-          </StyledSelect>
-
-          {variant === "success" && <SuccessIcon aria-hidden="true" />}
-
-          {variant === "error" && <ErrorIcon aria-hidden="true" />}
-        </InputWrapper>
-      </Field>
-    );
-  }
+  const hasError = Boolean(touched && error);
 
   return (
     <Field>
       <StyledLabel htmlFor={id}>{label}</StyledLabel>
 
-      <InputWrapper>
+      {type === "select" ? (
+        <StyledSelect
+          $error={hasError}
+          name={name}
+          value={value}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          id={id}
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </StyledSelect>
+      ) : (
         <StyledInput
-          $variant={variant}
+          $error={hasError}
           name={name}
           type={type}
           value={value}
@@ -205,11 +126,9 @@ export const FormInput: React.FunctionComponent<Props> = ({
           onChange={handleChange}
           onBlur={handleBlur}
         />
+      )}
 
-        {variant === "success" && <SuccessIcon aria-hidden="true" />}
-
-        {variant === "error" && <ErrorIcon aria-hidden="true" />}
-      </InputWrapper>
+      {hint && !hasError && <HintBox>{hint}</HintBox>}
     </Field>
   );
 };
