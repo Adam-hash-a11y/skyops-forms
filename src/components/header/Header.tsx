@@ -4,14 +4,15 @@ import { LuPlane } from "react-icons/lu";
 
 const HeaderWrapper = styled.header`
   background-color: #0b2545;
-  display: flex;
 `;
 
 const NavBar = styled.nav`
   display: flex;
   align-items: center;
-  gap: 30px;
-  padding: 0 40px;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
 `;
 
 const Skyops = styled(Link)`
