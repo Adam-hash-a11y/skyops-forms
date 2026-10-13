@@ -18,7 +18,7 @@ interface Props {
 }
 
 const baseButtonStyles = css`
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
