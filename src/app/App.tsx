@@ -6,7 +6,6 @@ import { RootLayout } from "../components/rootLayout/RootLayout";
 import { Home } from "../components/home/Home";
 import { FlightsList } from "../components/flighList/FlightList";
 import { PassengerList } from "../components/passengerList/PassengerList";
-import { DummyData } from "../components/dummyData/DummyData";
 import { GlobalStyle } from "./GlobalStyle";
 
 export const App = () => {
@@ -17,7 +16,6 @@ export const App = () => {
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
           <Route path="flight" element={<FlightForm />} />
-          <Route path="dummydata" element={<DummyData />} />
           <Route path="passenger" element={<PassengerForm />} />
           <Route path="flights" element={<FlightsList />} />
           <Route path="passengers" element={<PassengerList />} />
