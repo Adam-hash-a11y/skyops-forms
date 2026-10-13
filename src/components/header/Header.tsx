@@ -61,7 +61,6 @@ export const Header = () => {
           <StyledLink to="/passenger">Passenger Form</StyledLink>
           <StyledLink to="/flights">Flights List</StyledLink>
           <StyledLink to="/passengers">Passengers List</StyledLink>
-          <StyledLink to="/counter">Counter</StyledLink>
         </LinkGroup>
       </Nav>
     </HeaderWrapper>
