@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import { Header } from "../header/Header";
-import { Footer } from "../footer/Footer";
 import styled from "styled-components";
 
 const RootWrapper = styled.div`
@@ -21,7 +20,6 @@ export const RootLayout = () => {
       <MainContent>
         <Outlet />
       </MainContent>
-      <Footer />
     </RootWrapper>
   );
 };
