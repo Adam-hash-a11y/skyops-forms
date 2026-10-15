@@ -19,8 +19,8 @@ export const flights: Flight[] = [
     departureTime: "2026-07-27T20:30",
     arrivalTime: "2026-07-29T20:30",
     status: "Scheduled",
-    bookedSeats: 0,
-    totalSeats: 10,
+    bookedSeats: 50,
+    totalSeats: 183,
   },
   {
     flightNumber: "SKYOPS-102",
@@ -30,8 +30,8 @@ export const flights: Flight[] = [
     departureTime: "2026-07-27T20:30",
     arrivalTime: "2026-07-28T20:30",
     status: "Scheduled",
-    bookedSeats: 0,
-    totalSeats: 10,
+    bookedSeats: 150,
+    totalSeats: 150,
   },
 
   {
@@ -42,7 +42,7 @@ export const flights: Flight[] = [
     departureTime: "2026-07-27T20:31",
     arrivalTime: "2026-07-28T20:31",
     status: "Scheduled",
-    bookedSeats: 0,
-    totalSeats: 9,
+    bookedSeats: 190,
+    totalSeats: 199,
   },
 ];
