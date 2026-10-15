@@ -49,10 +49,12 @@ const variants = {
   [IconButtonVariant.DANGER]: DangerIconButton,
 };
 
-export const IconButton: React.FunctionComponent<Props> = (p) => {
-  const StyledIconButton = variants[p.variant ?? IconButtonVariant.DEFAULT];
+export const IconButton: React.FunctionComponent<Props> = ({
+  handleButton,
+  children,
+  variant,
+}) => {
+  const StyledIconButton = variants[variant ?? IconButtonVariant.DEFAULT];
 
-  return (
-    <StyledIconButton onClick={p.handleButton}>{p.children}</StyledIconButton>
-  );
+  return <StyledIconButton onClick={handleButton}>{children}</StyledIconButton>;
 };
