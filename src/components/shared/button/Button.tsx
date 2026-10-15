@@ -99,13 +99,19 @@ const variants = {
   [ButtonVariant.OUTLINE_SMALL]: OutlineSmallButton,
 };
 
-export const Button: React.FunctionComponent<Props> = (p) => {
-  const StyledButton = variants[p.variant ?? ButtonVariant.SECONDARY];
+export const Button: React.FunctionComponent<Props> = ({
+  disabled,
+  handleButton,
+  children,
+  label,
+  variant,
+}) => {
+  const StyledButton = variants[variant ?? ButtonVariant.SECONDARY];
 
   return (
-    <StyledButton disabled={p.disabled} onClick={p.handleButton}>
-      {p.children}
-      {p.label}
+    <StyledButton disabled={disabled} onClick={handleButton}>
+      {children}
+      {label}
     </StyledButton>
   );
 };
