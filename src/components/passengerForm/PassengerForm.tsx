@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { FormInputError } from "../shared/formInputError/FormInputError";
 import { FormInput } from "../shared/formInput/FlightFormInput";
-import { FormType } from "../flightForm/types";
 import { passengerReducer, initialState } from "./reducer";
 import {
   RESET_PASSENGER,
@@ -13,6 +12,7 @@ import {
 } from "./action";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 import { FaCheck, FaXmark } from "react-icons/fa6";
+import { FormType } from "../shared/flightFormModal/types";
 
 const FormWrapper = styled.div`
   max-width: 400px;
@@ -82,7 +82,7 @@ export const PassengerForm = () => {
         touched={state.touched.firstName}
       />
       {state.touched.firstName && state.errors.firstName && (
-        <FormInputError error={state.errors.firstName} />
+        <FormInputError message={state.errors.firstName} />
       )}
 
       <FormInput
@@ -98,7 +98,7 @@ export const PassengerForm = () => {
         touched={state.touched.lastName}
       />
       {state.touched.lastName && state.errors.lastName && (
-        <FormInputError error={state.errors.lastName} />
+        <FormInputError message={state.errors.lastName} />
       )}
 
       <FormInput
@@ -114,7 +114,7 @@ export const PassengerForm = () => {
         touched={state.touched.passportNumber}
       />
       {state.touched.passportNumber && state.errors.passportNumber && (
-        <FormInputError error={state.errors.passportNumber} />
+        <FormInputError message={state.errors.passportNumber} />
       )}
 
       <FormInput
@@ -130,7 +130,7 @@ export const PassengerForm = () => {
         touched={state.touched.nationality}
       />
       {state.touched.nationality && state.errors.nationality && (
-        <FormInputError error={state.errors.nationality} />
+        <FormInputError message={state.errors.nationality} />
       )}
 
       <FormInput
@@ -146,7 +146,7 @@ export const PassengerForm = () => {
         touched={state.touched.dateOfBirth}
       />
       {state.touched.dateOfBirth && state.errors.dateOfBirth && (
-        <FormInputError error={state.errors.dateOfBirth} />
+        <FormInputError message={state.errors.dateOfBirth} />
       )}
 
       <FormInput
@@ -162,7 +162,7 @@ export const PassengerForm = () => {
         touched={state.touched.email}
       />
       {state.touched.email && state.errors.email && (
-        <FormInputError error={state.errors.email} />
+        <FormInputError message={state.errors.email} />
       )}
 
       <FormInput
@@ -178,7 +178,7 @@ export const PassengerForm = () => {
         touched={state.touched.phoneNumber}
       />
       {state.touched.phoneNumber && state.errors.phoneNumber && (
-        <FormInputError error={state.errors.phoneNumber} />
+        <FormInputError message={state.errors.phoneNumber} />
       )}
 
       <ButtonRow>

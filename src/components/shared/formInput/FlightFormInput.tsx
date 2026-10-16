@@ -1,5 +1,6 @@
-import { FormType } from "../../flightForm/types";
 import styled from "styled-components";
+import { FormInputError } from "../formInputError/FormInputError";
+import type { FormType } from "../flightFormModal/types";
 
 interface Props {
   name: string;
@@ -33,6 +34,8 @@ const Field = styled.div`
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 100%;
+  flex: 1;
 `;
 
 const StyledLabel = styled.label`
@@ -68,10 +71,10 @@ const StyledInput = styled.input<{ $error: boolean }>`
   }
 `;
 
-const StyledSelect = styled.select<{ $error: boolean }>`
+const StyledSelect = styled.select`
   ${baseInputStyles}
-  border: 1px solid ${(p) => (p.$error ? "#c0262d" : "#c9d2df")};
-  background: ${(p) => (p.$error ? "#fff8f8" : "#fff")};
+  border: 1px solid #c9d2df;
+  background: #fff;
 `;
 
 const HintBox = styled.span`
@@ -102,7 +105,6 @@ export const FormInput: React.FunctionComponent<Props> = ({
 
       {type === "select" ? (
         <StyledSelect
-          $error={hasError}
           name={name}
           value={value}
           onChange={handleChange}
@@ -128,7 +130,11 @@ export const FormInput: React.FunctionComponent<Props> = ({
         />
       )}
 
-      {hint && !hasError && <HintBox>{hint}</HintBox>}
+      {touched && error ? (
+        <FormInputError message={error} />
+      ) : (
+        hint && <HintBox>{hint}</HintBox>
+      )}
     </Field>
   );
 };
