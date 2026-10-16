@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { LuTriangleAlert } from "react-icons/lu";
 
 interface Props {
-  error: string;
+  message: string;
 }
 
 const ErrorText = styled.span`
@@ -14,11 +14,11 @@ const ErrorText = styled.span`
   color: #a4202a;
 `;
 
-export const FormInputError: React.FunctionComponent<Props> = ({ error }) => {
+export const FormInputError: React.FunctionComponent<Props> = ({ message }) => {
   return (
     <ErrorText>
       <LuTriangleAlert />
-      {error}
+      {message}
     </ErrorText>
   );
 };
