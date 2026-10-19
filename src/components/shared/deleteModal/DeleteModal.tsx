@@ -1,17 +1,21 @@
 import type React from "react";
-import styled from "styled-components";
 import { Button, ButtonVariant } from "../button/Button";
-import { FaTrash, FaXmark } from "react-icons/fa6";
+import styled from "styled-components";
+import { IconButton } from "../iconButton/IconButton";
+import { LuX } from "react-icons/lu";
+import { WarningBox } from "../warningBox/WarningBox";
 
 interface Props {
-  label: string;
-  isOpen: boolean;
-  handleClose?: () => void;
-  handleDelete: (key: number) => void;
-  itemKey: number;
+  title: string;
+  action: string;
+  itemName: string;
+  handleClose: () => void;
+  ticketCount?: number;
+  deleteButtonLabel: string;
+  handleDelete: () => void;
 }
 
-const Overlay = styled.div`
+const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -21,47 +25,86 @@ const Overlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
 `;
 
-const ModalBox = styled.section`
+const ModalBox = styled.div`
+  border-radius: 12px;
+  width: 440px;
   background-color: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  max-width: 400px;
+
+  display: flex;
+  flex-direction: column;
+`;
+
+const ModalHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px 24px;
+  align-items: center;
+  border-bottom: 1px solid #dce2eb;
+`;
+
+const HeaderTitle = styled.div`
+  font-size: 18px;
+  font-weight: 600;
+`;
+
+const ModalBody = styled.div`
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow-y: auto;
+  flex: 1;
+`;
+const ModalFooter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  background-color: #f2f4f8;
+  border-top: 1px solid #dce2eb;
+  padding: 16px 24px;
+  border-radius: 0 0 12px 12px;
+  gap: 10px;
 `;
 
 export const DeleteModal: React.FunctionComponent<Props> = ({
-  label,
-  isOpen,
+  title,
   handleClose,
+  action,
+  itemName,
+  ticketCount,
+  deleteButtonLabel,
   handleDelete,
-  itemKey,
 }) => {
-  if (!isOpen) {
-    return null;
-  } else {
-    return (
-      <Overlay>
-        <ModalBox>
-          <p>Are you sure you want to delete this {label}?</p>
+  return (
+    <ModalOverlay>
+      <ModalBox>
+        <ModalHeader>
+          <HeaderTitle>{title}</HeaderTitle>
+          <IconButton handleButton={handleClose}>
+            <LuX />
+          </IconButton>
+        </ModalHeader>
+        <ModalBody>
+          <div>
+            {action} <b>{itemName}</b> ? This cannot be undone.
+          </div>
+          <WarningBox>
+            {ticketCount} tickets reference this flight. The API does not remove
+            them; they will show as deleted.
+          </WarningBox>
+        </ModalBody>
+        <ModalFooter>
+          <Button label="Cancel" handleButton={handleClose} />
           <Button
-            handleButton={() => handleDelete(itemKey)}
-            label="Confirm"
+            label={deleteButtonLabel}
             variant={ButtonVariant.DANGER}
-          >
-            <FaTrash />
-          </Button>
-          <Button
-            handleButton={handleClose}
-            label="Cancel"
-            variant={ButtonVariant.SECONDARY}
-          >
-            <FaXmark />
-          </Button>
-        </ModalBox>
-      </Overlay>
-    );
-  }
+            handleButton={handleDelete}
+          />
+        </ModalFooter>
+      </ModalBox>
+    </ModalOverlay>
+  );
 };
