@@ -5,6 +5,7 @@ import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuPlus } from "react-icons/lu";
 import { useState } from "react";
 import { FlightFormModal } from "../shared/flightFormModal/FlightFormModal";
+import { DeleteModal } from "../shared/deleteModal/DeleteModal";
 
 const Title = styled.h2`
   font-size: 26px;
@@ -40,6 +41,9 @@ export const FlightsList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [allFlights, setAllFlights] = useState(flights);
   const [flightToEdit, setFlightToEdit] = useState("");
+  const [flightToDelete, setFlightToDelete] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   const handleOpenFlightCreateModal = () => {
     setFlightToEdit("");
     setIsModalOpen(true);
@@ -75,12 +79,33 @@ export const FlightsList = () => {
     handleCloseFlightModal();
   };
 
+  const handleOpenDeleteModal = (flightNumber: string) => {
+    setFlightToDelete(flightNumber);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setFlightToDelete("");
+  };
+
+  const handleDeleteFlight = () => {
+    const remainingFlights = allFlights.filter(
+      (flight) => flight.flightNumber !== flightToDelete,
+    );
+
+    setAllFlights(remainingFlights);
+    handleCloseDeleteModal();
+  };
+
   return (
     <>
       <PageHeader>
         <TitleBlock>
           <Title>Flights</Title>
-          <Subtitle>9 flights · all times in UTC, 24-hour</Subtitle>
+          <Subtitle>
+            {allFlights.length} flights · all times in UTC, 24-hour
+          </Subtitle>
         </TitleBlock>
         <Button
           label="New flight"
@@ -96,6 +121,17 @@ export const FlightsList = () => {
           flight={editedFlight}
           handleClose={handleCloseFlightModal}
           handleSave={handleSaveFlight}
+        />
+      )}
+
+      {isDeleteModalOpen && (
+        <DeleteModal
+          handleClose={handleCloseDeleteModal}
+          title="Delete flight"
+          action="Delete"
+          itemName={flightToDelete}
+          deleteButtonLabel="Delete flight"
+          handleDelete={handleDeleteFlight}
         />
       )}
 
@@ -117,8 +153,8 @@ export const FlightsList = () => {
               totalSeats={flight.totalSeats}
               bookDisabled={false}
               handleEdit={() => handleEditFlight(flight.flightNumber)}
+              handleDelete={() => handleOpenDeleteModal(flight.flightNumber)}
               // handleBook={}
-              // handleDelete={handleDelete}
             />
           );
         })}
