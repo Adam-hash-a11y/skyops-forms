@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { flights } from "../../data/flightData";
+import { flights, type Flight } from "../../data/flightData";
 import { FligthCard } from "../flightCard/FlightCard";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuPlus } from "react-icons/lu";
@@ -38,12 +38,41 @@ const Subtitle = styled.div`
 `;
 export const FlightsList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [allFlights, setAllFlights] = useState(flights);
+  const [flightToEdit, setFlightToEdit] = useState("");
   const handleOpenFlightCreateModal = () => {
+    setFlightToEdit("");
     setIsModalOpen(true);
   };
 
   const handleCloseFlightModal = () => {
     setIsModalOpen(false);
+    setFlightToEdit("");
+  };
+
+  const handleEditFlight = (flightNumber: string) => {
+    setFlightToEdit(flightNumber);
+    setIsModalOpen(true);
+  };
+
+  const editedFlight = allFlights.find(
+    (flight) => flight.flightNumber === flightToEdit,
+  );
+
+  const handleSaveFlight = (savedFlight: Flight) => {
+    const newFlights = [...allFlights];
+
+    if (flightToEdit) {
+      const index = newFlights.findIndex(
+        (flight) => flight.flightNumber === flightToEdit,
+      );
+      newFlights[index] = savedFlight;
+    } else {
+      newFlights.push(savedFlight);
+    }
+
+    setAllFlights(newFlights);
+    handleCloseFlightModal();
   };
 
   return (
@@ -62,10 +91,16 @@ export const FlightsList = () => {
         </Button>
       </PageHeader>
 
-      {isModalOpen && <FlightFormModal handleClose={handleCloseFlightModal} />}
+      {isModalOpen && (
+        <FlightFormModal
+          flight={editedFlight}
+          handleClose={handleCloseFlightModal}
+          handleSave={handleSaveFlight}
+        />
+      )}
 
       <Container>
-        {flights.map((flight, index) => {
+        {allFlights.map((flight, index) => {
           return (
             <FligthCard
               key={flight.flightNumber}
@@ -81,8 +116,8 @@ export const FlightsList = () => {
               bookedSeats={flight.bookedSeats}
               totalSeats={flight.totalSeats}
               bookDisabled={false}
+              handleEdit={() => handleEditFlight(flight.flightNumber)}
               // handleBook={}
-              // handleEdit={handleUpdate}
               // handleDelete={handleDelete}
             />
           );

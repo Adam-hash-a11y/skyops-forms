@@ -23,6 +23,7 @@ interface Props {
   touched?: boolean;
   options?: SelectOption[];
   hint?: string;
+  disabled?: boolean;
 }
 
 interface SelectOption {
@@ -69,6 +70,11 @@ const StyledInput = styled.input<{ $error: boolean }>`
     color: #566377;
     opacity: 0.8;
   }
+  &:disabled {
+    background: #f2f4f8;
+    color: #566377;
+    cursor: not-allowed;
+  }
 `;
 
 const StyledSelect = styled.select`
@@ -96,6 +102,7 @@ export const FormInput: React.FunctionComponent<Props> = ({
   touched,
   options = [],
   hint,
+  disabled,
 }) => {
   const hasError = Boolean(touched && error);
 
@@ -127,6 +134,7 @@ export const FormInput: React.FunctionComponent<Props> = ({
           id={id}
           onChange={handleChange}
           onBlur={handleBlur}
+          disabled={disabled}
         />
       )}
 
