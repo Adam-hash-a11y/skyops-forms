@@ -6,10 +6,13 @@ import { FormInput } from "../formInput/FlightFormInput";
 import { flightReducer, initialState } from "./reducer";
 import { SET_FIELD, SET_TOUCHED } from "./action";
 import { Button, ButtonVariant } from "../button/Button";
-import { FormType } from "./types";
+import { FormType, type Status } from "./types";
+import { type Flight } from "../../../data/flightData";
 
 interface Props {
   handleClose: () => void;
+  handleSave: (flight: Flight) => void;
+  flight?: Flight;
 }
 
 const ModalOverlay = styled.div`
@@ -76,14 +79,28 @@ const ModalFooter = styled.div`
 `;
 
 const statusOptions = [
-  { value: "scheduled", label: "Scheduled" },
-  { value: "delayed", label: "Delayed" },
-  { value: "cancelled", label: "Cancelled" },
-  { value: "landed", label: "Landed" },
+  { value: "Scheduled", label: "Scheduled" },
+  { value: "Delayed", label: "Delayed" },
+  { value: "Cancelled", label: "Cancelled" },
+  { value: "Landed", label: "Landed" },
 ];
 
-export const FlightFormModal: FunctionComponent<Props> = ({ handleClose }) => {
-  const [state, dispatch] = useReducer(flightReducer, initialState);
+export const FlightFormModal: FunctionComponent<Props> = ({
+  handleClose,
+  flight,
+  handleSave,
+}) => {
+  const startState = flight
+    ? {
+        ...initialState,
+        ...flight,
+        bookedSeats: String(flight.bookedSeats),
+        totalSeats: String(flight.totalSeats),
+        status: flight.status as Status,
+        disabled: false,
+      }
+    : initialState;
+  const [state, dispatch] = useReducer(flightReducer, startState);
   const handleChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -104,11 +121,25 @@ export const FlightFormModal: FunctionComponent<Props> = ({ handleClose }) => {
     dispatch({ type: SET_TOUCHED, field: e.target.name });
   };
 
+  const handleSubmit = () => {
+    handleSave({
+      flightNumber: state.flightNumber,
+      airline: state.airline,
+      origin: state.origin,
+      destination: state.destination,
+      departureTime: state.departureTime,
+      arrivalTime: state.arrivalTime,
+      status: state.status,
+      bookedSeats: Number(state.bookedSeats),
+      totalSeats: Number(state.totalSeats),
+    });
+  };
+
   return (
     <ModalOverlay>
       <ModalBox>
         <ModalHeader>
-          <HeaderTitle>New flight</HeaderTitle>
+          <HeaderTitle>{flight ? "Edit flight" : "New flight"}</HeaderTitle>
           <IconButton handleButton={handleClose}>
             <LuX />
           </IconButton>
@@ -127,6 +158,7 @@ export const FlightFormModal: FunctionComponent<Props> = ({ handleClose }) => {
               hint="Must start with SKYOPS-"
               error={state.errors.flightNumber}
               touched={state.touched.flightNumber}
+              disabled={Boolean(flight)}
             />
           </FormRow>
 
@@ -248,9 +280,10 @@ export const FlightFormModal: FunctionComponent<Props> = ({ handleClose }) => {
         <ModalFooter>
           <Button label="Cancel" handleButton={handleClose} />
           <Button
-            label="Create flight"
+            label={flight ? "Save changes" : "Create flight"}
             variant={ButtonVariant.PRIMARY}
-            disabled={true}
+            disabled={state.disabled}
+            handleButton={handleSubmit}
           />
         </ModalFooter>
       </ModalBox>
