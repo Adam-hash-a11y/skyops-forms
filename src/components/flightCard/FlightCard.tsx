@@ -4,6 +4,7 @@ import { IconButton, IconButtonVariant } from "../shared/iconButton/IconButton";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuArrowRight, LuPencil, LuTicket, LuTrash2 } from "react-icons/lu";
 import type { FunctionComponent } from "react";
+import { StatusBadge } from "../shared/statusBadge/StatusBadge";
 
 interface Props {
   flightNumber: string;
@@ -54,29 +55,6 @@ const FlightNumber = styled.p`
   font-size: 12px;
   font-weight: 400;
   color: #566377;
-`;
-const StatusBadge = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 24px;
-  padding: 0 10px;
-  border-radius: 12px;
-  background-color: #d3e3fb;
-  color: #144aa0;
-  gap: 5px;
-`;
-
-const Status = styled.div`
-  font-size: 12px;
-  font-weight: 600;
-`;
-
-const Dot = styled.div`
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #144aa0;
 `;
 
 const Route = styled.div`
@@ -235,10 +213,7 @@ export const FligthCard: FunctionComponent<Props> = ({
           <Airline>{airline}</Airline>
           <FlightNumber>{flightNumber}</FlightNumber>
         </AirlineInfo>
-        <StatusBadge>
-          <Dot />
-          <Status>{status}</Status>
-        </StatusBadge>
+        <StatusBadge status={status} />
       </CardHeader>
 
       <Route>
