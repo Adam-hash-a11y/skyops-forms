@@ -137,6 +137,9 @@ export const FlightsList = () => {
 
       <Container>
         {allFlights.map((flight, index) => {
+          const isFull = flight.bookedSeats >= flight.totalSeats;
+          const isBookableStatus =
+            flight.status === "Scheduled" || flight.status === "Delayed";
           return (
             <FligthCard
               key={flight.flightNumber}
@@ -151,7 +154,7 @@ export const FlightsList = () => {
               arrivalDate={flight.arrivalTime}
               bookedSeats={flight.bookedSeats}
               totalSeats={flight.totalSeats}
-              bookDisabled={false}
+              bookDisabled={isFull || !isBookableStatus}
               handleEdit={() => handleEditFlight(flight.flightNumber)}
               handleDelete={() => handleOpenDeleteModal(flight.flightNumber)}
               // handleBook={}
