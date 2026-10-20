@@ -6,6 +6,7 @@ import { LuArrowRight, LuPencil, LuTicket, LuTrash2 } from "react-icons/lu";
 import type { FunctionComponent } from "react";
 import { StatusBadge } from "../shared/statusBadge/StatusBadge";
 import { formatUtcDate, formatUtcTime } from "../../utils/formatDateTime";
+import { getCityName } from "../../utils/cityNames";
 
 interface Props {
   flightNumber: string;
@@ -220,22 +221,22 @@ export const FligthCard: FunctionComponent<Props> = ({
       <Route>
         <RouteStart>
           <CityIATA>{origin}</CityIATA>
-          <City>{origin}</City>
+          <City>{getCityName(origin)}</City>
         </RouteStart>
         <FlightIcon />
         <RouteEnd>
           <CityIATA>{destination}</CityIATA>
-          <City>{destination}</City>
+          <City>{getCityName(destination)}</City>
         </RouteEnd>
       </Route>
 
       <FlightTimes>
         <FlightTimeDateBlockDeparture>
-          <FlightTime>{formatUtcTime(departureDate)} </FlightTime>
+          <FlightTime>{formatUtcTime(departureTime)}</FlightTime>
           <FlightDate>{formatUtcDate(departureDate)}</FlightDate>
         </FlightTimeDateBlockDeparture>
         <FlightTimeDateBlockArrival>
-          <FlightTime>{formatUtcTime(arrivalTime)} </FlightTime>
+          <FlightTime>{formatUtcTime(arrivalTime)}</FlightTime>
           <FlightDate>{formatUtcDate(arrivalDate)}</FlightDate>
         </FlightTimeDateBlockArrival>
       </FlightTimes>
