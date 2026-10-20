@@ -5,6 +5,7 @@ import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuArrowRight, LuPencil, LuTicket, LuTrash2 } from "react-icons/lu";
 import type { FunctionComponent } from "react";
 import { StatusBadge } from "../shared/statusBadge/StatusBadge";
+import { formatUtcDate, formatUtcTime } from "../../utils/formatDateTime";
 
 interface Props {
   flightNumber: string;
@@ -230,12 +231,12 @@ export const FligthCard: FunctionComponent<Props> = ({
 
       <FlightTimes>
         <FlightTimeDateBlockDeparture>
-          <FlightTime>{departureTime} </FlightTime>
-          <FlightDate>{departureDate}</FlightDate>
+          <FlightTime>{formatUtcTime(departureDate)} </FlightTime>
+          <FlightDate>{formatUtcDate(departureDate)}</FlightDate>
         </FlightTimeDateBlockDeparture>
         <FlightTimeDateBlockArrival>
-          <FlightTime>{arrivalTime} </FlightTime>
-          <FlightDate>{arrivalDate}</FlightDate>
+          <FlightTime>{formatUtcTime(arrivalTime)} </FlightTime>
+          <FlightDate>{formatUtcDate(arrivalDate)}</FlightDate>
         </FlightTimeDateBlockArrival>
       </FlightTimes>
 
