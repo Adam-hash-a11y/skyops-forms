@@ -7,6 +7,7 @@ export enum ButtonVariant {
   DANGER = "danger",
   DANGER_OUTLINE = "dangerOutline",
   OUTLINE_SMALL = "outlineSmall",
+  FILTER = "filter",
 }
 
 interface Props {
@@ -91,12 +92,34 @@ const OutlineSmallButton = styled.button`
   }
 `;
 
+const FilterButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  color: #1b63d6;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #e7f0fd;
+  }
+`;
+
 const variants = {
   [ButtonVariant.PRIMARY]: PrimaryButton,
   [ButtonVariant.SECONDARY]: SecondaryButton,
   [ButtonVariant.DANGER]: DangerButton,
   [ButtonVariant.DANGER_OUTLINE]: DangerOutlineButton,
   [ButtonVariant.OUTLINE_SMALL]: OutlineSmallButton,
+  [ButtonVariant.FILTER]: FilterButton,
 };
 
 export const Button: React.FunctionComponent<Props> = ({

@@ -6,14 +6,14 @@ interface Props {
   name: string;
   type: FormType;
   value: string | number;
-  placeholder: string;
+  placeholder?: string;
   id: string;
   handleChange: (
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLSelectElement>,
   ) => void;
-  handleBlur: (
+  handleBlur?: (
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLSelectElement>,
