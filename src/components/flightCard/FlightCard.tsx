@@ -32,10 +32,16 @@ const FlightCard = styled.div`
   display: flex;
   flex-direction: column;
   gap: 18px;
-  width: 340px;
-  flex: 1;
+  width: 32%;
   padding: 20px;
   background-color: #fff;
+
+  @media (max-width: 1200px) {
+    width: 49%;
+  }
+  @media (max-width: 900px) {
+    width: 100%;
+  }
 `;
 const CardHeader = styled.div`
   display: flex;
