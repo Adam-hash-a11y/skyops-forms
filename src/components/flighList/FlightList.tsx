@@ -18,7 +18,7 @@ const Title = styled.h2`
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 20px 2%;
 `;
 
 const PageHeader = styled.div`
