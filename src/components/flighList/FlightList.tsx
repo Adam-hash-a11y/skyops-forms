@@ -184,6 +184,7 @@ export const FlightsList = () => {
           itemName={flightToDelete}
           deleteButtonLabel="Delete flight"
           handleDelete={handleDeleteFlight}
+          entityName="flight"
         />
       )}
 
