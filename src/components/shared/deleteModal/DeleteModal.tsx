@@ -13,6 +13,7 @@ interface Props {
   ticketCount?: number;
   deleteButtonLabel: string;
   handleDelete: () => void;
+  entityName?: string;
 }
 
 const ModalOverlay = styled.div`
@@ -78,6 +79,7 @@ export const DeleteModal: React.FunctionComponent<Props> = ({
   ticketCount,
   deleteButtonLabel,
   handleDelete,
+  entityName,
 }) => {
   return (
     <ModalOverlay>
@@ -93,8 +95,8 @@ export const DeleteModal: React.FunctionComponent<Props> = ({
             {action} <b>{itemName}</b> ? This cannot be undone.
           </div>
           <WarningBox>
-            {ticketCount} tickets reference this flight. The API does not remove
-            them; they will show as deleted.
+            {ticketCount} tickets reference this {entityName}. The API does not
+            remove them; they will show as deleted.
           </WarningBox>
         </ModalBody>
         <ModalFooter>
