@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import { PassengerForm } from "../components/passengerForm/PassengerForm";
 import { NotFound } from "../components/notFound/NotFound";
 import { RootLayout } from "../components/rootLayout/RootLayout";
 import { FlightsList } from "../components/flighList/FlightList";
@@ -13,7 +12,6 @@ export const App = () => {
       <Routes>
         <Route element={<RootLayout />}>
           <Route path="flights" element={<FlightsList />} />
-          <Route path="passenger" element={<PassengerForm />} />
           <Route path="passengers" element={<PassengerList />} />
           <Route path="*" element={<NotFound />} />
         </Route>
