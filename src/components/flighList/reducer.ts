@@ -1,5 +1,5 @@
 import type { Status } from "../shared/flightFormModal/types";
-import { RESET_FILTERS, SET_FILTER } from "./action";
+import { RESET_FILTERS, SET_FILTER, type Action } from "./action";
 
 interface State {
   origin: string;
@@ -15,7 +15,7 @@ export const initialState: State = {
   status: "",
 };
 
-export const flightFilterReducer = (state: State, action: any): State => {
+export const flightFilterReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case SET_FILTER: {
       const newState = {
