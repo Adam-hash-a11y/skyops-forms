@@ -1,6 +1,5 @@
 import { RESET, SET_FIELD, SET_TOUCHED, SUBMIT, type Action } from "./action";
 import type { Status } from "./types";
-import { flights, type Flight } from "../../data/flightData";
 import {
   isValidFlightNumber,
   isValidOrigin,
@@ -14,7 +13,8 @@ import {
   isValidArrivalTime,
   isValidStatus,
   isValidAirline,
-} from "../../validators/flightForm.validator";
+} from "../../../validators/flightForm.validator";
+import { flights, type Flight } from "../../../data/flightData";
 
 export interface State {
   flightNumber: string;
@@ -59,7 +59,7 @@ export const initialState: State = {
   destination: "",
   departureTime: "",
   arrivalTime: "",
-  status: "",
+  status: "Scheduled",
   bookedSeats: "0",
   totalSeats: "0",
   touched: {
@@ -177,8 +177,7 @@ export const flightReducer = (state: State, action: Action): State => {
         allFLights: newFligths,
       };
     }
-    // case RESET:
-    //   return initialState;
+
     case SET_TOUCHED: {
       const newTouched = { ...state.touched, [action.field]: true };
       const newErrors = { ...state.errors };
@@ -215,8 +214,9 @@ export const flightReducer = (state: State, action: Action): State => {
 
       return { ...state, touched: newTouched, errors: newErrors };
     }
+    case RESET:
+      return initialState;
     default: {
-      console.log("test redcuer");
       return state;
     }
   }

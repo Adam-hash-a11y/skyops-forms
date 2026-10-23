@@ -1,69 +1,79 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
+import { LuPlane } from "react-icons/lu";
 
 const HeaderWrapper = styled.header`
-  background-color: white;
-  border-bottom: 1px solid #e2e2ea;
+  background-color: #0b2545;
 `;
 
-const Nav = styled.nav`
+const NavBar = styled.nav`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  max-width: 1140px;
+  gap: 40px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 18px 24px;
+  padding: 0 24px;
 `;
 
-const Brand = styled.h2`
-  color: #1e1b2e;
-  margin: 0;
-  margin-right: 48px;
-  font-size: 19px;
-  font-weight: 700;
+const Skyops = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 600;
+`;
+
+const LogoMark = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: #1b63d6;
+  color: #ffffff;
 `;
 
 const LinkGroup = styled.div`
   display: flex;
-  align-items: center;
-  gap: 30px;
 `;
 
 const StyledLink = styled(NavLink)`
-  color: #64748b;
+  padding: 18px 16px;
+  color: #a9b8ce;
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
-  padding: 10px 0;
-  border-bottom: 2px solid transparent;
-  transition: color 0.15s ease;
+  border-bottom: 3px solid transparent;
 
   &:hover {
-    color: #1e1b2e;
+    color: #ffffff;
   }
 
   &.active {
-    color: #6d5ef8;
-    border-bottom: 2px solid #6d5ef8;
+    color: #ffffff;
+    border-bottom-color: #5b9bff;
   }
 `;
 
 export const Header = () => {
   return (
     <HeaderWrapper>
-      <Nav>
-        <Brand>SkyOps</Brand>
+      <NavBar>
+        <Skyops to="/flights">
+          <LogoMark>
+            <LuPlane size={20} />
+          </LogoMark>
+          SkyOps
+        </Skyops>
         <LinkGroup>
-          <StyledLink to="/" end>
-            Home
-          </StyledLink>
-          <StyledLink to="/flight">Flight Form</StyledLink>
-          <StyledLink to="/passenger">Passenger Form</StyledLink>
-          <StyledLink to="/flights">Flights List</StyledLink>
-          <StyledLink to="/passengers">Passengers List</StyledLink>
-          <StyledLink to="/counter">Counter</StyledLink>
+          <StyledLink to="/flights">Flights</StyledLink>
+          <StyledLink to="/passengers">Passengers</StyledLink>
+          <StyledLink to="/tickets">Tickets</StyledLink>
         </LinkGroup>
-      </Nav>
+      </NavBar>
     </HeaderWrapper>
   );
 };

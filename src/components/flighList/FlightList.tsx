@@ -1,206 +1,220 @@
 import styled from "styled-components";
-import type { Flight } from "../../data/flightData";
+import { flights, type Flight } from "../../data/flightData";
+import { FligthCard } from "../flightCard/FlightCard";
 import { Button, ButtonVariant } from "../shared/button/Button";
-import { useEffect, useState } from "react";
+import { LuPlus } from "react-icons/lu";
+import { useReducer, useState } from "react";
+import { FlightFormModal } from "../shared/flightFormModal/FlightFormModal";
 import { DeleteModal } from "../shared/deleteModal/DeleteModal";
-import { EditModal } from "../shared/editModal/EditModal";
-import { FaPen, FaTrash } from "react-icons/fa6";
-import {
-  deleteFlight,
-  getFlights,
-  updateFlight,
-} from "../../service/flightService";
+import { FlightFilters } from "../flightFilters/FlightFilters";
+import { flightFilterReducer, initialState } from "./reducer";
+import { RESET_FILTERS, SET_FILTER } from "./action";
 
 const Title = styled.h2`
-  margin-bottom: 20px;
+  font-size: 26px;
+  font-weight: 600;
 `;
 
-const Card = styled.div`
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 12px;
-  background: white;
-`;
-
-const CardTopRow = styled.div`
+const Container = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  gap: 20px 2%;
+`;
+
+const PageHeader = styled.div`
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 6px;
+  margin-bottom: 20px;
+  align-items: flex-end;
 `;
 
-const FlightHeader = styled.p`
-  font-weight: 700;
-  margin: 0;
+const TitleBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
 
-const Route = styled.p`
-  color: #475569;
-  margin: 0 0 6px 0;
+const Subtitle = styled.div`
+  font-size: 14px;
+  font-weight: 400;
+  color: #566377;
 `;
-
-const Meta = styled.p`
-  color: #64748b;
-  font-size: 13px;
-  margin: 0;
-`;
-
 export const FlightsList = () => {
-  const [allFlights, setAllFlights] = useState<Flight[]>([]);
-  const [filter, setFilter] = useState("");
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [state, dispatch] = useReducer(flightFilterReducer, initialState);
 
-  useEffect(() => {
-    const fetchFlights = async () => {
-      try {
-        const flights = await getFlights();
-        setAllFlights(flights);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [allFlights, setAllFlights] = useState(flights);
+  const [flightToEdit, setFlightToEdit] = useState("");
+  const [flightToDelete, setFlightToDelete] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-    fetchFlights();
-  }, []);
-
-  const handleModalOpen = (index: number) => {
-    setOpenIndex(index);
+  const handleOpenFlightCreateModal = () => {
+    setFlightToEdit("");
+    setIsModalOpen(true);
   };
 
-  const handleModalClose = () => {
-    setOpenIndex(null);
+  const handleCloseFlightModal = () => {
+    setIsModalOpen(false);
+    setFlightToEdit("");
   };
 
-  const handleEditOpen = (index: number) => {
-    setEditIndex(index);
+  const handleEditFlight = (flightNumber: string) => {
+    setFlightToEdit(flightNumber);
+    setIsModalOpen(true);
   };
 
-  const handleEditClose = () => {
-    setEditIndex(null);
-  };
-
-  const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(e.target.value);
-  };
-
-  const displayedFlights = allFlights.filter((item) =>
-    filter === "" ? true : item.flightNumber.includes(filter),
+  const editedFlight = allFlights.find(
+    (flight) => flight.flightNumber === flightToEdit,
   );
 
-  const handleDelete = async (flightNumber: string) => {
-    try {
-      console.log("Deleting flight:", flightNumber);
-      await deleteFlight(flightNumber);
-      setAllFlights((prev) =>
-        prev.filter((flight) => flight.flightNumber !== flightNumber),
+  const handleSaveFlight = (savedFlight: Flight) => {
+    const newFlights = [...allFlights];
+
+    if (flightToEdit) {
+      const index = newFlights.findIndex(
+        (flight) => flight.flightNumber === flightToEdit,
       );
-      setOpenIndex(null);
-    } catch (error) {
-      console.error(error);
+
+      if (index === -1) return;
+
+      newFlights[index] = savedFlight;
+    } else {
+      newFlights.push(savedFlight);
     }
+
+    setAllFlights(newFlights);
+    handleCloseFlightModal();
   };
 
-  const handleUpdate = async (updatedFlight: Flight) => {
-    try {
-      await updateFlight(
-        updatedFlight.flightNumber,
-        updatedFlight.airline,
-        updatedFlight.origin,
-        updatedFlight.destination,
-        updatedFlight.departureTime,
-        updatedFlight.arrivalTime,
-        updatedFlight.status,
-        String(updatedFlight.totalSeats),
-        String(updatedFlight.bookedSeats),
-      );
-      setAllFlights((prev) =>
-        prev.map((flight) =>
-          flight.flightNumber === updatedFlight.flightNumber
-            ? updatedFlight
-            : flight,
-        ),
-      );
-      setEditIndex(null);
-    } catch (error) {
-      console.error(error);
-    }
+  const handleOpenDeleteModal = (flightNumber: string) => {
+    setFlightToDelete(flightNumber);
+    setIsDeleteModalOpen(true);
   };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setFlightToDelete("");
+  };
+
+  const handleDeleteFlight = () => {
+    const remainingFlights = allFlights.filter(
+      (flight) => flight.flightNumber !== flightToDelete,
+    );
+
+    setAllFlights(remainingFlights);
+    handleCloseDeleteModal();
+  };
+
+  const handleChangeFilter = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    dispatch({
+      type: SET_FILTER,
+      payload: { value: e.target.value, name: e.target.name },
+    });
+  };
+
+  const handleResetFilter = () => {
+    dispatch({ type: RESET_FILTERS });
+  };
+
+  const displayedFlight = allFlights.filter((flight) => {
+    const originFilter = flight.origin.includes(
+      state.origin.trim().toUpperCase(),
+    );
+    const destinationFilter = flight.destination.includes(
+      state.destination.trim().toUpperCase(),
+    );
+
+    const statusFilter =
+      state.status === "" ? true : flight.status === state.status;
+
+    return originFilter && destinationFilter && statusFilter;
+  });
+
+  if (state.sortBy === "departureTime") {
+    displayedFlight.sort((a, b) =>
+      a.departureTime.localeCompare(b.departureTime),
+    );
+  }
 
   return (
     <>
-      <Title>Flights List</Title>
+      <PageHeader>
+        <TitleBlock>
+          <Title>Flights</Title>
+          <Subtitle>
+            {allFlights.length} flights · all times in UTC, 24-hour
+          </Subtitle>
+        </TitleBlock>
+        <Button
+          label="New flight"
+          variant={ButtonVariant.PRIMARY}
+          handleButton={handleOpenFlightCreateModal}
+        >
+          <LuPlus />
+        </Button>
+      </PageHeader>
 
-      <label htmlFor="filterInput">Filter</label>
-      <input
-        id="filterInput"
-        type="text"
-        placeholder="filter by"
-        value={filter}
-        onChange={handleChangeFilter}
+      <FlightFilters
+        status={state.status}
+        origin={state.origin}
+        destination={state.destination}
+        sortBy={state.sortBy}
+        handleChange={handleChangeFilter}
+        handleReset={handleResetFilter}
       />
 
-      {displayedFlights.map((flight, index) => {
-        const currentIndex = allFlights.indexOf(flight);
+      {isModalOpen && (
+        <FlightFormModal
+          flight={editedFlight}
+          handleClose={handleCloseFlightModal}
+          handleSave={handleSaveFlight}
+        />
+      )}
 
-        return (
-          <Card key={flight.flightNumber}>
-            <CardTopRow>
-              <FlightHeader>
-                {flight.flightNumber} — {flight.airline}
-              </FlightHeader>
+      {isDeleteModalOpen && (
+        <DeleteModal
+          handleClose={handleCloseDeleteModal}
+          title="Delete flight"
+          action="Delete"
+          itemName={flightToDelete}
+          deleteButtonLabel="Delete flight"
+          handleDelete={handleDeleteFlight}
+          entityName="flight"
+        />
+      )}
 
-              <div>
-                <Button
-                  handleButton={() => handleEditOpen(index)}
-                  label="Edit"
-                  variant={ButtonVariant.PRIMARY}
-                >
-                  <FaPen />
-                </Button>
-
-                <Button
-                  handleButton={() => handleModalOpen(index)}
-                  label="Delete"
-                  variant={ButtonVariant.DANGER}
-                >
-                  <FaTrash />
-                </Button>
-              </div>
-            </CardTopRow>
-
-            <Route>
-              {flight.origin} → {flight.destination}
-            </Route>
-
-            <Meta>Status: {flight.status}</Meta>
-
-            <Meta>
-              Seats: {flight.bookedSeats}/{flight.totalSeats}
-            </Meta>
-
-            {openIndex === index && (
-              <DeleteModal
-                itemKey={currentIndex}
-                label="Flight"
-                isOpen={true}
-                handleClose={handleModalClose}
-                handleDelete={() => handleDelete(flight.flightNumber)}
-              />
-            )}
-
-            {editIndex === index && (
-              <EditModal
-                isOpen={true}
-                flight={flight}
-                handleClose={handleEditClose}
-                handleSave={handleUpdate}
-              />
-            )}
-          </Card>
-        );
-      })}
+      <Container>
+        {displayedFlight.map((flight) => {
+          const isFull = flight.bookedSeats >= flight.totalSeats;
+          const isBookableStatus =
+            flight.status === "Scheduled" || flight.status === "Delayed";
+          return (
+            <FligthCard
+              key={flight.flightNumber}
+              flightNumber={flight.flightNumber}
+              airline={flight.airline}
+              status={flight.status}
+              origin={flight.origin}
+              destination={flight.destination}
+              departureTime={flight.departureTime}
+              departureDate={flight.departureTime}
+              arrivalTime={flight.arrivalTime}
+              arrivalDate={flight.arrivalTime}
+              bookedSeats={flight.bookedSeats}
+              totalSeats={flight.totalSeats}
+              bookDisabled={isFull || !isBookableStatus}
+              handleEdit={() => handleEditFlight(flight.flightNumber)}
+              handleDelete={() => handleOpenDeleteModal(flight.flightNumber)}
+              // handleBook={}
+            />
+          );
+        })}
+      </Container>
     </>
   );
 };
