@@ -36,6 +36,7 @@ const STATUS_BADGE_COLORS: Record<
   Delayed: { background: "#FFF1D6", text: "#8A4B00" },
   Cancelled: { background: "#FDE8E8", text: "#A4202A" },
   Landed: { background: "#E3F4EA", text: "#17653D" },
+  Confirmed: { background: "#E3F4EA", text: "#17653D" },
 };
 
 export const StatusBadge: React.FunctionComponent<Props> = ({ status }) => {
