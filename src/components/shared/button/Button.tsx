@@ -6,6 +6,7 @@ export enum ButtonVariant {
   SECONDARY = "secondary",
   DANGER = "danger",
   DANGER_OUTLINE = "dangerOutline",
+  DANGER_OUTLINE_SMALL = "dangerOutlineSmall",
   OUTLINE_SMALL = "outlineSmall",
   FILTER = "filter",
 }
@@ -77,6 +78,28 @@ const DangerOutlineButton = styled.button`
   }
 `;
 
+const DangerOutlineSmallButton = styled.button`
+  ${baseButtonStyles}
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
+  background-color: #ffffff;
+  border: 1px solid #c0262d;
+  color: #a4202a;
+
+  &:hover:not(:disabled) {
+    background-color: #fde8e8;
+  }
+
+  &:disabled {
+    border-color: #c0262d;
+    color: #a4202a;
+    background-color: #f2f4f8;
+    cursor: not-allowed;
+  }
+`;
+
 const OutlineSmallButton = styled.button`
   ${baseButtonStyles}
   gap: 6px;
@@ -118,6 +141,7 @@ const variants = {
   [ButtonVariant.SECONDARY]: SecondaryButton,
   [ButtonVariant.DANGER]: DangerButton,
   [ButtonVariant.DANGER_OUTLINE]: DangerOutlineButton,
+  [ButtonVariant.DANGER_OUTLINE_SMALL]: DangerOutlineSmallButton,
   [ButtonVariant.OUTLINE_SMALL]: OutlineSmallButton,
   [ButtonVariant.FILTER]: FilterButton,
 };
