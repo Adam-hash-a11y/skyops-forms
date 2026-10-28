@@ -72,23 +72,17 @@ export const isDepartureBeforeArrival = (
   return !Number.isNaN(dep) && !Number.isNaN(arr) && dep < arr;
 };
 
-export const isValidTotalSeats = (value: number): string => {
-  if (value > 0) {
+export const isValidSeatCount = (value: number): string => {
+  if (Number.isInteger(value) && value >= 0) {
     return "";
   }
-  return "Total seats must be a positive number";
+  return "Seats must be a postive number bigger than 0";
 };
 
-export const isValidBookedSeats = (value: number): string => {
-  if (value >= 0) {
-    return "";
-  }
-  return "Booked seats must be a valid number";
-};
-
-export const isBookedWithinTotal = (
-  bookedSeats: number,
-  totalSeats: number,
+export const hasAtLeastOneSeat = (
+  firstSeats: number,
+  businessSeats: number,
+  economySeats: number,
 ): boolean => {
-  return bookedSeats <= totalSeats;
+  return firstSeats + businessSeats + economySeats > 0;
 };

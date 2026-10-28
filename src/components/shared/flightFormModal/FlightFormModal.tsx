@@ -95,8 +95,9 @@ export const FlightFormModal: FunctionComponent<Props> = ({
     ? {
         ...initialState,
         ...flight,
-        bookedSeats: String(flight.bookedSeats),
-        totalSeats: String(flight.totalSeats),
+        firstSeats: String(flight.firstSeats),
+        businessSeats: String(flight.businessSeats),
+        economySeats: String(flight.economySeats),
         status: flight.status as Status,
         disabled: false,
       }
@@ -131,8 +132,10 @@ export const FlightFormModal: FunctionComponent<Props> = ({
       departureTime: state.departureTime,
       arrivalTime: state.arrivalTime,
       status: state.status,
-      bookedSeats: Number(state.bookedSeats),
-      totalSeats: Number(state.totalSeats),
+      firstSeats: Number(state.firstSeats),
+      businessSeats: Number(state.businessSeats),
+      economySeats: Number(state.economySeats),
+      takenSeats: flight ? flight.takenSeats : [],
     });
   };
 
@@ -252,29 +255,42 @@ export const FlightFormModal: FunctionComponent<Props> = ({
           </FormRow>
           <FormRow>
             <FormInput
-              name="totalSeats"
+              name="firstSeats"
               type={FormType.NUMBER}
-              value={state.totalSeats}
-              placeholder="Total Seats"
-              id="TotalSeatsInput"
+              value={state.firstSeats}
+              placeholder="First Seats"
+              id="FirstSeatsInput"
               handleChange={handleChange}
-              label="Total seats"
+              label="First seats"
               handleBlur={handleBlur}
-              error={state.errors.totalSeats}
-              touched={state.touched.totalSeats}
+              error={state.errors.firstSeats}
+              touched={state.touched.firstSeats}
             />
 
             <FormInput
-              name="bookedSeats"
+              name="businessSeats"
               type={FormType.NUMBER}
-              value={state.bookedSeats}
-              placeholder="Booked Seats"
-              id="BookedSeatsInput"
+              value={state.businessSeats}
+              placeholder="Business Seats"
+              id="BusinessSeatsInput"
               handleChange={handleChange}
-              label="Booked seats"
+              label="Business seats"
               handleBlur={handleBlur}
-              error={state.errors.bookedSeats}
-              touched={state.touched.bookedSeats}
+              error={state.errors.businessSeats}
+              touched={state.touched.businessSeats}
+            />
+
+            <FormInput
+              name="economySeats"
+              type={FormType.NUMBER}
+              value={state.economySeats}
+              placeholder="Economy Seats"
+              id="EconomySeatsInput"
+              handleChange={handleChange}
+              label="Economy seats"
+              handleBlur={handleBlur}
+              error={state.errors.economySeats}
+              touched={state.touched.economySeats}
             />
           </FormRow>
         </ModalBody>

@@ -6,8 +6,10 @@ export interface Flight {
   departureTime: string;
   arrivalTime: string;
   status: string;
-  bookedSeats: number;
-  totalSeats: number;
+  firstSeats: number;
+  businessSeats: number;
+  economySeats: number;
+  takenSeats: string[];
 }
 
 export const flights: Flight[] = [
@@ -19,8 +21,10 @@ export const flights: Flight[] = [
     departureTime: "2026-11-03T08:15",
     arrivalTime: "2026-11-03T11:05",
     status: "Scheduled",
-    bookedSeats: 120,
-    totalSeats: 180,
+    firstSeats: 12,
+    businessSeats: 28,
+    economySeats: 140,
+    takenSeats: ["B3", "C12", "C21"],
   },
   {
     flightNumber: "SKYOPS-102",
@@ -30,8 +34,10 @@ export const flights: Flight[] = [
     departureTime: "2026-11-03T14:30",
     arrivalTime: "2026-11-03T17:20",
     status: "Delayed",
-    bookedSeats: 175,
-    totalSeats: 180,
+    firstSeats: 12,
+    businessSeats: 28,
+    economySeats: 140,
+    takenSeats: ["C7", "C9"],
   },
   {
     flightNumber: "SKYOPS-103",
@@ -41,8 +47,10 @@ export const flights: Flight[] = [
     departureTime: "2026-11-04T06:45",
     arrivalTime: "2026-11-04T09:50",
     status: "Scheduled",
-    bookedSeats: 150,
-    totalSeats: 150,
+    firstSeats: 10,
+    businessSeats: 30,
+    economySeats: 110,
+    takenSeats: [],
   },
   {
     flightNumber: "SKYOPS-104",
@@ -52,8 +60,10 @@ export const flights: Flight[] = [
     departureTime: "2026-10-18T10:00",
     arrivalTime: "2026-10-18T11:35",
     status: "Landed",
-    bookedSeats: 98,
-    totalSeats: 140,
+    firstSeats: 10,
+    businessSeats: 30,
+    economySeats: 100,
+    takenSeats: ["A1", "C14"],
   },
   {
     flightNumber: "SKYOPS-105",
@@ -63,8 +73,10 @@ export const flights: Flight[] = [
     departureTime: "2026-11-05T19:20",
     arrivalTime: "2026-11-05T22:10",
     status: "Cancelled",
-    bookedSeats: 45,
-    totalSeats: 160,
+    firstSeats: 10,
+    businessSeats: 30,
+    economySeats: 120,
+    takenSeats: ["C22"],
   },
   {
     flightNumber: "SKYOPS-106",
@@ -74,8 +86,10 @@ export const flights: Flight[] = [
     departureTime: "2026-11-06T12:00",
     arrivalTime: "2026-11-06T14:35",
     status: "Scheduled",
-    bookedSeats: 20,
-    totalSeats: 200,
+    firstSeats: 20,
+    businessSeats: 40,
+    economySeats: 140,
+    takenSeats: ["B11"],
   },
   {
     flightNumber: "SKYOPS-107",
@@ -85,7 +99,9 @@ export const flights: Flight[] = [
     departureTime: "2026-11-07T21:40",
     arrivalTime: "2026-11-07T23:55",
     status: "Delayed",
-    bookedSeats: 60,
-    totalSeats: 210,
+    firstSeats: 20,
+    businessSeats: 40,
+    economySeats: 150,
+    takenSeats: [],
   },
 ];

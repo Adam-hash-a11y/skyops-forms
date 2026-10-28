@@ -190,7 +190,10 @@ export const FlightsList = () => {
 
       <Container>
         {displayedFlight.map((flight) => {
-          const isFull = flight.bookedSeats >= flight.totalSeats;
+          const totalSeats =
+            flight.firstSeats + flight.businessSeats + flight.economySeats;
+          const takenSeatsCount = flight.takenSeats.length;
+          const isFull = takenSeatsCount >= totalSeats;
           const isBookableStatus =
             flight.status === "Scheduled" || flight.status === "Delayed";
           return (
@@ -205,8 +208,8 @@ export const FlightsList = () => {
               departureDate={flight.departureTime}
               arrivalTime={flight.arrivalTime}
               arrivalDate={flight.arrivalTime}
-              bookedSeats={flight.bookedSeats}
-              totalSeats={flight.totalSeats}
+              bookedSeats={takenSeatsCount}
+              totalSeats={totalSeats}
               bookDisabled={isFull || !isBookableStatus}
               handleEdit={() => handleEditFlight(flight.flightNumber)}
               handleDelete={() => handleOpenDeleteModal(flight.flightNumber)}
