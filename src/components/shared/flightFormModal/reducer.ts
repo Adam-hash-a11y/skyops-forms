@@ -1,15 +1,14 @@
-import { RESET, SET_FIELD, SET_TOUCHED, SUBMIT, type Action } from "./action";
+import { RESET, SET_FIELD, SET_TOUCHED, type Action } from "./action";
 import type { Status } from "./types";
 import {
   isValidFlightNumber,
   isValidOrigin,
   isValidDestination,
   isValidDepartureTime,
-  isValidTotalSeats,
-  isValidBookedSeats,
+  isValidSeatCount,
+  hasAtLeastOneSeat,
   isSameOriginDestination,
   isDepartureBeforeArrival,
-  isBookedWithinTotal,
   isValidArrivalTime,
   isValidStatus,
   isValidAirline,
@@ -24,8 +23,9 @@ export interface State {
   departureTime: string;
   arrivalTime: string;
   status: Status;
-  bookedSeats: string;
-  totalSeats: string;
+  firstSeats: string;
+  businessSeats: string;
+  economySeats: string;
   touched: {
     flightNumber: boolean;
     airline: boolean;
@@ -34,8 +34,9 @@ export interface State {
     departureTime: boolean;
     arrivalTime: boolean;
     status: boolean;
-    bookedSeats: boolean;
-    totalSeats: boolean;
+    firstSeats: boolean;
+    businessSeats: boolean;
+    economySeats: boolean;
   };
   errors: {
     flightNumber: string;
@@ -45,8 +46,9 @@ export interface State {
     departureTime: string;
     arrivalTime: string;
     status: string;
-    totalSeats: string;
-    bookedSeats: string;
+    firstSeats: string;
+    businessSeats: string;
+    economySeats: string;
   };
   disabled: boolean;
   allFLights: Flight[];
@@ -60,8 +62,9 @@ export const initialState: State = {
   departureTime: "",
   arrivalTime: "",
   status: "Scheduled",
-  bookedSeats: "0",
-  totalSeats: "0",
+  firstSeats: "0",
+  businessSeats: "0",
+  economySeats: "0",
   touched: {
     flightNumber: false,
     airline: false,
@@ -70,8 +73,9 @@ export const initialState: State = {
     departureTime: false,
     arrivalTime: false,
     status: false,
-    bookedSeats: false,
-    totalSeats: false,
+    firstSeats: false,
+    businessSeats: false,
+    economySeats: false,
   },
   errors: {
     flightNumber: "",
@@ -81,8 +85,9 @@ export const initialState: State = {
     departureTime: "",
     arrivalTime: "",
     status: "",
-    totalSeats: "",
-    bookedSeats: "",
+    firstSeats: "",
+    businessSeats: "",
+    economySeats: "",
   },
   disabled: true,
   allFLights: [...flights],
@@ -102,8 +107,11 @@ export const flightReducer = (state: State, action: Action): State => {
       newErrors.destination = isValidDestination(newState.destination);
       newErrors.departureTime = isValidDepartureTime(newState.departureTime);
       newErrors.arrivalTime = isValidArrivalTime(newState.arrivalTime);
-      newErrors.totalSeats = isValidTotalSeats(Number(newState.totalSeats));
-      newErrors.bookedSeats = isValidBookedSeats(Number(newState.bookedSeats));
+      newErrors.firstSeats = isValidSeatCount(Number(newState.firstSeats));
+      newErrors.businessSeats = isValidSeatCount(
+        Number(newState.businessSeats),
+      );
+      newErrors.economySeats = isValidSeatCount(Number(newState.economySeats));
       newErrors.status = isValidStatus(newState.status);
 
       if (isSameOriginDestination(newState.origin, newState.destination)) {
@@ -119,13 +127,15 @@ export const flightReducer = (state: State, action: Action): State => {
       }
 
       if (
-        !isBookedWithinTotal(
-          Number(newState.bookedSeats),
-          Number(newState.totalSeats),
+        !hasAtLeastOneSeat(
+          Number(newState.firstSeats),
+          Number(newState.businessSeats),
+          Number(newState.economySeats),
         )
       ) {
-        newErrors.bookedSeats = "Booked seats can't exceed total seats";
-        newErrors.totalSeats = "Booked seats can't exceed total seats";
+        newErrors.firstSeats = "A flight needs at least one seat";
+        newErrors.businessSeats = "A flight needs at least one seat";
+        newErrors.economySeats = "A flight needs at least one seat";
       }
       return {
         ...newState,
@@ -133,48 +143,14 @@ export const flightReducer = (state: State, action: Action): State => {
           newErrors.flightNumber != "" ||
           newErrors.airline != "" ||
           newErrors.arrivalTime != "" ||
-          newErrors.bookedSeats != "" ||
-          newErrors.totalSeats != "" ||
+          newErrors.firstSeats != "" ||
+          newErrors.businessSeats != "" ||
+          newErrors.economySeats != "" ||
           newErrors.departureTime != "" ||
           newErrors.origin != "" ||
           newErrors.destination != "" ||
           newErrors.status != "",
         errors: newErrors,
-      };
-    }
-    case SUBMIT: {
-      console.log("SUBMIT fired, current state:", state);
-      // flights.push({
-      //   flightNumber: state.flightNumber,
-      //   airline: state.airline,
-      //   origin: state.origin,
-      //   destination: state.destination,
-      //   departureTime: state.departureTime,
-      //   arrivalTime: state.arrivalTime,
-      //   status: state.status,
-      //   bookedSeats: Number(state.bookedSeats),
-      //   totalSeats: Number(state.totalSeats),
-      // });
-
-      //TDLR ; check this later !
-      console.log("flights array now:", flights);
-      const newFligths = [
-        ...state.allFLights,
-        {
-          flightNumber: state.flightNumber,
-          airline: state.airline,
-          origin: state.origin,
-          destination: state.destination,
-          departureTime: state.departureTime,
-          arrivalTime: state.arrivalTime,
-          status: state.status,
-          bookedSeats: Number(state.bookedSeats),
-          totalSeats: Number(state.totalSeats),
-        },
-      ];
-      return {
-        ...state,
-        allFLights: newFligths,
       };
     }
 
@@ -204,11 +180,16 @@ export const flightReducer = (state: State, action: Action): State => {
         case "status":
           newErrors.status = isValidStatus(state.status);
           break;
-        case "totalSeats":
-          newErrors.totalSeats = isValidTotalSeats(Number(state.totalSeats));
+        case "firstSeats":
+          newErrors.firstSeats = isValidSeatCount(Number(state.firstSeats));
           break;
-        case "bookedSeats":
-          newErrors.bookedSeats = isValidBookedSeats(Number(state.bookedSeats));
+        case "businessSeats":
+          newErrors.businessSeats = isValidSeatCount(
+            Number(state.businessSeats),
+          );
+          break;
+        case "economySeats":
+          newErrors.economySeats = isValidSeatCount(Number(state.economySeats));
           break;
       }
 
