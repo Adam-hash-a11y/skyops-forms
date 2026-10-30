@@ -29,6 +29,7 @@ interface Props {
 interface SelectOption {
   value: string;
   label: string;
+  disabled?: boolean;
 }
 
 const Field = styled.div`
@@ -81,6 +82,12 @@ const StyledSelect = styled.select`
   ${baseInputStyles}
   border: 1px solid #c9d2df;
   background: #fff;
+
+  &:disabled {
+    background: #f2f4f8;
+    color: #566377;
+    cursor: not-allowed;
+  }
 `;
 
 const HintBox = styled.span`
@@ -117,9 +124,14 @@ export const FormInput: React.FunctionComponent<Props> = ({
           onChange={handleChange}
           onBlur={handleBlur}
           id={id}
+          disabled={disabled}
         >
           {options.map((option) => (
-            <option key={option.value} value={option.value}>
+            <option
+              key={option.value}
+              value={option.value}
+              disabled={option.disabled}
+            >
               {option.label}
             </option>
           ))}
