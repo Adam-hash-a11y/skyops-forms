@@ -9,6 +9,9 @@ import { DeleteModal } from "../shared/deleteModal/DeleteModal";
 import { PassengerFilters } from "../passengerFilters/PassengerFilters";
 import { initialState, passengerFilterReducer } from "./reducer";
 import { RESET_PASSENGER_FILTERS, SET_PASSENGER_FILTER } from "./action";
+import { flights } from "../../data/flightData";
+import { tickets, type Ticket } from "../../data/ticketData";
+import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
 
 const Title = styled.h2`
   font-size: 26px;
@@ -51,6 +54,18 @@ export const PassengerList = () => {
   const [passengerToEdit, setPassengerToEdit] = useState("");
   const [passengerToDelete, setPassengerToDelete] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [passengerToBook, setPassengerToBook] = useState("");
+  const [isTicketModalOpen, setIsTicketModalOpen] = useState(false);
+
+  const handleOpenTicketCreateModal = (passportNumber: string) => {
+    setPassengerToBook(passportNumber);
+    setIsTicketModalOpen(true);
+  };
+
+  const handleCloseTicketModal = () => {
+    setIsTicketModalOpen(false);
+    setPassengerToBook("");
+  };
 
   const handleOpenPassengerCreateModal = () => {
     setPassengerToEdit("");
@@ -88,6 +103,23 @@ export const PassengerList = () => {
 
     setAllPassengers(newPassengers);
     handleClosePassengerModal();
+  };
+
+  const handleSaveTicket = (savedTicket: Ticket) => {
+    tickets.push({
+      ...savedTicket,
+      id: "T-" + String(tickets.length + 1).padStart(3, "0"),
+      createdAt: new Date().toISOString().slice(0, 16),
+    });
+
+    const bookedFlight = flights.find(
+      (flight) => flight.flightNumber === savedTicket.flightNumber,
+    );
+    if (bookedFlight) {
+      bookedFlight.takenSeats.push(savedTicket.seatNumber);
+    }
+
+    handleCloseTicketModal();
   };
 
   const handleOpenDeleteModal = (passportNumber: string) => {
@@ -205,6 +237,15 @@ export const PassengerList = () => {
         />
       )}
 
+      {/* NEW */}
+      {isTicketModalOpen && (
+        <TicketFormModal
+          passportNumber={passengerToBook}
+          handleClose={handleCloseTicketModal}
+          handleSave={handleSaveTicket}
+        />
+      )}
+
       <Container>
         {displayedPassengers.map((passenger) => {
           return (
@@ -221,7 +262,9 @@ export const PassengerList = () => {
               handleDelete={() =>
                 handleOpenDeleteModal(passenger.passportNumber)
               }
-              // handleBook={}
+              handleBook={() =>
+                handleOpenTicketCreateModal(passenger.passportNumber)
+              }
             />
           );
         })}
