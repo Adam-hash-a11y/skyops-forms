@@ -5,7 +5,7 @@ import {
   SUMBIT_PASSENGER,
   type Action,
 } from "./action";
-import { passengers } from "../../data/passengerData";
+import { passengers } from "../../../data/passengerData";
 import {
   isValidDateOfBirth,
   isValidEmail,
@@ -14,7 +14,7 @@ import {
   isValidNationality,
   isValidPassportNumber,
   isValidPhoneNumber,
-} from "../../validators/passengerForm.validator";
+} from "../../../validators/passengerForm.validator";
 
 interface State {
   firstName: string;
@@ -124,13 +124,6 @@ export const passengerReducer = (state: State, action: Action) => {
       const newTouched = { ...state.touched, [action.field]: true };
       const newErrors = { ...state.errors };
       switch (action.field) {
-        //       firstName: string;
-        // lastName: string;
-        // passportNumber: string;
-        // nationality: string;
-        // dateOfBirth: string;
-        // email: string;
-        // phoneNumber: string;
         case "firstName":
           newErrors.firstName = isValidFirstname(state.firstName);
           break;

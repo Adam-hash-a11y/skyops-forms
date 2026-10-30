@@ -5,6 +5,10 @@ export enum ButtonVariant {
   PRIMARY = "primary",
   SECONDARY = "secondary",
   DANGER = "danger",
+  DANGER_OUTLINE = "dangerOutline",
+  DANGER_OUTLINE_SMALL = "dangerOutlineSmall",
+  OUTLINE_SMALL = "outlineSmall",
+  FILTER = "filter",
 }
 
 interface Props {
@@ -16,51 +20,119 @@ interface Props {
 }
 
 const baseButtonStyles = css`
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
+  height: 38px;
+  padding: 0 16px;
   border: none;
   border-radius: 6px;
-  font-size: 16px;
-  font-weight: 700;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
-  margin: 6px;
 
   &:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: 0.45;
   }
 `;
 
 const PrimaryButton = styled.button`
   ${baseButtonStyles}
-  background-color: #16a34a;
-  color: white;
+  background-color: #1b63d6;
+  color: #ffffff;
 
   &:hover:not(:disabled) {
-    background-color: #15803d;
+    background-color: #1553b5;
   }
 `;
 
 const SecondaryButton = styled.button`
   ${baseButtonStyles}
-  background-color: #e2e8f0;
-  color: #334155;
+  background-color: #ffffff;
+  border: 1px solid #c9d2df;
+  color: #162033;
 
   &:hover:not(:disabled) {
-    background-color: #cbd5e1;
+    background-color: #eef2f7;
   }
 `;
 
 const DangerButton = styled.button`
   ${baseButtonStyles}
-  background-color: #dc2626;
-  color: white;
+  background-color: #c0262d;
+  color: #ffffff;
+`;
+
+const DangerOutlineButton = styled.button`
+  ${baseButtonStyles}
+  background-color: #ffffff;
+  border: 1px solid #c0262d;
+  color: #a4202a;
 
   &:hover:not(:disabled) {
-    background-color: #b91c1c;
+    background-color: #fde8e8;
+  }
+`;
+
+const DangerOutlineSmallButton = styled.button`
+  ${baseButtonStyles}
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
+  background-color: #ffffff;
+  border: 1px solid #c0262d;
+  color: #a4202a;
+
+  &:hover:not(:disabled) {
+    background-color: #fde8e8;
+  }
+
+  &:disabled {
+    border-color: #c0262d;
+    color: #a4202a;
+    background-color: #f2f4f8;
+    cursor: not-allowed;
+  }
+`;
+
+const OutlineSmallButton = styled.button`
+  ${baseButtonStyles}
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
+  background-color: #ffffff;
+  border: 1px solid #1b63d6;
+  color: #1b63d6;
+
+  &:hover:not(:disabled) {
+    background-color: #e7f0fd;
+  }
+`;
+
+const FilterButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  color: #1b63d6;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #e7f0fd;
   }
 `;
 
@@ -68,15 +140,25 @@ const variants = {
   [ButtonVariant.PRIMARY]: PrimaryButton,
   [ButtonVariant.SECONDARY]: SecondaryButton,
   [ButtonVariant.DANGER]: DangerButton,
+  [ButtonVariant.DANGER_OUTLINE]: DangerOutlineButton,
+  [ButtonVariant.DANGER_OUTLINE_SMALL]: DangerOutlineSmallButton,
+  [ButtonVariant.OUTLINE_SMALL]: OutlineSmallButton,
+  [ButtonVariant.FILTER]: FilterButton,
 };
 
-export const Button: React.FunctionComponent<Props> = (p) => {
-  const StyledButton = variants[p.variant ?? ButtonVariant.SECONDARY];
+export const Button: React.FunctionComponent<Props> = ({
+  disabled,
+  handleButton,
+  children,
+  label,
+  variant,
+}) => {
+  const StyledButton = variants[variant ?? ButtonVariant.SECONDARY];
 
   return (
-    <StyledButton disabled={p.disabled} onClick={p.handleButton}>
-      {p.children}
-      {p.label}
+    <StyledButton disabled={disabled} onClick={handleButton}>
+      {children}
+      {label}
     </StyledButton>
   );
 };
