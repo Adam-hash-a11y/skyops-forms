@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import styled from "styled-components";
 import { tickets, type Ticket } from "../../data/ticketData";
 import { flights } from "../../data/flightData";
@@ -7,6 +7,9 @@ import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuPlus } from "react-icons/lu";
 import { TicketCard } from "../shared/ticketCard/TicketCard";
 import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
+import { TicketFilters } from "../ticketFilters/TicketFilters";
+import { initialState, ticketFilterReducer } from "./reducer";
+import { RESET_TICKET_FILTERS, SET_TICKET_FILTER } from "./action";
 
 const Title = styled.h2`
   font-size: 26px;
@@ -40,6 +43,7 @@ const Subtitle = styled.div`
 `;
 
 export const TicketList = () => {
+  const [state, dispatch] = useReducer(ticketFilterReducer, initialState);
   const [allTickets, setAllTickets] = useState(tickets);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -75,12 +79,57 @@ export const TicketList = () => {
     setAllTickets(newTickets);
     handleCloseTicketModal();
   };
+
+  const handleChangeFilter = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    dispatch({
+      type: SET_TICKET_FILTER,
+      payload: { value: e.target.value, name: e.target.name },
+    });
+  };
+
+  const handleResetFilter = () => {
+    dispatch({ type: RESET_TICKET_FILTERS });
+  };
+
+  const flightOptions = [
+    { value: "", label: "Select..." },
+    ...flights.map((flight) => ({
+      value: flight.flightNumber,
+      label: flight.flightNumber,
+    })),
+  ];
+
+  const passengerOptions = [
+    { value: "", label: "Select..." },
+    ...passengers.map((passenger) => ({
+      value: passenger.passportNumber,
+      label: passenger.lastName + ", " + passenger.firstName,
+    })),
+  ];
+
+  const filterValueOptions =
+    state.filterBy === "flight" ? flightOptions : passengerOptions;
+
+  const displayedTickets = allTickets.filter((ticket) => {
+    if (state.filterBy === "flight" && state.filterValue !== "") {
+      return ticket.flightNumber === state.filterValue;
+    }
+    if (state.filterBy === "passenger" && state.filterValue !== "") {
+      return ticket.passportNumber === state.filterValue;
+    }
+    return true;
+  });
+
   return (
     <>
       <PageHeader>
         <TitleBlock>
           <Title>Tickets</Title>
-          <Subtitle>{allTickets.length} tickets</Subtitle>
+          <Subtitle>{displayedTickets.length} tickets</Subtitle>
         </TitleBlock>
         <Button
           label="Book ticket"
@@ -91,6 +140,14 @@ export const TicketList = () => {
         </Button>
       </PageHeader>
 
+      <TicketFilters
+        filterBy={state.filterBy}
+        filterValue={state.filterValue}
+        filterValueOptions={filterValueOptions}
+        handleChange={handleChangeFilter}
+        handleReset={handleResetFilter}
+      />
+
       {isModalOpen && (
         <TicketFormModal
           handleClose={handleCloseTicketModal}
@@ -99,7 +156,7 @@ export const TicketList = () => {
       )}
 
       <Container>
-        {allTickets.map((ticket) => {
+        {displayedTickets.map((ticket) => {
           const ticketPassenger = passengers.find(
             (passenger) => passenger.passportNumber === ticket.passportNumber,
           );
