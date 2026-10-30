@@ -7,6 +7,7 @@ import type { FunctionComponent } from "react";
 import { StatusBadge } from "../shared/statusBadge/StatusBadge";
 import { formatUtcDate, formatUtcTime } from "../../utils/formatDateTime";
 import { getCityName } from "../../utils/cityNames";
+import { Link } from "react-router-dom";
 
 interface Props {
   flightNumber: string;
@@ -176,7 +177,7 @@ const CardFooter = styled.div`
   align-items: center;
 `;
 
-const FlightDetails = styled.a`
+const FlightDetails = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -184,6 +185,7 @@ const FlightDetails = styled.a`
   font-size: 13px;
   font-weight: 600;
   color: #1b63d6;
+  text-decoration: none;
 
   &:hover {
     text-decoration: underline;
@@ -261,7 +263,7 @@ export const FligthCard: FunctionComponent<Props> = ({
       </FlightSeats>
       <CardDivider></CardDivider>
       <CardFooter>
-        <FlightDetails>
+        <FlightDetails to={"/flights/" + flightNumber}>
           View details
           <LuArrowRight />
         </FlightDetails>
