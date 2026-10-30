@@ -1,11 +1,12 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { tickets } from "../../data/ticketData";
+import { tickets, type Ticket } from "../../data/ticketData";
 import { flights } from "../../data/flightData";
 import { passengers } from "../../data/passengerData";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuPlus } from "react-icons/lu";
 import { TicketCard } from "../shared/ticketCard/TicketCard";
+import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
 
 const Title = styled.h2`
   font-size: 26px;
@@ -40,11 +41,39 @@ const Subtitle = styled.div`
 
 export const TicketList = () => {
   const [allTickets, setAllTickets] = useState(tickets);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleOpenTicketCreateModal = () => {
-    console.log("book ticket");
+    setIsModalOpen(true);
   };
-  const handleCanelTicket = () => {
+
+  const handleCancelTicket = () => {
     console.log("ticket cancelled");
+  };
+
+  const handleCloseTicketModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSaveTicket = (savedTicket: Ticket) => {
+    const newTickets = [...allTickets];
+    const newTicketId = "T-" + String(allTickets.length + 1).padStart(3, "0");
+
+    newTickets.push({
+      ...savedTicket,
+      id: newTicketId,
+      createdAt: new Date().toISOString().slice(0, 16),
+    });
+
+    const bookedFlight = flights.find(
+      (flight) => flight.flightNumber === savedTicket.flightNumber,
+    );
+    if (bookedFlight) {
+      bookedFlight.takenSeats.push(savedTicket.seatNumber);
+    }
+
+    setAllTickets(newTickets);
+    handleCloseTicketModal();
   };
   return (
     <>
@@ -61,6 +90,13 @@ export const TicketList = () => {
           <LuPlus />
         </Button>
       </PageHeader>
+
+      {isModalOpen && (
+        <TicketFormModal
+          handleClose={handleCloseTicketModal}
+          handleSave={handleSaveTicket}
+        />
+      )}
 
       <Container>
         {allTickets.map((ticket) => {
@@ -83,7 +119,7 @@ export const TicketList = () => {
               isDeletedPassenger={!ticketPassenger}
               isDeletedFlight={!ticketFlight}
               flightNumber={
-                ticketFlight ? ticket.flightNumber : "Deleted Flight"
+                ticketFlight ? ticket.flightNumber : "Deleted flight"
               }
               origin={ticketFlight ? ticketFlight.origin : "-"}
               destination={ticketFlight ? ticketFlight.destination : "-"}
@@ -92,7 +128,7 @@ export const TicketList = () => {
               ticketClass={ticket.ticketClass}
               price={ticket.price}
               createdAt={ticket.createdAt}
-              handleCancel={handleCanelTicket}
+              handleCancel={handleCancelTicket}
               cancelDisabled={ticket.status === "Cancelled"}
             />
           );

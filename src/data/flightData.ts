@@ -104,4 +104,17 @@ export const flights: Flight[] = [
     economySeats: 150,
     takenSeats: [],
   },
+  {
+    flightNumber: "SKYOPS-108",
+    airline: "Tunisair",
+    origin: "TUN",
+    destination: "FRA",
+    departureTime: "2026-11-08T09:30",
+    arrivalTime: "2026-11-08T12:10",
+    status: "Scheduled",
+    firstSeats: 2,
+    businessSeats: 3,
+    economySeats: 3,
+    takenSeats: ["A1", "A2", "B2", "C1"],
+  },
 ];
