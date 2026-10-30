@@ -15,6 +15,8 @@ import type { Ticket } from "../../../data/ticketData";
 interface Props {
   handleClose: () => void;
   handleSave: (ticket: Ticket) => void;
+  flightNumber?: string;
+  passportNumber?: string;
 }
 
 const ModalOverlay = styled.div`
@@ -84,9 +86,14 @@ const ModalFooter = styled.div`
 export const TicketFormModal: React.FunctionComponent<Props> = ({
   handleClose,
   handleSave,
+  flightNumber = "",
+  passportNumber = "",
 }) => {
-  const [state, dispatch] = useReducer(ticketReducer, initialState);
-
+  const [state, dispatch] = useReducer(ticketReducer, {
+    ...initialState,
+    flightNumber: flightNumber,
+    passportNumber: passportNumber,
+  });
   const handleChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
