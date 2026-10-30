@@ -4,6 +4,7 @@ import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuArrowRight, LuPencil, LuTicket, LuTrash2 } from "react-icons/lu";
 import type { FunctionComponent } from "react";
 import { formatUtcDate } from "../../utils/formatDateTime";
+import { Link } from "react-router-dom";
 
 interface Props {
   firstName: string;
@@ -128,7 +129,7 @@ const CardFooter = styled.div`
   align-items: center;
 `;
 
-const TicketsLink = styled.a`
+const TicketsLink = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -136,6 +137,7 @@ const TicketsLink = styled.a`
   font-size: 13px;
   font-weight: 600;
   color: #1b63d6;
+  text-decoration: none;
 
   &:hover {
     text-decoration: underline;
@@ -196,11 +198,10 @@ export const PassengerCard: FunctionComponent<Props> = ({
 
       <CardDivider></CardDivider>
       <CardFooter>
-        <TicketsLink>
-          N tickets
+        <TicketsLink to={"/passengers/" + passportNumber}>
+          View tickets
           <LuArrowRight />
         </TicketsLink>
-
         <FooterActions>
           <Button
             label="Book"
