@@ -7,6 +7,7 @@ import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuPlus } from "react-icons/lu";
 import { TicketCard } from "../shared/ticketCard/TicketCard";
 import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
+import { TicketCancelModal } from "../shared/ticketCancelModal/TicketCancelModal"; // new
 import { TicketFilters } from "../ticketFilters/TicketFilters";
 import { initialState, ticketFilterReducer } from "./reducer";
 import { RESET_TICKET_FILTERS, SET_TICKET_FILTER } from "./action";
@@ -46,13 +47,21 @@ export const TicketList = () => {
   const [state, dispatch] = useReducer(ticketFilterReducer, initialState);
   const [allTickets, setAllTickets] = useState(tickets);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [ticketToCancel, setTicketToCancel] = useState("");
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const handleOpenTicketCreateModal = () => {
     setIsModalOpen(true);
   };
 
-  const handleCancelTicket = () => {
-    console.log("ticket cancelled");
+  const handleOpenCancelModal = (ticketId: string) => {
+    setTicketToCancel(ticketId);
+    setIsCancelModalOpen(true);
+  };
+
+  const handleCloseCancelModal = () => {
+    setIsCancelModalOpen(false);
+    setTicketToCancel("");
   };
 
   const handleCloseTicketModal = () => {
@@ -124,6 +133,27 @@ export const TicketList = () => {
     return true;
   });
 
+  const handleCancelTicket = () => {
+    const newTickets = [...allTickets];
+    const index = newTickets.findIndex(
+      (ticket) => ticket.id === ticketToCancel,
+    );
+
+    if (index === -1) return;
+
+    newTickets[index] = { ...newTickets[index], status: "Cancelled" };
+
+    setAllTickets(newTickets);
+    handleCloseCancelModal();
+  };
+
+  const cancelledTicket = allTickets.find(
+    (ticket) => ticket.id === ticketToCancel,
+  );
+  const cancelledTicketFlight = flights.find(
+    (flight) => flight.flightNumber === cancelledTicket?.flightNumber,
+  );
+
   return (
     <>
       <PageHeader>
@@ -152,6 +182,19 @@ export const TicketList = () => {
         <TicketFormModal
           handleClose={handleCloseTicketModal}
           handleSave={handleSaveTicket}
+        />
+      )}
+
+      {isCancelModalOpen && cancelledTicket && (
+        <TicketCancelModal
+          seatNumber={cancelledTicket.seatNumber}
+          flightNumber={
+            cancelledTicketFlight
+              ? cancelledTicket.flightNumber
+              : "deleted flight"
+          }
+          handleClose={handleCloseCancelModal}
+          handleCancel={handleCancelTicket}
         />
       )}
 
@@ -185,7 +228,7 @@ export const TicketList = () => {
               ticketClass={ticket.ticketClass}
               price={ticket.price}
               createdAt={ticket.createdAt}
-              handleCancel={handleCancelTicket}
+              handleCancel={() => handleOpenCancelModal(ticket.id)}
               cancelDisabled={ticket.status === "Cancelled"}
             />
           );
