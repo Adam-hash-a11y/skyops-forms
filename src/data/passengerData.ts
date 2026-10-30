@@ -72,4 +72,13 @@ export const passengers: Passenger[] = [
     email: "jakub.nowak@example.com",
     phoneNumber: "+48512345678",
   },
+  {
+    firstName: "Hannah",
+    lastName: "Weber",
+    passportNumber: "DE402917",
+    nationality: "DE",
+    dateOfBirth: "1995-06-21",
+    email: "hannah.weber@example.com",
+    phoneNumber: "+4917612345",
+  },
 ];
