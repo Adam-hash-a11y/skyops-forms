@@ -9,7 +9,7 @@ import { DeleteModal } from "../shared/deleteModal/DeleteModal";
 import { PassengerFilters } from "../passengerFilters/PassengerFilters";
 import { initialState, passengerFilterReducer } from "./reducer";
 import { RESET_PASSENGER_FILTERS, SET_PASSENGER_FILTER } from "./action";
-import { flights } from "../../data/flightData";
+import { flights, type Seat } from "../../data/flightData";
 import { tickets, type Ticket } from "../../data/ticketData";
 import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
 
@@ -116,7 +116,23 @@ export const PassengerList = () => {
       (flight) => flight.flightNumber === savedTicket.flightNumber,
     );
     if (bookedFlight) {
-      bookedFlight.takenSeats.push(savedTicket.seatNumber);
+      let classSeats: Seat[] = [];
+      if (savedTicket.ticketClass === "First") {
+        classSeats = bookedFlight.firstSeats;
+      }
+      if (savedTicket.ticketClass === "Business") {
+        classSeats = bookedFlight.businessSeats;
+      }
+      if (savedTicket.ticketClass === "Economy") {
+        classSeats = bookedFlight.economySeats;
+      }
+
+      const bookedSeat = classSeats.find(
+        (seat) => seat.seat === savedTicket.seatNumber,
+      );
+      if (bookedSeat) {
+        bookedSeat.availability = false;
+      }
     }
 
     handleCloseTicketModal();
@@ -237,7 +253,6 @@ export const PassengerList = () => {
         />
       )}
 
-      {/* NEW */}
       {isTicketModalOpen && (
         <TicketFormModal
           passportNumber={passengerToBook}

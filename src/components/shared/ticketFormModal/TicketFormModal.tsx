@@ -5,6 +5,7 @@ import { Button, ButtonVariant } from "../button/Button";
 import { FormInput } from "../formInput/FlightFormInput";
 import { FormType } from "../flightFormModal/types";
 import { flights } from "../../../data/flightData";
+import type { Seat } from "../../../data/flightData";
 import { formatUtcDate, formatUtcTime } from "../../../utils/formatDateTime";
 import { passengers } from "../../../data/passengerData";
 import { initialState, ticketReducer } from "./reducer";
@@ -147,21 +148,10 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
     { value: "", label: "Select a class...", disabled: false },
   ];
 
-  const firstClasstakenSeats = selectedFlight
-    ? selectedFlight.takenSeats.filter((seat) => seat.startsWith("A")).length
-    : 0;
-
-  const bussinessClasstakenSeats = selectedFlight
-    ? selectedFlight.takenSeats.filter((seat) => seat.startsWith("B")).length
-    : 0;
-
-  const economyClasstakenSeats = selectedFlight
-    ? selectedFlight.takenSeats.filter((seat) => seat.startsWith("C")).length
-    : 0;
-
-  if (selectedFlight && selectedFlight.economySeats > 0) {
-    const isEconomyFull =
-      economyClasstakenSeats === selectedFlight.economySeats;
+  if (selectedFlight && selectedFlight.economySeats.length > 0) {
+    const isEconomyFull = !selectedFlight.economySeats.some(
+      (seat) => seat.availability,
+    );
     classOptions.push({
       value: "Economy",
       label: isEconomyFull ? "Economy · full" : "Economy",
@@ -169,9 +159,10 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
     });
   }
 
-  if (selectedFlight && selectedFlight.businessSeats > 0) {
-    const isBusinessFull =
-      bussinessClasstakenSeats === selectedFlight.businessSeats;
+  if (selectedFlight && selectedFlight.businessSeats.length > 0) {
+    const isBusinessFull = !selectedFlight.businessSeats.some(
+      (seat) => seat.availability,
+    );
     classOptions.push({
       value: "Business",
       label: isBusinessFull ? "Business · full" : "Business",
@@ -179,8 +170,10 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
     });
   }
 
-  if (selectedFlight && selectedFlight.firstSeats > 0) {
-    const isFirstFull = firstClasstakenSeats === selectedFlight.firstSeats;
+  if (selectedFlight && selectedFlight.firstSeats.length > 0) {
+    const isFirstFull = !selectedFlight.firstSeats.some(
+      (seat) => seat.availability,
+    );
     classOptions.push({
       value: "First",
       label: isFirstFull ? "First · full" : "First",
@@ -188,39 +181,27 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
     });
   }
 
-  let seatLetter = "";
-  let seatCount = 0;
+  let classSeats: Seat[] = [];
 
   if (selectedFlight && state.ticketClass === "First") {
-    seatLetter = "A";
-    seatCount = selectedFlight.firstSeats;
+    classSeats = selectedFlight.firstSeats;
   }
 
   if (selectedFlight && state.ticketClass === "Business") {
-    seatLetter = "B";
-    seatCount = selectedFlight.businessSeats;
+    classSeats = selectedFlight.businessSeats;
   }
 
   if (selectedFlight && state.ticketClass === "Economy") {
-    seatLetter = "C";
-    seatCount = selectedFlight.economySeats;
+    classSeats = selectedFlight.economySeats;
   }
 
-  const allSeats: string[] = [];
-
-  for (let i = 1; i <= seatCount; i++) {
-    allSeats.push(seatLetter + i);
-  }
-
-  const freeSeats = selectedFlight
-    ? allSeats.filter((seat) => !selectedFlight.takenSeats.includes(seat))
-    : allSeats;
+  const freeSeats = classSeats.filter((seat) => seat.availability);
 
   const seatOptions = [
     { value: "", label: "Select a seat..." },
     ...freeSeats.map((seat) => ({
-      value: seat,
-      label: seat,
+      value: seat.seat,
+      label: seat.seat,
     })),
   ];
 

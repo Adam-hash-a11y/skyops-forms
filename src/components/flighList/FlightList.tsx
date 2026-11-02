@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { flights, type Flight } from "../../data/flightData";
+import { flights, type Flight, type Seat } from "../../data/flightData";
 import { FligthCard } from "../flightCard/FlightCard";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuPlus } from "react-icons/lu";
@@ -166,7 +166,23 @@ export const FlightsList = () => {
       (flight) => flight.flightNumber === savedTicket.flightNumber,
     );
     if (bookedFlight) {
-      bookedFlight.takenSeats.push(savedTicket.seatNumber);
+      let classSeats: Seat[] = [];
+      if (savedTicket.ticketClass === "First") {
+        classSeats = bookedFlight.firstSeats;
+      }
+      if (savedTicket.ticketClass === "Business") {
+        classSeats = bookedFlight.businessSeats;
+      }
+      if (savedTicket.ticketClass === "Economy") {
+        classSeats = bookedFlight.economySeats;
+      }
+
+      const bookedSeat = classSeats.find(
+        (seat) => seat.seat === savedTicket.seatNumber,
+      );
+      if (bookedSeat) {
+        bookedSeat.availability = false;
+      }
     }
 
     handleCloseTicketModal();
@@ -230,8 +246,14 @@ export const FlightsList = () => {
       <Container>
         {displayedFlight.map((flight) => {
           const totalSeats =
-            flight.firstSeats + flight.businessSeats + flight.economySeats;
-          const takenSeatsCount = flight.takenSeats.length;
+            flight.firstSeats.length +
+            flight.businessSeats.length +
+            flight.economySeats.length;
+          const takenSeatsCount = [
+            ...flight.firstSeats,
+            ...flight.businessSeats,
+            ...flight.economySeats,
+          ].filter((seat) => !seat.availability).length;
           const isFull = takenSeatsCount >= totalSeats;
           const isBookableStatus =
             flight.status === "Scheduled" || flight.status === "Delayed";
