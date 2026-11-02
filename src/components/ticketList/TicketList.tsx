@@ -1,13 +1,13 @@
 import { useReducer, useState } from "react";
 import styled from "styled-components";
 import { tickets, type Ticket } from "../../data/ticketData";
-import { flights } from "../../data/flightData";
+import { flights, type Seat } from "../../data/flightData";
 import { passengers } from "../../data/passengerData";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuPlus } from "react-icons/lu";
 import { TicketCard } from "../shared/ticketCard/TicketCard";
 import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
-import { TicketCancelModal } from "../shared/ticketCancelModal/TicketCancelModal"; // new
+import { TicketCancelModal } from "../shared/ticketCancelModal/TicketCancelModal";
 import { TicketFilters } from "../ticketFilters/TicketFilters";
 import { initialState, ticketFilterReducer } from "./reducer";
 import { RESET_TICKET_FILTERS, SET_TICKET_FILTER } from "./action";
@@ -69,20 +69,38 @@ export const TicketList = () => {
   };
 
   const handleSaveTicket = (savedTicket: Ticket) => {
-    const newTickets = [...allTickets];
     const newTicketId = "T-" + String(allTickets.length + 1).padStart(3, "0");
 
-    newTickets.push({
-      ...savedTicket,
-      id: newTicketId,
-      createdAt: new Date().toISOString().slice(0, 16),
-    });
+    const newTickets = [
+      ...allTickets,
+      {
+        ...savedTicket,
+        id: newTicketId,
+        createdAt: new Date().toISOString().slice(0, 16),
+      },
+    ];
 
     const bookedFlight = flights.find(
       (flight) => flight.flightNumber === savedTicket.flightNumber,
     );
     if (bookedFlight) {
-      bookedFlight.takenSeats.push(savedTicket.seatNumber);
+      let classSeats: Seat[] = [];
+      if (savedTicket.ticketClass === "First") {
+        classSeats = bookedFlight.firstSeats;
+      }
+      if (savedTicket.ticketClass === "Business") {
+        classSeats = bookedFlight.businessSeats;
+      }
+      if (savedTicket.ticketClass === "Economy") {
+        classSeats = bookedFlight.economySeats;
+      }
+
+      const bookedSeat = classSeats.find(
+        (seat) => seat.seat === savedTicket.seatNumber,
+      );
+      if (bookedSeat) {
+        bookedSeat.availability = false;
+      }
     }
 
     setAllTickets(newTickets);
