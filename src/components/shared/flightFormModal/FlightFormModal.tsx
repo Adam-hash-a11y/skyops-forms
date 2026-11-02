@@ -95,9 +95,9 @@ export const FlightFormModal: FunctionComponent<Props> = ({
     ? {
         ...initialState,
         ...flight,
-        firstSeats: String(flight.firstSeats),
-        businessSeats: String(flight.businessSeats),
-        economySeats: String(flight.economySeats),
+        firstSeats: String(flight.firstSeats.length),
+        businessSeats: String(flight.businessSeats.length),
+        economySeats: String(flight.economySeats.length),
         status: flight.status as Status,
         disabled: false,
       }
@@ -132,10 +132,9 @@ export const FlightFormModal: FunctionComponent<Props> = ({
       departureTime: state.departureTime,
       arrivalTime: state.arrivalTime,
       status: state.status,
-      firstSeats: Number(state.firstSeats),
-      businessSeats: Number(state.businessSeats),
-      economySeats: Number(state.economySeats),
-      takenSeats: flight ? flight.takenSeats : [],
+      firstSeats: flight ? flight.firstSeats : [],
+      businessSeats: flight ? flight.businessSeats : [],
+      economySeats: flight ? flight.economySeats : [],
     });
   };
 
@@ -253,46 +252,49 @@ export const FlightFormModal: FunctionComponent<Props> = ({
               hint="YYYY-MM-DD HH:mm, 24-hour"
             />
           </FormRow>
-          <FormRow>
-            <FormInput
-              name="firstSeats"
-              type={FormType.NUMBER}
-              value={state.firstSeats}
-              placeholder="First Seats"
-              id="FirstSeatsInput"
-              handleChange={handleChange}
-              label="First seats"
-              handleBlur={handleBlur}
-              error={state.errors.firstSeats}
-              touched={state.touched.firstSeats}
-            />
 
-            <FormInput
-              name="businessSeats"
-              type={FormType.NUMBER}
-              value={state.businessSeats}
-              placeholder="Business Seats"
-              id="BusinessSeatsInput"
-              handleChange={handleChange}
-              label="Business seats"
-              handleBlur={handleBlur}
-              error={state.errors.businessSeats}
-              touched={state.touched.businessSeats}
-            />
+          {!flight && (
+            <FormRow>
+              <FormInput
+                name="firstSeats"
+                type={FormType.NUMBER}
+                value={state.firstSeats}
+                placeholder="First Seats"
+                id="FirstSeatsInput"
+                handleChange={handleChange}
+                label="First seats"
+                handleBlur={handleBlur}
+                error={state.errors.firstSeats}
+                touched={state.touched.firstSeats}
+              />
 
-            <FormInput
-              name="economySeats"
-              type={FormType.NUMBER}
-              value={state.economySeats}
-              placeholder="Economy Seats"
-              id="EconomySeatsInput"
-              handleChange={handleChange}
-              label="Economy seats"
-              handleBlur={handleBlur}
-              error={state.errors.economySeats}
-              touched={state.touched.economySeats}
-            />
-          </FormRow>
+              <FormInput
+                name="businessSeats"
+                type={FormType.NUMBER}
+                value={state.businessSeats}
+                placeholder="Business Seats"
+                id="BusinessSeatsInput"
+                handleChange={handleChange}
+                label="Business seats"
+                handleBlur={handleBlur}
+                error={state.errors.businessSeats}
+                touched={state.touched.businessSeats}
+              />
+
+              <FormInput
+                name="economySeats"
+                type={FormType.NUMBER}
+                value={state.economySeats}
+                placeholder="Economy Seats"
+                id="EconomySeatsInput"
+                handleChange={handleChange}
+                label="Economy seats"
+                handleBlur={handleBlur}
+                error={state.errors.economySeats}
+                touched={state.touched.economySeats}
+              />
+            </FormRow>
+          )}
         </ModalBody>
         <ModalFooter>
           <Button label="Cancel" handleButton={handleClose} />
