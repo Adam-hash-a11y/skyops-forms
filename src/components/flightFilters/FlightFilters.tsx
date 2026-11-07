@@ -14,6 +14,8 @@ interface Props {
       | React.ChangeEvent<HTMLSelectElement>,
   ) => void;
   handleReset: () => void;
+  handleSearch: () => void;
+  searchDisabled: boolean;
 }
 
 const FilterBar = styled.div`
@@ -27,7 +29,10 @@ const FilterBar = styled.div`
   margin-bottom: 20px;
 `;
 
-const ResetFilters = styled.div`
+const FilterButtons = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
   margin-top: 20px;
 `;
 
@@ -51,6 +56,8 @@ export const FlightFilters: React.FunctionComponent<Props> = ({
   sortBy,
   handleChange,
   handleReset,
+  handleSearch,
+  searchDisabled,
 }) => {
   return (
     <FilterBar>
@@ -90,13 +97,19 @@ export const FlightFilters: React.FunctionComponent<Props> = ({
         options={sortByOptions}
         handleChange={handleChange}
       />
-      <ResetFilters>
+      <FilterButtons>
+        <Button
+          label="Search"
+          handleButton={handleSearch}
+          variant={ButtonVariant.PRIMARY}
+          disabled={searchDisabled}
+        />
         <Button
           label="Reset filters"
           handleButton={handleReset}
           variant={ButtonVariant.FILTER}
         />
-      </ResetFilters>
+      </FilterButtons>
     </FilterBar>
   );
 };
