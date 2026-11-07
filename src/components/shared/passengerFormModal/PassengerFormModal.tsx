@@ -1,5 +1,5 @@
 import type React from "react";
-import type { Passenger } from "../../../data/passengerData";
+import type { Passenger } from "../../../types/passengerTypes";
 import styled from "styled-components";
 import { IconButton } from "../iconButton/IconButton";
 import { LuX } from "react-icons/lu";
@@ -11,7 +11,15 @@ import { initialState, passengerReducer } from "./reducer";
 import { SET_FIELD, SET_PASSENGER_TOUCHED } from "./action";
 
 interface Props {
-  handleSave: (passenger: Passenger) => void;
+  handleSave: (
+    firstName: string,
+    lastName: string,
+    passportNumber: string,
+    nationality: string,
+    dateOfBirth: string,
+    email: string,
+    phoneNumber: string,
+  ) => void;
   handleClose: () => void;
   passenger?: Passenger;
 }
@@ -128,15 +136,15 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
   };
 
   const handleSubmit = () => {
-    handleSave({
-      firstName: state.firstName,
-      lastName: state.lastName,
-      passportNumber: state.passportNumber,
-      nationality: state.nationality,
-      dateOfBirth: state.dateOfBirth,
-      email: state.email,
-      phoneNumber: state.phoneNumber,
-    });
+    handleSave(
+      state.firstName,
+      state.lastName,
+      state.passportNumber,
+      state.nationality,
+      state.dateOfBirth,
+      state.email,
+      state.phoneNumber,
+    );
   };
 
   return (
@@ -193,6 +201,7 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               hint="Min. 6 characters, unique"
               error={state.errors.passportNumber}
               touched={state.touched.passportNumber}
+              disabled={Boolean(passenger)}
             />
             <FormInput
               name="nationality"
