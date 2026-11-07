@@ -4,18 +4,23 @@ import { LuX } from "react-icons/lu";
 import { Button, ButtonVariant } from "../button/Button";
 import { FormInput } from "../formInput/FlightFormInput";
 import { FormType } from "../flightFormModal/types";
-import { flights } from "../../../data/flightData";
-import type { Seat } from "../../../data/flightData";
+import type { Flight } from "../../../types/flightTypes";
+import type { Passenger } from "../../../types/passengerTypes";
 import { formatUtcDate, formatUtcTime } from "../../../utils/formatDateTime";
-import { passengers } from "../../../data/passengerData";
 import { initialState, ticketReducer } from "./reducer";
-import { useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { SET_FIELD } from "./action";
-import type { Ticket } from "../../../data/ticketData";
+import { getFlights, getFreeSeats } from "../../../service/flightService";
+import { getPassengers } from "../../../service/passengerService";
 
 interface Props {
   handleClose: () => void;
-  handleSave: (ticket: Ticket) => void;
+  handleSave: (
+    flightId: string,
+    passengerId: string,
+    seatNumber: string,
+    ticketClass: string,
+  ) => void;
   flightNumber?: string;
   passportNumber?: string;
 }
@@ -32,11 +37,11 @@ const ModalOverlay = styled.div`
   align-items: center;
   z-index: 9999;
 `;
+
 const ModalBox = styled.div`
   border-radius: 12px;
   width: 620px;
   background-color: white;
-  height: 520px;
   display: flex;
   flex-direction: column;
 `;
@@ -60,8 +65,6 @@ const ModalBody = styled.div`
   display: flex;
   flex-direction: column;
   gap: 18px;
-  overflow-y: auto;
-  flex: 1;
 `;
 
 const FormRow = styled.div`
@@ -71,6 +74,41 @@ const FormRow = styled.div`
   @media (max-width: 550px) {
     flex-direction: column;
   }
+`;
+
+const PriceBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f2f4f8;
+  border: 1px solid #dce2eb;
+  border-radius: 10px;
+  padding: 14px 16px;
+`;
+
+const PriceInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+const PriceTitle = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+  color: #162033;
+`;
+
+const PriceNote = styled.div`
+  font-size: 13px;
+  font-weight: 400;
+  color: #566377;
+`;
+
+const PriceValue = styled.div`
+  font-size: 18px;
+  font-weight: 600;
+  color: #162033;
 `;
 
 const ModalFooter = styled.div`
@@ -95,6 +133,54 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
     flightNumber: flightNumber,
     passportNumber: passportNumber,
   });
+  const [flights, setFlights] = useState<Flight[]>([]);
+  const [passengers, setPassengers] = useState<Passenger[]>([]);
+  const [freeSeats, setFreeSeats] = useState<{ seat: string; class: string }[]>(
+    [],
+  );
+  const [counts, setCounts] = useState({ first: 0, business: 0, economy: 0 });
+  const [prices, setPrices] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const fetchFlights = async () => {
+      try {
+        const loadedFlights = await getFlights();
+        setFlights(loadedFlights);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchFlights();
+  }, []);
+
+  useEffect(() => {
+    const fetchPassengers = async () => {
+      try {
+        const loadedPassengers = await getPassengers();
+        setPassengers(loadedPassengers);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchPassengers();
+  }, []);
+
+  useEffect(() => {
+    const fetchSeats = async () => {
+      try {
+        const data = await getFreeSeats(state.flightNumber);
+        setFreeSeats(data.seats);
+        setCounts(data.counts);
+        setPrices(data.prices);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (state.flightNumber !== "") {
+      fetchSeats();
+    }
+  }, [state.flightNumber]);
+
   const handleChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -105,6 +191,12 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
       field: e.target.name,
       value: e.target.value,
     });
+
+    if (e.target.name === "flightNumber" && e.target.value === "") {
+      setFreeSeats([]);
+      setCounts({ first: 0, business: 0, economy: 0 });
+      setPrices({});
+    }
   };
 
   const bookableFlights = flights.filter(
@@ -140,82 +232,64 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
     })),
   ];
 
-  const selectedFlight = bookableFlights.find(
-    (flight) => flight.flightNumber === state.flightNumber,
-  );
-
   const classOptions = [
     { value: "", label: "Select a class...", disabled: false },
   ];
 
-  if (selectedFlight && selectedFlight.economySeats.length > 0) {
-    const isEconomyFull = !selectedFlight.economySeats.some(
-      (seat) => seat.availability,
-    );
+  if (counts.economy > 0) {
     classOptions.push({
       value: "Economy",
-      label: isEconomyFull ? "Economy · full" : "Economy",
-      disabled: isEconomyFull,
+      label: "Economy (" + counts.economy + " free)",
+      disabled: false,
     });
   }
 
-  if (selectedFlight && selectedFlight.businessSeats.length > 0) {
-    const isBusinessFull = !selectedFlight.businessSeats.some(
-      (seat) => seat.availability,
-    );
+  if (counts.business > 0) {
     classOptions.push({
       value: "Business",
-      label: isBusinessFull ? "Business · full" : "Business",
-      disabled: isBusinessFull,
+      label: "Business (" + counts.business + " free)",
+      disabled: false,
     });
   }
 
-  if (selectedFlight && selectedFlight.firstSeats.length > 0) {
-    const isFirstFull = !selectedFlight.firstSeats.some(
-      (seat) => seat.availability,
-    );
+  if (counts.first > 0) {
     classOptions.push({
       value: "First",
-      label: isFirstFull ? "First · full" : "First",
-      disabled: isFirstFull,
+      label: "First (" + counts.first + " free)",
+      disabled: false,
     });
   }
 
-  let classSeats: Seat[] = [];
-
-  if (selectedFlight && state.ticketClass === "First") {
-    classSeats = selectedFlight.firstSeats;
-  }
-
-  if (selectedFlight && state.ticketClass === "Business") {
-    classSeats = selectedFlight.businessSeats;
-  }
-
-  if (selectedFlight && state.ticketClass === "Economy") {
-    classSeats = selectedFlight.economySeats;
-  }
-
-  const freeSeats = classSeats.filter((seat) => seat.availability);
+  const classSeats = freeSeats.filter(
+    (seat) => seat.class === state.ticketClass.toLowerCase(),
+  );
 
   const seatOptions = [
     { value: "", label: "Select a seat..." },
-    ...freeSeats.map((seat) => ({
+    ...classSeats.map((seat) => ({
       value: seat.seat,
       label: seat.seat,
     })),
   ];
 
+  const classPrice = prices[state.ticketClass.toLowerCase()];
+
   const handleSubmit = () => {
-    handleSave({
-      id: "",
-      flightNumber: state.flightNumber,
-      passportNumber: state.passportNumber,
-      seatNumber: state.seatNumber,
-      ticketClass: state.ticketClass,
-      price: Number(state.price),
-      status: "Confirmed",
-      createdAt: "",
-    });
+    const selectedFlight = flights.find(
+      (flight) => flight.flightNumber === state.flightNumber,
+    );
+    const selectedPassenger = passengers.find(
+      (passenger) => passenger.passportNumber === state.passportNumber,
+    );
+
+    if (selectedFlight && selectedPassenger) {
+      handleSave(
+        selectedFlight.id,
+        selectedPassenger.id,
+        state.seatNumber,
+        state.ticketClass,
+      );
+    }
   };
 
   return (
@@ -274,19 +348,15 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
               options={seatOptions}
             />
           </FormRow>
-          <FormRow>
-            <FormInput
-              name="price"
-              type={FormType.TEXT}
-              value={state.price}
-              id="TicketPriceInput"
-              label="Price (EUR)"
-              placeholder="Set by class"
-              handleChange={handleChange}
-              hint="Fixed price per class"
-              disabled={true}
-            />
-          </FormRow>
+          <PriceBox>
+            <PriceInfo>
+              <PriceTitle>Ticket price</PriceTitle>
+              <PriceNote>Set by ticket class, fixed per tier</PriceNote>
+            </PriceInfo>
+            <PriceValue>
+              {classPrice === undefined ? "-" : classPrice + " EUR"}
+            </PriceValue>
+          </PriceBox>
         </ModalBody>
         <ModalFooter>
           <Button label="Cancel" handleButton={handleClose} />
