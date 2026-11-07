@@ -83,7 +83,6 @@ export const FlightsList = () => {
   };
 
   const handleOpenFlightCreateModal = () => {
-    setFlightToEdit("");
     setIsModalOpen(true);
   };
 
