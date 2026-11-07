@@ -83,7 +83,6 @@ export const PassengerList = () => {
   };
 
   const handleOpenPassengerCreateModal = () => {
-    setPassengerToEdit("");
     setIsModalOpen(true);
   };
 
