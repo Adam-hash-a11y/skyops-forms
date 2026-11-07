@@ -1,12 +1,10 @@
 import { RESET, SET_FIELD, type Action } from "./action";
-import { classPrices } from "../../../data/classPrices";
 
 export interface State {
   flightNumber: string;
   passportNumber: string;
   ticketClass: string;
   seatNumber: string;
-  price: string;
   disabled: boolean;
 }
 
@@ -15,7 +13,6 @@ export const initialState: State = {
   passportNumber: "",
   ticketClass: "",
   seatNumber: "",
-  price: "",
   disabled: true,
 };
 
@@ -30,12 +27,10 @@ export const ticketReducer = (state: State, action: Action): State => {
       if (action.field === "flightNumber") {
         newState.ticketClass = "";
         newState.seatNumber = "";
-        newState.price = "";
       }
 
       if (action.field === "ticketClass") {
         newState.seatNumber = "";
-        newState.price = action.value ? String(classPrices[action.value]) : "";
       }
 
       return {

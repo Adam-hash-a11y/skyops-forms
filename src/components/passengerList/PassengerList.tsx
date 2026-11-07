@@ -1,5 +1,5 @@
-import { useReducer, useState } from "react";
-import { passengers, type Passenger } from "../../data/passengerData";
+import { useEffect, useReducer, useState } from "react";
+import { type Passenger } from "../../types/passengerTypes";
 import styled from "styled-components";
 import { PassengerCard } from "../passengerCard/PassengerCard";
 import { Button, ButtonVariant } from "../shared/button/Button";
@@ -9,9 +9,15 @@ import { DeleteModal } from "../shared/deleteModal/DeleteModal";
 import { PassengerFilters } from "../passengerFilters/PassengerFilters";
 import { initialState, passengerFilterReducer } from "./reducer";
 import { RESET_PASSENGER_FILTERS, SET_PASSENGER_FILTER } from "./action";
-import { flights, type Seat } from "../../data/flightData";
-import { tickets, type Ticket } from "../../data/ticketData";
 import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
+import { createTicket } from "../../service/ticketService";
+import {
+  createPassenger,
+  deletePassenger,
+  getPassengers,
+  searchPassengers,
+  updatePassenger,
+} from "../../service/passengerService";
 
 const Title = styled.h2`
   font-size: 26px;
@@ -46,16 +52,25 @@ const Subtitle = styled.div`
 
 export const PassengerList = () => {
   const [state, dispatch] = useReducer(passengerFilterReducer, initialState);
-
-  const [allPassengers, setAllPassengers] = useState<Passenger[]>([
-    ...passengers,
-  ]);
+  const [allPassengers, setAllPassengers] = useState<Passenger[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [passengerToEdit, setPassengerToEdit] = useState("");
   const [passengerToDelete, setPassengerToDelete] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [passengerToBook, setPassengerToBook] = useState("");
   const [isTicketModalOpen, setIsTicketModalOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchPassengers = async () => {
+      try {
+        const passengers = await getPassengers();
+        setAllPassengers(passengers);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchPassengers();
+  }, []);
 
   const handleOpenTicketCreateModal = (passportNumber: string) => {
     setPassengerToBook(passportNumber);
@@ -86,56 +101,61 @@ export const PassengerList = () => {
     (passenger) => passenger.passportNumber === passengerToEdit,
   );
 
-  const handleSavePassenger = (savedPassenger: Passenger) => {
-    const newPassengers = [...allPassengers];
-
-    if (passengerToEdit) {
-      const index = newPassengers.findIndex(
-        (passenger) => passenger.passportNumber === passengerToEdit,
-      );
-
-      if (index === -1) return;
-
-      newPassengers[index] = savedPassenger;
-    } else {
-      newPassengers.push(savedPassenger);
+  const handleSavePassenger = async (
+    firstName: string,
+    lastName: string,
+    passportNumber: string,
+    nationality: string,
+    dateOfBirth: string,
+    email: string,
+    phoneNumber: string,
+  ) => {
+    try {
+      if (passengerToEdit) {
+        await updatePassenger(
+          passengerToEdit,
+          firstName,
+          lastName,
+          nationality,
+          dateOfBirth,
+          email,
+          phoneNumber,
+        );
+      } else {
+        await createPassenger(
+          firstName,
+          lastName,
+          passportNumber,
+          nationality,
+          dateOfBirth,
+          email,
+          phoneNumber,
+        );
+      }
+      dispatch({ type: RESET_PASSENGER_FILTERS });
+      const passengers = await getPassengers();
+      setAllPassengers(passengers);
+      handleClosePassengerModal();
+    } catch (error) {
+      console.error(error);
     }
-
-    setAllPassengers(newPassengers);
-    handleClosePassengerModal();
   };
 
-  const handleSaveTicket = (savedTicket: Ticket) => {
-    tickets.push({
-      ...savedTicket,
-      id: "T-" + String(tickets.length + 1).padStart(3, "0"),
-      createdAt: new Date().toISOString().slice(0, 16),
-    });
-
-    const bookedFlight = flights.find(
-      (flight) => flight.flightNumber === savedTicket.flightNumber,
-    );
-    if (bookedFlight) {
-      let classSeats: Seat[] = [];
-      if (savedTicket.ticketClass === "First") {
-        classSeats = bookedFlight.firstSeats;
-      }
-      if (savedTicket.ticketClass === "Business") {
-        classSeats = bookedFlight.businessSeats;
-      }
-      if (savedTicket.ticketClass === "Economy") {
-        classSeats = bookedFlight.economySeats;
-      }
-
-      const bookedSeat = classSeats.find(
-        (seat) => seat.seat === savedTicket.seatNumber,
-      );
-      if (bookedSeat) {
-        bookedSeat.availability = false;
-      }
+  const handleSaveTicket = async (
+    flightId: string,
+    passengerId: string,
+    seatNumber: string,
+    ticketClass: string,
+  ) => {
+    try {
+      await createTicket(flightId, passengerId, seatNumber, ticketClass);
+      dispatch({ type: RESET_PASSENGER_FILTERS });
+      const passengers = await getPassengers();
+      setAllPassengers(passengers);
+      handleCloseTicketModal();
+    } catch (error) {
+      console.error(error);
     }
-
-    handleCloseTicketModal();
   };
 
   const handleOpenDeleteModal = (passportNumber: string) => {
@@ -148,13 +168,18 @@ export const PassengerList = () => {
     setPassengerToDelete("");
   };
 
-  const handleDeletePassenger = () => {
-    const remainingPassengers = allPassengers.filter(
-      (passenger) => passenger.passportNumber !== passengerToDelete,
-    );
-
-    setAllPassengers(remainingPassengers);
-    handleCloseDeleteModal();
+  const handleDeletePassenger = async () => {
+    try {
+      await deletePassenger(passengerToDelete);
+      setAllPassengers((prev) =>
+        prev.filter(
+          (passenger) => passenger.passportNumber !== passengerToDelete,
+        ),
+      );
+      handleCloseDeleteModal();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const deletedPassenger = allPassengers.find(
@@ -180,33 +205,29 @@ export const PassengerList = () => {
     });
   };
 
-  const handleResetFilter = () => {
+  const handleResetFilter = async () => {
     dispatch({ type: RESET_PASSENGER_FILTERS });
+    try {
+      const passengers = await getPassengers();
+      setAllPassengers(passengers);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const displayedPassengers = allPassengers.filter((passenger) => {
-    const firstNameFilter = passenger.firstName
-      .toLowerCase()
-      .includes(state.firstName.trim().toLowerCase());
-    const lastNameFilter = passenger.lastName
-      .toLowerCase()
-      .includes(state.lastName.trim().toLowerCase());
-
-    const nationalityFilter =
-      state.nationality === ""
-        ? true
-        : passenger.nationality === state.nationality;
-
-    return firstNameFilter && lastNameFilter && nationalityFilter;
-  });
-
-  if (state.sortBy === "firstName") {
-    displayedPassengers.sort((a, b) => {
-      if (a.firstName < b.firstName) return -1;
-      if (a.firstName > b.firstName) return 1;
-      return 0;
-    });
-  }
+  const handleSearch = async () => {
+    try {
+      const passengers = await searchPassengers(
+        state.nationality,
+        state.firstName,
+        state.lastName,
+        state.sortBy,
+      );
+      setAllPassengers(passengers);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -231,6 +252,7 @@ export const PassengerList = () => {
         sortBy={state.sortBy}
         handleChange={handleChangeFilter}
         handleReset={handleResetFilter}
+        handleSearch={handleSearch}
       />
 
       {isModalOpen && (
@@ -262,7 +284,7 @@ export const PassengerList = () => {
       )}
 
       <Container>
-        {displayedPassengers.map((passenger) => {
+        {allPassengers.map((passenger) => {
           return (
             <PassengerCard
               key={passenger.passportNumber}

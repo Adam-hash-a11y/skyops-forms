@@ -13,7 +13,6 @@ import {
   isValidStatus,
   isValidAirline,
 } from "../../../validators/flightForm.validator";
-import { flights, type Flight } from "../../../data/flightData";
 
 export interface State {
   flightNumber: string;
@@ -26,6 +25,7 @@ export interface State {
   firstSeats: string;
   businessSeats: string;
   economySeats: string;
+  isEdit: boolean;
   touched: {
     flightNumber: boolean;
     airline: boolean;
@@ -51,7 +51,6 @@ export interface State {
     economySeats: string;
   };
   disabled: boolean;
-  allFLights: Flight[];
 }
 
 export const initialState: State = {
@@ -65,6 +64,7 @@ export const initialState: State = {
   firstSeats: "0",
   businessSeats: "0",
   economySeats: "0",
+  isEdit: false,
   touched: {
     flightNumber: false,
     airline: false,
@@ -90,7 +90,6 @@ export const initialState: State = {
     economySeats: "",
   },
   disabled: true,
-  allFLights: [...flights],
 };
 
 export const flightReducer = (state: State, action: Action): State => {
@@ -107,12 +106,29 @@ export const flightReducer = (state: State, action: Action): State => {
       newErrors.destination = isValidDestination(newState.destination);
       newErrors.departureTime = isValidDepartureTime(newState.departureTime);
       newErrors.arrivalTime = isValidArrivalTime(newState.arrivalTime);
-      newErrors.firstSeats = isValidSeatCount(Number(newState.firstSeats));
-      newErrors.businessSeats = isValidSeatCount(
-        Number(newState.businessSeats),
-      );
-      newErrors.economySeats = isValidSeatCount(Number(newState.economySeats));
       newErrors.status = isValidStatus(newState.status);
+
+      if (!newState.isEdit) {
+        newErrors.firstSeats = isValidSeatCount(Number(newState.firstSeats));
+        newErrors.businessSeats = isValidSeatCount(
+          Number(newState.businessSeats),
+        );
+        newErrors.economySeats = isValidSeatCount(
+          Number(newState.economySeats),
+        );
+
+        if (
+          !hasAtLeastOneSeat(
+            Number(newState.firstSeats),
+            Number(newState.businessSeats),
+            Number(newState.economySeats),
+          )
+        ) {
+          newErrors.firstSeats = "A flight needs at least one seat";
+          newErrors.businessSeats = "A flight needs at least one seat";
+          newErrors.economySeats = "A flight needs at least one seat";
+        }
+      }
 
       if (isSameOriginDestination(newState.origin, newState.destination)) {
         newErrors.origin = "Origin and destination can't be the same";
@@ -126,17 +142,6 @@ export const flightReducer = (state: State, action: Action): State => {
         newErrors.arrivalTime = "departure time must be before arrival time";
       }
 
-      if (
-        !hasAtLeastOneSeat(
-          Number(newState.firstSeats),
-          Number(newState.businessSeats),
-          Number(newState.economySeats),
-        )
-      ) {
-        newErrors.firstSeats = "A flight needs at least one seat";
-        newErrors.businessSeats = "A flight needs at least one seat";
-        newErrors.economySeats = "A flight needs at least one seat";
-      }
       return {
         ...newState,
         disabled:

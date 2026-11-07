@@ -1,13 +1,25 @@
-export const mapFlightFromApi = (flight: any) => ({
+interface FlightApi {
+  _id: string;
+  flightNumber: string;
+  airline: string;
+  route: { origin: string; destination: string };
+  schedule: { departureTime: string; arrivalTime: string };
+  status: string;
+  totalSeats: number;
+  bookedSeats: number;
+}
+
+export const mapFlightFromApi = (flight: FlightApi) => ({
+  id: flight._id,
   flightNumber: flight.flightNumber,
   airline: flight.airline,
   origin: flight.route.origin,
   destination: flight.route.destination,
   departureTime: flight.schedule.departureTime,
   arrivalTime: flight.schedule.arrivalTime,
-  status: flight.status,
-  totalSeats: flight.seats.total,
-  bookedSeats: flight.seats.booked,
+  status: flight.status.charAt(0).toUpperCase() + flight.status.slice(1),
+  totalSeats: flight.totalSeats,
+  bookedSeats: flight.bookedSeats,
 });
 
 export const mapFlightToApi = (
@@ -18,8 +30,9 @@ export const mapFlightToApi = (
   departureTime: string,
   arrivalTime: string,
   status: string,
-  totalSeats: string,
-  bookedSeats: string,
+  firstSeats: string,
+  businessSeats: string,
+  economySeats: string,
 ) => ({
   flightNumber,
   airline,
@@ -32,10 +45,9 @@ export const mapFlightToApi = (
     arrivalTime,
   },
   status: status.toLowerCase(),
-  seats: {
-    total: Number(totalSeats),
-    booked: Number(bookedSeats),
-  },
+  firstSeats: Number(firstSeats),
+  businessSeats: Number(businessSeats),
+  economySeats: Number(economySeats),
 });
 
 export const mapFlightUpdateToApi = (
@@ -45,8 +57,6 @@ export const mapFlightUpdateToApi = (
   departureTime: string,
   arrivalTime: string,
   status: string,
-  totalSeats: string,
-  bookedSeats: string,
 ) => ({
   airline,
   route: {
@@ -58,8 +68,4 @@ export const mapFlightUpdateToApi = (
     arrivalTime,
   },
   status: status.toLowerCase(),
-  seats: {
-    total: Number(totalSeats),
-    booked: Number(bookedSeats),
-  },
 });

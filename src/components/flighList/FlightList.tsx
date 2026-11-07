@@ -1,16 +1,23 @@
 import styled from "styled-components";
-import { flights, type Flight, type Seat } from "../../data/flightData";
+import { type Flight } from "../../types/flightTypes";
 import { FligthCard } from "../flightCard/FlightCard";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuPlus } from "react-icons/lu";
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { FlightFormModal } from "../shared/flightFormModal/FlightFormModal";
 import { DeleteModal } from "../shared/deleteModal/DeleteModal";
 import { FlightFilters } from "../flightFilters/FlightFilters";
 import { flightFilterReducer, initialState } from "./reducer";
 import { RESET_FILTERS, SET_FILTER } from "./action";
-import { tickets, type Ticket } from "../../data/ticketData";
 import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
+import { createTicket } from "../../service/ticketService";
+import {
+  createFlight,
+  deleteFlight,
+  getFlights,
+  searchFlights,
+  updateFlight,
+} from "../../service/flightService";
 
 const Title = styled.h2`
   font-size: 26px;
@@ -46,12 +53,24 @@ export const FlightsList = () => {
   const [state, dispatch] = useReducer(flightFilterReducer, initialState);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [allFlights, setAllFlights] = useState(flights);
+  const [allFlights, setAllFlights] = useState<Flight[]>([]);
   const [flightToEdit, setFlightToEdit] = useState("");
   const [flightToDelete, setFlightToDelete] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [flightToBook, setFlightToBook] = useState("");
   const [isTicketModalOpen, setIsTicketModalOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchFlights = async () => {
+      try {
+        const flights = await getFlights();
+        setAllFlights(flights);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchFlights();
+  }, []);
 
   const handleOpenTicketCreateModal = (flightNumber: string) => {
     setFlightToBook(flightNumber);
@@ -82,23 +101,50 @@ export const FlightsList = () => {
     (flight) => flight.flightNumber === flightToEdit,
   );
 
-  const handleSaveFlight = (savedFlight: Flight) => {
-    const newFlights = [...allFlights];
-
-    if (flightToEdit) {
-      const index = newFlights.findIndex(
-        (flight) => flight.flightNumber === flightToEdit,
-      );
-
-      if (index === -1) return;
-
-      newFlights[index] = savedFlight;
-    } else {
-      newFlights.push(savedFlight);
+  const handleSaveFlight = async (
+    flightNumber: string,
+    airline: string,
+    origin: string,
+    destination: string,
+    departureTime: string,
+    arrivalTime: string,
+    status: string,
+    firstSeats: string,
+    businessSeats: string,
+    economySeats: string,
+  ) => {
+    try {
+      if (flightToEdit) {
+        await updateFlight(
+          flightNumber,
+          airline,
+          origin,
+          destination,
+          departureTime,
+          arrivalTime,
+          status,
+        );
+      } else {
+        await createFlight(
+          flightNumber,
+          airline,
+          origin,
+          destination,
+          departureTime,
+          arrivalTime,
+          status,
+          firstSeats,
+          businessSeats,
+          economySeats,
+        );
+      }
+      dispatch({ type: RESET_FILTERS });
+      const flights = await getFlights();
+      setAllFlights(flights);
+      handleCloseFlightModal();
+    } catch (error) {
+      console.error(error);
     }
-
-    setAllFlights(newFlights);
-    handleCloseFlightModal();
   };
 
   const handleOpenDeleteModal = (flightNumber: string) => {
@@ -111,13 +157,16 @@ export const FlightsList = () => {
     setFlightToDelete("");
   };
 
-  const handleDeleteFlight = () => {
-    const remainingFlights = allFlights.filter(
-      (flight) => flight.flightNumber !== flightToDelete,
-    );
-
-    setAllFlights(remainingFlights);
-    handleCloseDeleteModal();
+  const handleDeleteFlight = async () => {
+    try {
+      await deleteFlight(flightToDelete);
+      setAllFlights((prev) =>
+        prev.filter((flight) => flight.flightNumber !== flightToDelete),
+      );
+      handleCloseDeleteModal();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleChangeFilter = (
@@ -131,61 +180,51 @@ export const FlightsList = () => {
     });
   };
 
-  const handleResetFilter = () => {
+  const handleResetFilter = async () => {
     dispatch({ type: RESET_FILTERS });
+    try {
+      const flights = await getFlights();
+      setAllFlights(flights);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const displayedFlight = allFlights.filter((flight) => {
-    const originFilter = flight.origin.includes(
-      state.origin.trim().toUpperCase(),
-    );
-    const destinationFilter = flight.destination.includes(
-      state.destination.trim().toUpperCase(),
-    );
-
-    const statusFilter =
-      state.status === "" ? true : flight.status === state.status;
-
-    return originFilter && destinationFilter && statusFilter;
-  });
-
-  if (state.sortBy === "departureTime") {
-    displayedFlight.sort((a, b) =>
-      a.departureTime.localeCompare(b.departureTime),
-    );
-  }
-
-  const handleSaveTicket = (savedTicket: Ticket) => {
-    tickets.push({
-      ...savedTicket,
-      id: "T-" + String(tickets.length + 1).padStart(3, "0"),
-      createdAt: new Date().toISOString().slice(0, 16),
-    });
-
-    const bookedFlight = allFlights.find(
-      (flight) => flight.flightNumber === savedTicket.flightNumber,
-    );
-    if (bookedFlight) {
-      let classSeats: Seat[] = [];
-      if (savedTicket.ticketClass === "First") {
-        classSeats = bookedFlight.firstSeats;
-      }
-      if (savedTicket.ticketClass === "Business") {
-        classSeats = bookedFlight.businessSeats;
-      }
-      if (savedTicket.ticketClass === "Economy") {
-        classSeats = bookedFlight.economySeats;
-      }
-
-      const bookedSeat = classSeats.find(
-        (seat) => seat.seat === savedTicket.seatNumber,
+  const handleSearch = async () => {
+    try {
+      const flights = await searchFlights(
+        state.status,
+        state.origin,
+        state.destination,
+        state.sortBy,
       );
-      if (bookedSeat) {
-        bookedSeat.availability = false;
-      }
+      setAllFlights(flights);
+    } catch (error) {
+      console.error(error);
     }
+  };
 
-    handleCloseTicketModal();
+  const originLength = state.origin.trim().length;
+  const destinationLength = state.destination.trim().length;
+  const searchDisabled =
+    (originLength !== 0 && originLength !== 3) ||
+    (destinationLength !== 0 && destinationLength !== 3);
+
+  const handleSaveTicket = async (
+    flightId: string,
+    passengerId: string,
+    seatNumber: string,
+    ticketClass: string,
+  ) => {
+    try {
+      await createTicket(flightId, passengerId, seatNumber, ticketClass);
+      dispatch({ type: RESET_FILTERS });
+      const flights = await getFlights();
+      setAllFlights(flights);
+      handleCloseTicketModal();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -213,6 +252,8 @@ export const FlightsList = () => {
         sortBy={state.sortBy}
         handleChange={handleChangeFilter}
         handleReset={handleResetFilter}
+        handleSearch={handleSearch}
+        searchDisabled={searchDisabled}
       />
 
       {isModalOpen && (
@@ -244,17 +285,8 @@ export const FlightsList = () => {
       )}
 
       <Container>
-        {displayedFlight.map((flight) => {
-          const totalSeats =
-            flight.firstSeats.length +
-            flight.businessSeats.length +
-            flight.economySeats.length;
-          const takenSeatsCount = [
-            ...flight.firstSeats,
-            ...flight.businessSeats,
-            ...flight.economySeats,
-          ].filter((seat) => !seat.availability).length;
-          const isFull = takenSeatsCount >= totalSeats;
+        {allFlights.map((flight) => {
+          const isFull = flight.bookedSeats >= flight.totalSeats;
           const isBookableStatus =
             flight.status === "Scheduled" || flight.status === "Delayed";
           return (
@@ -269,8 +301,8 @@ export const FlightsList = () => {
               departureDate={flight.departureTime}
               arrivalTime={flight.arrivalTime}
               arrivalDate={flight.arrivalTime}
-              bookedSeats={takenSeatsCount}
-              totalSeats={totalSeats}
+              bookedSeats={flight.bookedSeats}
+              totalSeats={flight.totalSeats}
               bookDisabled={isFull || !isBookableStatus}
               handleEdit={() => handleEditFlight(flight.flightNumber)}
               handleDelete={() => handleOpenDeleteModal(flight.flightNumber)}

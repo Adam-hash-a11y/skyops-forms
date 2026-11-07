@@ -14,6 +14,7 @@ interface Props {
       | React.ChangeEvent<HTMLSelectElement>,
   ) => void;
   handleReset: () => void;
+  handleSearch: () => void;
 }
 
 const FilterBar = styled.div`
@@ -27,7 +28,10 @@ const FilterBar = styled.div`
   margin-bottom: 20px;
 `;
 
-const ResetFilters = styled.div`
+const FilterButtons = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
   margin-top: 20px;
 `;
 
@@ -56,6 +60,7 @@ export const PassengerFilters: React.FunctionComponent<Props> = ({
   sortBy,
   handleChange,
   handleReset,
+  handleSearch,
 }) => {
   return (
     <FilterBar>
@@ -95,13 +100,18 @@ export const PassengerFilters: React.FunctionComponent<Props> = ({
         options={sortByOptions}
         handleChange={handleChange}
       />
-      <ResetFilters>
+      <FilterButtons>
+        <Button
+          label="Search"
+          handleButton={handleSearch}
+          variant={ButtonVariant.PRIMARY}
+        />
         <Button
           label="Reset filters"
           handleButton={handleReset}
           variant={ButtonVariant.FILTER}
         />
-      </ResetFilters>
+      </FilterButtons>
     </FilterBar>
   );
 };

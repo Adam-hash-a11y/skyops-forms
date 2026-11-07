@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { flights } from "../../data/flightData";
-import { tickets } from "../../data/ticketData";
-import { passengers } from "../../data/passengerData";
+import type { Ticket } from "../../types/ticketTypes";
+import type { Passenger } from "../../types/passengerTypes";
 import { TicketCard } from "../shared/ticketCard/TicketCard";
 import { TicketCancelModal } from "../shared/ticketCancelModal/TicketCancelModal";
+import { getPassenger } from "../../service/passengerService";
+import {
+  cancelTicket,
+  getTicketsByPassenger,
+} from "../../service/ticketService";
 
 const BackLink = styled(Link)`
   font-size: 13px;
@@ -77,13 +81,26 @@ const EmptyText = styled.div`
 export const PassengerDetailsPage = () => {
   const { passportNumber } = useParams();
 
-  const [allTickets, setAllTickets] = useState(tickets);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
   const [ticketToCancel, setTicketToCancel] = useState("");
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [passenger, setPassenger] = useState<Passenger>();
 
-  const passenger = passengers.find(
-    (passenger) => passenger.passportNumber === passportNumber,
-  );
+  useEffect(() => {
+    const fetchPassengerAndTickets = async () => {
+      try {
+        if (passportNumber) {
+          const loadedPassenger = await getPassenger(passportNumber);
+          setPassenger(loadedPassenger);
+          const loadedTickets = await getTicketsByPassenger(loadedPassenger.id);
+          setTickets(loadedTickets);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchPassengerAndTickets();
+  }, [passportNumber]);
 
   const handleOpenCancelModal = (ticketId: string) => {
     setTicketToCancel(ticketId);
@@ -95,32 +112,24 @@ export const PassengerDetailsPage = () => {
     setTicketToCancel("");
   };
 
-  const handleCancelTicket = () => {
-    const newTickets = [...allTickets];
-    const index = newTickets.findIndex(
-      (ticket) => ticket.id === ticketToCancel,
-    );
-
-    if (index === -1) return;
-
-    newTickets[index] = { ...newTickets[index], status: "Cancelled" };
-
-    setAllTickets(newTickets);
-    handleCloseCancelModal();
+  const handleCancelTicket = async () => {
+    try {
+      await cancelTicket(ticketToCancel);
+      if (passenger) {
+        const loadedTickets = await getTicketsByPassenger(passenger.id);
+        setTickets(loadedTickets);
+      }
+      handleCloseCancelModal();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const cancelledTicket = allTickets.find(
+  const cancelledTicket = tickets.find(
     (ticket) => ticket.id === ticketToCancel,
-  );
-  const cancelledTicketFlight = flights.find(
-    (flight) => flight.flightNumber === cancelledTicket?.flightNumber,
   );
 
   if (!passenger) return null;
-
-  const passengerTickets = allTickets.filter(
-    (ticket) => ticket.passportNumber === passenger.passportNumber,
-  );
 
   return (
     <>
@@ -135,23 +144,23 @@ export const PassengerDetailsPage = () => {
       </PageHeader>
 
       <SectionHeading>
-        Tickets of this passenger ({passengerTickets.length})
+        Tickets of this passenger ({tickets.length})
       </SectionHeading>
 
       {isCancelModalOpen && cancelledTicket && (
         <TicketCancelModal
           seatNumber={cancelledTicket.seatNumber}
           flightNumber={
-            cancelledTicketFlight
-              ? cancelledTicket.flightNumber
-              : "deleted flight"
+            cancelledTicket.flightNumber === ""
+              ? "deleted flight"
+              : cancelledTicket.flightNumber
           }
           handleClose={handleCloseCancelModal}
           handleCancel={handleCancelTicket}
         />
       )}
 
-      {passengerTickets.length === 0 && (
+      {tickets.length === 0 && (
         <EmptyTickets>
           <EmptyTitle>No tickets yet</EmptyTitle>
           <EmptyText>This passenger has no tickets.</EmptyText>
@@ -159,22 +168,20 @@ export const PassengerDetailsPage = () => {
       )}
 
       <Container>
-        {passengerTickets.map((ticket) => {
-          const ticketFlight = flights.find(
-            (flight) => flight.flightNumber === ticket.flightNumber,
-          );
+        {tickets.map((ticket) => {
+          const isDeletedFlight = ticket.flightNumber === "";
 
           return (
             <TicketCard
               key={ticket.id}
               passengerName={passenger.firstName + " " + passenger.lastName}
               isDeletedPassenger={false}
-              isDeletedFlight={!ticketFlight}
+              isDeletedFlight={isDeletedFlight}
               flightNumber={
-                ticketFlight ? ticket.flightNumber : "Deleted flight"
+                isDeletedFlight ? "Deleted flight" : ticket.flightNumber
               }
-              origin={ticketFlight ? ticketFlight.origin : "-"}
-              destination={ticketFlight ? ticketFlight.destination : "-"}
+              origin={ticket.origin}
+              destination={ticket.destination}
               status={ticket.status}
               seatNumber={ticket.seatNumber}
               ticketClass={ticket.ticketClass}
