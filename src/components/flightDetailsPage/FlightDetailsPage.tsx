@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { flights } from "../../data/flightData";
-import { tickets } from "../../data/ticketData";
-import { passengers } from "../../data/passengerData";
+import type { Flight } from "../../types/flightTypes";
+import type { Ticket } from "../../types/ticketTypes";
 import { TicketCard } from "../shared/ticketCard/TicketCard";
 import { TicketCancelModal } from "../shared/ticketCancelModal/TicketCancelModal";
+import { getFlight } from "../../service/flightService";
+import { cancelTicket, getTicketsByFlight } from "../../service/ticketService";
 
 const BackLink = styled(Link)`
   font-size: 13px;
@@ -77,11 +78,26 @@ const EmptyText = styled.div`
 export const FlightDetailsPage = () => {
   const { flightNumber } = useParams();
 
-  const [allTickets, setAllTickets] = useState(tickets);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
   const [ticketToCancel, setTicketToCancel] = useState("");
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [flight, setFlight] = useState<Flight>();
 
-  const flight = flights.find((flight) => flight.flightNumber === flightNumber);
+  useEffect(() => {
+    const fetchFlightAndTickets = async () => {
+      try {
+        if (flightNumber) {
+          const loadedFlight = await getFlight(flightNumber);
+          setFlight(loadedFlight);
+          const loadedTickets = await getTicketsByFlight(loadedFlight.id);
+          setTickets(loadedTickets);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchFlightAndTickets();
+  }, [flightNumber]);
 
   const handleOpenCancelModal = (ticketId: string) => {
     setTicketToCancel(ticketId);
@@ -93,29 +109,24 @@ export const FlightDetailsPage = () => {
     setTicketToCancel("");
   };
 
-  const handleCancelTicket = () => {
-    const newTickets = [...allTickets];
-    const index = newTickets.findIndex(
-      (ticket) => ticket.id === ticketToCancel,
-    );
-
-    if (index === -1) return;
-
-    newTickets[index] = { ...newTickets[index], status: "Cancelled" };
-
-    setAllTickets(newTickets);
-    handleCloseCancelModal();
+  const handleCancelTicket = async () => {
+    try {
+      await cancelTicket(ticketToCancel);
+      if (flight) {
+        const loadedTickets = await getTicketsByFlight(flight.id);
+        setTickets(loadedTickets);
+      }
+      handleCloseCancelModal();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const cancelledTicket = allTickets.find(
+  const cancelledTicket = tickets.find(
     (ticket) => ticket.id === ticketToCancel,
   );
 
   if (!flight) return null;
-
-  const flightTickets = allTickets.filter(
-    (ticket) => ticket.flightNumber === flight.flightNumber,
-  );
 
   return (
     <>
@@ -129,9 +140,7 @@ export const FlightDetailsPage = () => {
         </TitleBlock>
       </PageHeader>
 
-      <SectionHeading>
-        Tickets on this flight ({flightTickets.length})
-      </SectionHeading>
+      <SectionHeading>Tickets on this flight ({tickets.length})</SectionHeading>
 
       {isCancelModalOpen && cancelledTicket && (
         <TicketCancelModal
@@ -142,7 +151,7 @@ export const FlightDetailsPage = () => {
         />
       )}
 
-      {flightTickets.length === 0 && (
+      {tickets.length === 0 && (
         <EmptyTickets>
           <EmptyTitle>No tickets yet</EmptyTitle>
           <EmptyText>Book the first ticket for this flight.</EmptyText>
@@ -150,20 +159,16 @@ export const FlightDetailsPage = () => {
       )}
 
       <Container>
-        {flightTickets.map((ticket) => {
-          const ticketPassenger = passengers.find(
-            (passenger) => passenger.passportNumber === ticket.passportNumber,
-          );
+        {tickets.map((ticket) => {
+          const isDeletedPassenger = ticket.passportNumber === "";
 
           return (
             <TicketCard
               key={ticket.id}
               passengerName={
-                ticketPassenger
-                  ? ticketPassenger.firstName + " " + ticketPassenger.lastName
-                  : "Deleted passenger"
+                isDeletedPassenger ? "Deleted passenger" : ticket.passengerName
               }
-              isDeletedPassenger={!ticketPassenger}
+              isDeletedPassenger={isDeletedPassenger}
               isDeletedFlight={false}
               flightNumber={flight.flightNumber}
               origin={flight.origin}
