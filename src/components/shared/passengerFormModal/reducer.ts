@@ -2,10 +2,8 @@ import {
   RESET_PASSENGER,
   SET_FIELD,
   SET_PASSENGER_TOUCHED,
-  SUMBIT_PASSENGER,
   type Action,
 } from "./action";
-import { passengers } from "../../../data/passengerData";
 import {
   isValidDateOfBirth,
   isValidEmail,
@@ -104,20 +102,6 @@ export const passengerReducer = (state: State, action: Action) => {
           newErrors.phoneNumber !== "",
         errors: newErrors,
       };
-    }
-
-    case SUMBIT_PASSENGER: {
-      passengers.push({
-        firstName: state.firstName,
-        lastName: state.lastName,
-        passportNumber: state.passportNumber,
-        email: state.email,
-        nationality: state.nationality,
-        dateOfBirth: state.dateOfBirth,
-        phoneNumber: state.phoneNumber,
-      });
-
-      return initialState;
     }
 
     case SET_PASSENGER_TOUCHED: {
