@@ -7,11 +7,22 @@ import { flightReducer, initialState } from "./reducer";
 import { SET_FIELD, SET_TOUCHED } from "./action";
 import { Button, ButtonVariant } from "../button/Button";
 import { FormType, type Status } from "./types";
-import { type Flight } from "../../../data/flightData";
+import { type Flight } from "../../../types/flightTypes";
 
 interface Props {
   handleClose: () => void;
-  handleSave: (flight: Flight) => void;
+  handleSave: (
+    flightNumber: string,
+    airline: string,
+    origin: string,
+    destination: string,
+    departureTime: string,
+    arrivalTime: string,
+    status: string,
+    firstSeats: string,
+    businessSeats: string,
+    economySeats: string,
+  ) => void;
   flight?: Flight;
 }
 
@@ -94,11 +105,14 @@ export const FlightFormModal: FunctionComponent<Props> = ({
   const startState = flight
     ? {
         ...initialState,
-        ...flight,
-        firstSeats: String(flight.firstSeats.length),
-        businessSeats: String(flight.businessSeats.length),
-        economySeats: String(flight.economySeats.length),
+        flightNumber: flight.flightNumber,
+        airline: flight.airline,
+        origin: flight.origin,
+        destination: flight.destination,
+        departureTime: flight.departureTime.slice(0, 16),
+        arrivalTime: flight.arrivalTime.slice(0, 16),
         status: flight.status as Status,
+        isEdit: true,
         disabled: false,
       }
     : initialState;
@@ -124,18 +138,18 @@ export const FlightFormModal: FunctionComponent<Props> = ({
   };
 
   const handleSubmit = () => {
-    handleSave({
-      flightNumber: state.flightNumber,
-      airline: state.airline,
-      origin: state.origin,
-      destination: state.destination,
-      departureTime: state.departureTime,
-      arrivalTime: state.arrivalTime,
-      status: state.status,
-      firstSeats: flight ? flight.firstSeats : [],
-      businessSeats: flight ? flight.businessSeats : [],
-      economySeats: flight ? flight.economySeats : [],
-    });
+    handleSave(
+      state.flightNumber,
+      state.airline,
+      state.origin,
+      state.destination,
+      state.departureTime,
+      state.arrivalTime,
+      state.status,
+      state.firstSeats,
+      state.businessSeats,
+      state.economySeats,
+    );
   };
 
   return (
