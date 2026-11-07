@@ -1,8 +1,8 @@
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import styled from "styled-components";
-import { tickets, type Ticket } from "../../data/ticketData";
-import { flights, type Seat } from "../../data/flightData";
-import { passengers } from "../../data/passengerData";
+import type { Ticket } from "../../types/ticketTypes";
+import type { Flight } from "../../types/flightTypes";
+import type { Passenger } from "../../types/passengerTypes";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuPlus } from "react-icons/lu";
 import { TicketCard } from "../shared/ticketCard/TicketCard";
@@ -11,6 +11,15 @@ import { TicketCancelModal } from "../shared/ticketCancelModal/TicketCancelModal
 import { TicketFilters } from "../ticketFilters/TicketFilters";
 import { initialState, ticketFilterReducer } from "./reducer";
 import { RESET_TICKET_FILTERS, SET_TICKET_FILTER } from "./action";
+import { getFlights } from "../../service/flightService";
+import { getPassengers } from "../../service/passengerService";
+import {
+  cancelTicket,
+  createTicket,
+  getTickets,
+  getTicketsByFlight,
+  getTicketsByPassenger,
+} from "../../service/ticketService";
 
 const Title = styled.h2`
   font-size: 26px;
@@ -45,10 +54,48 @@ const Subtitle = styled.div`
 
 export const TicketList = () => {
   const [state, dispatch] = useReducer(ticketFilterReducer, initialState);
-  const [allTickets, setAllTickets] = useState(tickets);
+  const [allTickets, setAllTickets] = useState<Ticket[]>([]);
+  const [flights, setFlights] = useState<Flight[]>([]);
+  const [passengers, setPassengers] = useState<Passenger[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ticketToCancel, setTicketToCancel] = useState("");
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const loadedTickets = await getTickets();
+        setAllTickets(loadedTickets);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchTickets();
+  }, []);
+
+  useEffect(() => {
+    const fetchFlights = async () => {
+      try {
+        const loadedFlights = await getFlights();
+        setFlights(loadedFlights);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchFlights();
+  }, []);
+
+  useEffect(() => {
+    const fetchPassengers = async () => {
+      try {
+        const loadedPassengers = await getPassengers();
+        setPassengers(loadedPassengers);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchPassengers();
+  }, []);
 
   const handleOpenTicketCreateModal = () => {
     setIsModalOpen(true);
@@ -68,43 +115,21 @@ export const TicketList = () => {
     setIsModalOpen(false);
   };
 
-  const handleSaveTicket = (savedTicket: Ticket) => {
-    const newTicketId = "T-" + String(allTickets.length + 1).padStart(3, "0");
-
-    const newTickets = [
-      ...allTickets,
-      {
-        ...savedTicket,
-        id: newTicketId,
-        createdAt: new Date().toISOString().slice(0, 16),
-      },
-    ];
-
-    const bookedFlight = flights.find(
-      (flight) => flight.flightNumber === savedTicket.flightNumber,
-    );
-    if (bookedFlight) {
-      let classSeats: Seat[] = [];
-      if (savedTicket.ticketClass === "First") {
-        classSeats = bookedFlight.firstSeats;
-      }
-      if (savedTicket.ticketClass === "Business") {
-        classSeats = bookedFlight.businessSeats;
-      }
-      if (savedTicket.ticketClass === "Economy") {
-        classSeats = bookedFlight.economySeats;
-      }
-
-      const bookedSeat = classSeats.find(
-        (seat) => seat.seat === savedTicket.seatNumber,
-      );
-      if (bookedSeat) {
-        bookedSeat.availability = false;
-      }
+  const handleSaveTicket = async (
+    flightId: string,
+    passengerId: string,
+    seatNumber: string,
+    ticketClass: string,
+  ) => {
+    try {
+      await createTicket(flightId, passengerId, seatNumber, ticketClass);
+      dispatch({ type: RESET_TICKET_FILTERS });
+      const loadedTickets = await getTickets();
+      setAllTickets(loadedTickets);
+      handleCloseTicketModal();
+    } catch (error) {
+      console.error(error);
     }
-
-    setAllTickets(newTickets);
-    handleCloseTicketModal();
   };
 
   const handleChangeFilter = (
@@ -118,14 +143,37 @@ export const TicketList = () => {
     });
   };
 
-  const handleResetFilter = () => {
+  const handleResetFilter = async () => {
     dispatch({ type: RESET_TICKET_FILTERS });
+    try {
+      const loadedTickets = await getTickets();
+      setAllTickets(loadedTickets);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSearch = async () => {
+    try {
+      if (state.filterBy === "flight" && state.filterValue !== "") {
+        const loadedTickets = await getTicketsByFlight(state.filterValue);
+        setAllTickets(loadedTickets);
+      } else if (state.filterBy === "passenger" && state.filterValue !== "") {
+        const loadedTickets = await getTicketsByPassenger(state.filterValue);
+        setAllTickets(loadedTickets);
+      } else {
+        const loadedTickets = await getTickets();
+        setAllTickets(loadedTickets);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const flightOptions = [
     { value: "", label: "Select..." },
     ...flights.map((flight) => ({
-      value: flight.flightNumber,
+      value: flight.id,
       label: flight.flightNumber,
     })),
   ];
@@ -133,7 +181,7 @@ export const TicketList = () => {
   const passengerOptions = [
     { value: "", label: "Select..." },
     ...passengers.map((passenger) => ({
-      value: passenger.passportNumber,
+      value: passenger.id,
       label: passenger.lastName + ", " + passenger.firstName,
     })),
   ];
@@ -141,35 +189,20 @@ export const TicketList = () => {
   const filterValueOptions =
     state.filterBy === "flight" ? flightOptions : passengerOptions;
 
-  const displayedTickets = allTickets.filter((ticket) => {
-    if (state.filterBy === "flight" && state.filterValue !== "") {
-      return ticket.flightNumber === state.filterValue;
+  const handleCancelTicket = async () => {
+    try {
+      await cancelTicket(ticketToCancel);
+      dispatch({ type: RESET_TICKET_FILTERS });
+      const loadedTickets = await getTickets();
+      setAllTickets(loadedTickets);
+      handleCloseCancelModal();
+    } catch (error) {
+      console.error(error);
     }
-    if (state.filterBy === "passenger" && state.filterValue !== "") {
-      return ticket.passportNumber === state.filterValue;
-    }
-    return true;
-  });
-
-  const handleCancelTicket = () => {
-    const newTickets = [...allTickets];
-    const index = newTickets.findIndex(
-      (ticket) => ticket.id === ticketToCancel,
-    );
-
-    if (index === -1) return;
-
-    newTickets[index] = { ...newTickets[index], status: "Cancelled" };
-
-    setAllTickets(newTickets);
-    handleCloseCancelModal();
   };
 
   const cancelledTicket = allTickets.find(
     (ticket) => ticket.id === ticketToCancel,
-  );
-  const cancelledTicketFlight = flights.find(
-    (flight) => flight.flightNumber === cancelledTicket?.flightNumber,
   );
 
   return (
@@ -177,7 +210,7 @@ export const TicketList = () => {
       <PageHeader>
         <TitleBlock>
           <Title>Tickets</Title>
-          <Subtitle>{displayedTickets.length} tickets</Subtitle>
+          <Subtitle>{allTickets.length} tickets</Subtitle>
         </TitleBlock>
         <Button
           label="Book ticket"
@@ -194,6 +227,7 @@ export const TicketList = () => {
         filterValueOptions={filterValueOptions}
         handleChange={handleChangeFilter}
         handleReset={handleResetFilter}
+        handleSearch={handleSearch}
       />
 
       {isModalOpen && (
@@ -207,9 +241,9 @@ export const TicketList = () => {
         <TicketCancelModal
           seatNumber={cancelledTicket.seatNumber}
           flightNumber={
-            cancelledTicketFlight
-              ? cancelledTicket.flightNumber
-              : "deleted flight"
+            cancelledTicket.flightNumber === ""
+              ? "deleted flight"
+              : cancelledTicket.flightNumber
           }
           handleClose={handleCloseCancelModal}
           handleCancel={handleCancelTicket}
@@ -217,30 +251,23 @@ export const TicketList = () => {
       )}
 
       <Container>
-        {displayedTickets.map((ticket) => {
-          const ticketPassenger = passengers.find(
-            (passenger) => passenger.passportNumber === ticket.passportNumber,
-          );
-
-          const ticketFlight = flights.find(
-            (flight) => flight.flightNumber === ticket.flightNumber,
-          );
+        {allTickets.map((ticket) => {
+          const isDeletedFlight = ticket.flightNumber === "";
+          const isDeletedPassenger = ticket.passportNumber === "";
 
           return (
             <TicketCard
               key={ticket.id}
               passengerName={
-                ticketPassenger
-                  ? ticketPassenger.firstName + " " + ticketPassenger.lastName
-                  : "Deleted passenger"
+                isDeletedPassenger ? "Deleted passenger" : ticket.passengerName
               }
-              isDeletedPassenger={!ticketPassenger}
-              isDeletedFlight={!ticketFlight}
+              isDeletedPassenger={isDeletedPassenger}
+              isDeletedFlight={isDeletedFlight}
               flightNumber={
-                ticketFlight ? ticket.flightNumber : "Deleted flight"
+                isDeletedFlight ? "Deleted flight" : ticket.flightNumber
               }
-              origin={ticketFlight ? ticketFlight.origin : "-"}
-              destination={ticketFlight ? ticketFlight.destination : "-"}
+              origin={ticket.origin}
+              destination={ticket.destination}
               status={ticket.status}
               seatNumber={ticket.seatNumber}
               ticketClass={ticket.ticketClass}
