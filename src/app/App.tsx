@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { NotFound } from "../components/notFound/NotFound";
 import { RootLayout } from "../components/rootLayout/RootLayout";
@@ -7,8 +8,17 @@ import { GlobalStyle } from "./GlobalStyle";
 import { TicketList } from "../components/ticketList/TicketList";
 import { FlightDetailsPage } from "../components/flightDetailsPage/FlightDetailsPage";
 import { PassengerDetailsPage } from "../components/passengerDetailsPage/PassengerDetailsPage";
+import { loginToApi } from "../service/axios";
 
 export const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    void loginToApi().then(() => setIsLoggedIn(true));
+  }, []);
+
+  if (!isLoggedIn) return <p>Connecting...</p>;
+
   return (
     <>
       <GlobalStyle />
