@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { IconButton } from "../iconButton/IconButton";
-import { useReducer, type FunctionComponent } from "react";
+import { useCallback, useReducer, type FunctionComponent } from "react";
 import { LuX } from "react-icons/lu";
 import { FormInput } from "../formInput/FlightFormInput";
 import { flightReducer, initialState } from "./reducer";
@@ -117,29 +117,48 @@ export const FlightFormModal: FunctionComponent<Props> = ({
       }
     : initialState;
   const [state, dispatch] = useReducer(flightReducer, startState);
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: FlightFormActionType.SET_FIELD,
-      field: e.target.name,
-      value: e.target.value,
-    });
-  };
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({
-      type: FlightFormActionType.SET_FIELD,
-      field: e.target.name,
-      value: e.target.value,
-    });
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch({
+        type: FlightFormActionType.SET_FIELD,
+        field: e.target.name,
+        value: e.target.value,
+      });
+    },
+    [],
+  );
 
-  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    dispatch({ type: FlightFormActionType.SET_TOUCHED, field: e.target.name });
-  };
+  const handleSelectChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      dispatch({
+        type: FlightFormActionType.SET_FIELD,
+        field: e.target.name,
+        value: e.target.value,
+      });
+    },
+    [],
+  );
 
-  const handleSelectBlur = (e: React.FocusEvent<HTMLSelectElement>) => {
-    dispatch({ type: FlightFormActionType.SET_TOUCHED, field: e.target.name });
-  };
+  const handleInputBlur = useCallback(
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      dispatch({
+        type: FlightFormActionType.SET_TOUCHED,
+        field: e.target.name,
+      });
+    },
+    [],
+  );
+
+  const handleSelectBlur = useCallback(
+    (e: React.FocusEvent<HTMLSelectElement>) => {
+      dispatch({
+        type: FlightFormActionType.SET_TOUCHED,
+        field: e.target.name,
+      });
+    },
+    [],
+  );
 
   const handleSubmit = () => {
     handleSave(
