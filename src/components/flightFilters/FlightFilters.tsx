@@ -8,11 +8,8 @@ interface Props {
   origin: string;
   destination: string;
   sortBy: string;
-  handleChange: (
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => void;
+  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSelectChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleReset: () => void;
   handleSearch: () => void;
   searchDisabled: boolean;
@@ -54,7 +51,8 @@ export const FlightFilters: React.FunctionComponent<Props> = ({
   origin,
   destination,
   sortBy,
-  handleChange,
+  handleInputChange,
+  handleSelectChange,
   handleReset,
   handleSearch,
   searchDisabled,
@@ -68,7 +66,7 @@ export const FlightFilters: React.FunctionComponent<Props> = ({
         label="Status"
         value={status}
         options={statusOptions}
-        handleChange={handleChange}
+        handleSelectChange={handleSelectChange}
       />
       <FormInput
         id="origin"
@@ -77,7 +75,7 @@ export const FlightFilters: React.FunctionComponent<Props> = ({
         label="Origin"
         value={origin}
         placeholder="IATA code, e.g. TUN"
-        handleChange={handleChange}
+        handleInputChange={handleInputChange}
       />
       <FormInput
         id="destination"
@@ -86,7 +84,7 @@ export const FlightFilters: React.FunctionComponent<Props> = ({
         label="Destination"
         value={destination}
         placeholder="IATA code, e.g. FRA"
-        handleChange={handleChange}
+        handleInputChange={handleInputChange}
       />
       <FormInput
         id="sortBy"
@@ -95,7 +93,7 @@ export const FlightFilters: React.FunctionComponent<Props> = ({
         label="Sort by"
         value={sortBy}
         options={sortByOptions}
-        handleChange={handleChange}
+        handleSelectChange={handleSelectChange}
       />
       <FilterButtons>
         <Button
