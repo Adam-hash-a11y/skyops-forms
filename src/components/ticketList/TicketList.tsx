@@ -10,7 +10,7 @@ import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
 import { TicketCancelModal } from "../shared/ticketCancelModal/TicketCancelModal";
 import { TicketFilters } from "../ticketFilters/TicketFilters";
 import { initialState, ticketFilterReducer } from "./reducer";
-import { RESET_TICKET_FILTERS, SET_TICKET_FILTER } from "./action";
+import { TicketFilterActionType } from "./action";
 import { getFlights } from "../../service/flightService";
 import { getPassengers } from "../../service/passengerService";
 import {
@@ -123,7 +123,7 @@ export const TicketList = () => {
   ) => {
     try {
       await createTicket(flightId, passengerId, seatNumber, ticketClass);
-      dispatch({ type: RESET_TICKET_FILTERS });
+      dispatch({ type: TicketFilterActionType.RESET_TICKET_FILTERS });
       const loadedTickets = await getTickets();
       setAllTickets(loadedTickets);
       handleCloseTicketModal();
@@ -138,13 +138,13 @@ export const TicketList = () => {
       | React.ChangeEvent<HTMLSelectElement>,
   ) => {
     dispatch({
-      type: SET_TICKET_FILTER,
+      type: TicketFilterActionType.SET_TICKET_FILTER,
       payload: { value: e.target.value, name: e.target.name },
     });
   };
 
   const handleResetFilter = async () => {
-    dispatch({ type: RESET_TICKET_FILTERS });
+    dispatch({ type: TicketFilterActionType.RESET_TICKET_FILTERS });
     try {
       const loadedTickets = await getTickets();
       setAllTickets(loadedTickets);
@@ -192,7 +192,7 @@ export const TicketList = () => {
   const handleCancelTicket = async () => {
     try {
       await cancelTicket(ticketToCancel);
-      dispatch({ type: RESET_TICKET_FILTERS });
+      dispatch({ type: TicketFilterActionType.RESET_TICKET_FILTERS });
       const loadedTickets = await getTickets();
       setAllTickets(loadedTickets);
       handleCloseCancelModal();

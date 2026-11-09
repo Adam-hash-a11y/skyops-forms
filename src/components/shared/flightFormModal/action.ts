@@ -1,8 +1,10 @@
-export const SET_FIELD = "set_field";
-export const RESET = "reset";
-export const SET_TOUCHED = "set_touched";
+export enum FlightFormActionType {
+  SET_FIELD = "set_field",
+  RESET = "reset",
+  SET_TOUCHED = "set_touched",
+}
 
 export type Action =
-  | { type: typeof SET_FIELD; field: string; value: string }
-  | { type: typeof RESET }
-  | { type: typeof SET_TOUCHED; field: string };
+  | { type: FlightFormActionType.SET_FIELD; field: string; value: string }
+  | { type: FlightFormActionType.RESET }
+  | { type: FlightFormActionType.SET_TOUCHED; field: string };

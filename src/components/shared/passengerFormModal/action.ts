@@ -1,8 +1,10 @@
-export const SET_FIELD = "set_field";
-export const RESET_PASSENGER = "reset_passenger";
-export const SET_PASSENGER_TOUCHED = "set_passenger_touched";
+export enum PassengerFormActionType {
+  SET_FIELD = "set_field",
+  RESET_PASSENGER = "reset_passenger",
+  SET_PASSENGER_TOUCHED = "set_passenger_touched",
+}
 
 export type Action =
-  | { type: typeof SET_FIELD; field: string; value: string }
-  | { type: typeof RESET_PASSENGER }
-  | { type: typeof SET_PASSENGER_TOUCHED; field: string };
+  | { type: PassengerFormActionType.SET_FIELD; field: string; value: string }
+  | { type: PassengerFormActionType.RESET_PASSENGER }
+  | { type: PassengerFormActionType.SET_PASSENGER_TOUCHED; field: string };

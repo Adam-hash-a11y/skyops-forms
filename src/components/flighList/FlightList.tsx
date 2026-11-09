@@ -8,7 +8,7 @@ import { FlightFormModal } from "../shared/flightFormModal/FlightFormModal";
 import { DeleteModal } from "../shared/deleteModal/DeleteModal";
 import { FlightFilters } from "../flightFilters/FlightFilters";
 import { flightFilterReducer, initialState } from "./reducer";
-import { RESET_FILTERS, SET_FILTER } from "./action";
+import { FlightFilterActionType } from "./action";
 import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
 import { createTicket } from "../../service/ticketService";
 import {
@@ -137,7 +137,7 @@ export const FlightsList = () => {
           economySeats,
         );
       }
-      dispatch({ type: RESET_FILTERS });
+      dispatch({ type: FlightFilterActionType.RESET_FILTERS });
       const flights = await getFlights();
       setAllFlights(flights);
       handleCloseFlightModal();
@@ -174,13 +174,13 @@ export const FlightsList = () => {
       | React.ChangeEvent<HTMLSelectElement>,
   ) => {
     dispatch({
-      type: SET_FILTER,
+      type: FlightFilterActionType.SET_FILTER,
       payload: { value: e.target.value, name: e.target.name },
     });
   };
 
   const handleResetFilter = async () => {
-    dispatch({ type: RESET_FILTERS });
+    dispatch({ type: FlightFilterActionType.RESET_FILTERS });
     try {
       const flights = await getFlights();
       setAllFlights(flights);
@@ -217,7 +217,7 @@ export const FlightsList = () => {
   ) => {
     try {
       await createTicket(flightId, passengerId, seatNumber, ticketClass);
-      dispatch({ type: RESET_FILTERS });
+      dispatch({ type: FlightFilterActionType.RESET_FILTERS });
       const flights = await getFlights();
       setAllFlights(flights);
       handleCloseTicketModal();

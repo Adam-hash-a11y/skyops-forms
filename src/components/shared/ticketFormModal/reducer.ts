@@ -1,4 +1,4 @@
-import { RESET, SET_FIELD, type Action } from "./action";
+import { TicketFormActionType, type Action } from "./action";
 
 export interface State {
   flightNumber: string;
@@ -18,7 +18,7 @@ export const initialState: State = {
 
 export const ticketReducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case SET_FIELD: {
+    case TicketFormActionType.SET_FIELD: {
       const newState = {
         ...state,
         [action.field]: action.value,
@@ -42,7 +42,7 @@ export const ticketReducer = (state: State, action: Action): State => {
           newState.seatNumber === "",
       };
     }
-    case RESET:
+    case TicketFormActionType.RESET:
       return initialState;
     default:
       return state;

@@ -8,7 +8,7 @@ import { PassengerFormModal } from "../shared/passengerFormModal/PassengerFormMo
 import { DeleteModal } from "../shared/deleteModal/DeleteModal";
 import { PassengerFilters } from "../passengerFilters/PassengerFilters";
 import { initialState, passengerFilterReducer } from "./reducer";
-import { RESET_PASSENGER_FILTERS, SET_PASSENGER_FILTER } from "./action";
+import { PassengerFilterActionType } from "./action";
 import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
 import { createTicket } from "../../service/ticketService";
 import {
@@ -131,7 +131,7 @@ export const PassengerList = () => {
           phoneNumber,
         );
       }
-      dispatch({ type: RESET_PASSENGER_FILTERS });
+      dispatch({ type: PassengerFilterActionType.RESET_PASSENGER_FILTERS });
       const passengers = await getPassengers();
       setAllPassengers(passengers);
       handleClosePassengerModal();
@@ -148,7 +148,7 @@ export const PassengerList = () => {
   ) => {
     try {
       await createTicket(flightId, passengerId, seatNumber, ticketClass);
-      dispatch({ type: RESET_PASSENGER_FILTERS });
+      dispatch({ type: PassengerFilterActionType.RESET_PASSENGER_FILTERS });
       const passengers = await getPassengers();
       setAllPassengers(passengers);
       handleCloseTicketModal();
@@ -199,13 +199,13 @@ export const PassengerList = () => {
       | React.ChangeEvent<HTMLSelectElement>,
   ) => {
     dispatch({
-      type: SET_PASSENGER_FILTER,
+      type: PassengerFilterActionType.SET_PASSENGER_FILTER,
       payload: { value: e.target.value, name: e.target.name },
     });
   };
 
   const handleResetFilter = async () => {
-    dispatch({ type: RESET_PASSENGER_FILTERS });
+    dispatch({ type: PassengerFilterActionType.RESET_PASSENGER_FILTERS });
     try {
       const passengers = await getPassengers();
       setAllPassengers(passengers);
