@@ -8,8 +8,7 @@ import { FormInput } from "../formInput/FlightFormInput";
 import { Button, ButtonVariant } from "../button/Button";
 import { useReducer } from "react";
 import { initialState, passengerReducer } from "./reducer";
-import { SET_FIELD, SET_PASSENGER_TOUCHED } from "./action";
-
+import { PassengerFormActionType } from "./action";
 interface Props {
   handleSave: (
     firstName: string,
@@ -121,7 +120,7 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
       | React.ChangeEvent<HTMLSelectElement>,
   ) => {
     dispatch({
-      type: SET_FIELD,
+      type: PassengerFormActionType.SET_FIELD,
       field: e.target.name,
       value: e.target.value,
     });
@@ -132,7 +131,10 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    dispatch({ type: SET_PASSENGER_TOUCHED, field: e.target.name });
+    dispatch({
+      type: PassengerFormActionType.SET_PASSENGER_TOUCHED,
+      field: e.target.name,
+    });
   };
 
   const handleSubmit = () => {
