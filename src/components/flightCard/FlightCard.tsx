@@ -5,6 +5,7 @@ import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuArrowRight, LuPencil, LuTicket, LuTrash2 } from "react-icons/lu";
 import type { FunctionComponent } from "react";
 import { StatusBadge } from "../shared/statusBadge/StatusBadge";
+import { ProgressBar } from "../shared/progressBar/ProgressBar";
 import { formatUtcDate, formatUtcTime } from "../../utils/formatDateTime";
 import { getCityName } from "../../utils/cityNames";
 import { Link } from "react-router-dom";
@@ -144,27 +145,6 @@ const BookedSeatsCount = styled.div`
   justify-content: space-between;
 `;
 
-const SeatProgressBar = styled.div<{ $widthPercent: number }>`
-  height: 6px;
-  border-radius: 3px;
-  width: ${(props) => props.$widthPercent}%;
-  background-color: ${(props) => {
-    if (props.$widthPercent >= 100) {
-      return "#c0262d";
-    }
-    if (props.$widthPercent >= 90) {
-      return "#d98a00";
-    }
-    return "#1b63d6";
-  }};
-`;
-
-const SeatsProgressBarConatiner = styled.div`
-  height: 6px;
-  border-radius: 3px;
-  background-color: #edf0f5;
-`;
-
 const CardDivider = styled.div`
   height: 1px;
   background-color: #edf0f5;
@@ -257,9 +237,7 @@ export const FligthCard: FunctionComponent<Props> = ({
           </SeatsCount>
         </BookedSeatsCount>
 
-        <SeatsProgressBarConatiner>
-          <SeatProgressBar $widthPercent={(bookedSeats / totalSeats) * 100} />
-        </SeatsProgressBarConatiner>
+        <ProgressBar value={bookedSeats} max={totalSeats} />
       </FlightSeats>
       <CardDivider></CardDivider>
       <CardFooter>
