@@ -6,7 +6,7 @@ import { LuX } from "react-icons/lu";
 import { FormType } from "../flightFormModal/types";
 import { FormInput } from "../formInput/FlightFormInput";
 import { Button, ButtonVariant } from "../button/Button";
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 import { initialState, passengerReducer } from "./reducer";
 import { PassengerFormActionType } from "./action";
 interface Props {
@@ -114,35 +114,47 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
     : initialState;
   const [state, dispatch] = useReducer(passengerReducer, startState);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: PassengerFormActionType.SET_FIELD,
-      field: e.target.name,
-      value: e.target.value,
-    });
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch({
+        type: PassengerFormActionType.SET_FIELD,
+        field: e.target.name,
+        value: e.target.value,
+      });
+    },
+    [],
+  );
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({
-      type: PassengerFormActionType.SET_FIELD,
-      field: e.target.name,
-      value: e.target.value,
-    });
-  };
+  const handleSelectChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      dispatch({
+        type: PassengerFormActionType.SET_FIELD,
+        field: e.target.name,
+        value: e.target.value,
+      });
+    },
+    [],
+  );
 
-  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    dispatch({
-      type: PassengerFormActionType.SET_PASSENGER_TOUCHED,
-      field: e.target.name,
-    });
-  };
+  const handleInputBlur = useCallback(
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      dispatch({
+        type: PassengerFormActionType.SET_PASSENGER_TOUCHED,
+        field: e.target.name,
+      });
+    },
+    [],
+  );
 
-  const handleSelectBlur = (e: React.FocusEvent<HTMLSelectElement>) => {
-    dispatch({
-      type: PassengerFormActionType.SET_PASSENGER_TOUCHED,
-      field: e.target.name,
-    });
-  };
+  const handleSelectBlur = useCallback(
+    (e: React.FocusEvent<HTMLSelectElement>) => {
+      dispatch({
+        type: PassengerFormActionType.SET_PASSENGER_TOUCHED,
+        field: e.target.name,
+      });
+    },
+    [],
+  );
 
   const handleSubmit = () => {
     handleSave(
