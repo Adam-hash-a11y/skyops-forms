@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import styled from "styled-components";
 import type { Ticket } from "../../types/ticketTypes";
 import type { Flight } from "../../types/flightTypes";
@@ -97,14 +97,14 @@ export const TicketList = () => {
     fetchPassengers();
   }, []);
 
-  const handleOpenTicketCreateModal = () => {
+  const handleOpenTicketCreateModal = useCallback(() => {
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleOpenCancelModal = (ticketId: string) => {
+  const handleOpenCancelModal = useCallback((ticketId: string) => {
     setTicketToCancel(ticketId);
     setIsCancelModalOpen(true);
-  };
+  }, []);
 
   const handleCloseCancelModal = () => {
     setIsCancelModalOpen(false);
@@ -132,12 +132,15 @@ export const TicketList = () => {
     }
   };
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({
-      type: TicketFilterActionType.SET_TICKET_FILTER,
-      payload: { value: e.target.value, name: e.target.name },
-    });
-  };
+  const handleSelectChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      dispatch({
+        type: TicketFilterActionType.SET_TICKET_FILTER,
+        payload: { value: e.target.value, name: e.target.name },
+      });
+    },
+    [],
+  );
 
   const handleResetFilter = async () => {
     dispatch({ type: TicketFilterActionType.RESET_TICKET_FILTERS });
