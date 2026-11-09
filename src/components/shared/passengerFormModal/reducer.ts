@@ -1,9 +1,4 @@
-import {
-  RESET_PASSENGER,
-  SET_FIELD,
-  SET_PASSENGER_TOUCHED,
-  type Action,
-} from "./action";
+import { PassengerFormActionType, type Action } from "./action";
 import {
   isValidDateOfBirth,
   isValidEmail,
@@ -75,7 +70,7 @@ export const initialState: State = {
 
 export const passengerReducer = (state: State, action: Action) => {
   switch (action.type) {
-    case SET_FIELD: {
+    case PassengerFormActionType.SET_FIELD: {
       const newState = {
         ...state,
         [action.field]: action.value,
@@ -104,7 +99,7 @@ export const passengerReducer = (state: State, action: Action) => {
       };
     }
 
-    case SET_PASSENGER_TOUCHED: {
+    case PassengerFormActionType.SET_PASSENGER_TOUCHED: {
       const newTouched = { ...state.touched, [action.field]: true };
       const newErrors = { ...state.errors };
       switch (action.field) {
@@ -135,7 +130,7 @@ export const passengerReducer = (state: State, action: Action) => {
       return { ...state, touched: newTouched, errors: newErrors };
     }
 
-    case RESET_PASSENGER: {
+    case PassengerFormActionType.RESET_PASSENGER: {
       return initialState;
     }
 
