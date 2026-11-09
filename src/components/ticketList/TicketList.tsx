@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 import type { Ticket } from "../../types/ticketTypes";
 import type { Flight } from "../../types/flightTypes";
 import type { Passenger } from "../../types/passengerTypes";
@@ -67,7 +68,7 @@ export const TicketList = () => {
         const loadedTickets = await getTickets();
         setAllTickets(loadedTickets);
       } catch (error) {
-        console.error(error);
+        toast.error((error as Error).message);
       }
     };
     fetchTickets();
@@ -79,7 +80,7 @@ export const TicketList = () => {
         const loadedFlights = await getFlights();
         setFlights(loadedFlights);
       } catch (error) {
-        console.error(error);
+        toast.error((error as Error).message);
       }
     };
     fetchFlights();
@@ -91,7 +92,7 @@ export const TicketList = () => {
         const loadedPassengers = await getPassengers();
         setPassengers(loadedPassengers);
       } catch (error) {
-        console.error(error);
+        toast.error((error as Error).message);
       }
     };
     fetchPassengers();
@@ -127,8 +128,9 @@ export const TicketList = () => {
       const loadedTickets = await getTickets();
       setAllTickets(loadedTickets);
       handleCloseTicketModal();
+      toast.success("Ticket booked");
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
@@ -148,7 +150,7 @@ export const TicketList = () => {
       const loadedTickets = await getTickets();
       setAllTickets(loadedTickets);
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
@@ -161,11 +163,10 @@ export const TicketList = () => {
         const loadedTickets = await getTicketsByPassenger(state.filterValue);
         setAllTickets(loadedTickets);
       } else {
-        const loadedTickets = await getTickets();
-        setAllTickets(loadedTickets);
+        toast.error("Select a flight or passenger first");
       }
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
@@ -199,8 +200,9 @@ export const TicketList = () => {
       const loadedTickets = await getTickets();
       setAllTickets(loadedTickets);
       handleCloseCancelModal();
+      toast.success("Ticket cancelled");
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 

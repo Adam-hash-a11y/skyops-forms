@@ -20,7 +20,7 @@ export const NotFound = () => {
   return (
     <Wrapper>
       <Title>404 - Page Not Found</Title>
-      <StyledLink to="/">Back to Home</StyledLink>
+      <StyledLink to="/flights">Back to Home</StyledLink>
     </Wrapper>
   );
 };

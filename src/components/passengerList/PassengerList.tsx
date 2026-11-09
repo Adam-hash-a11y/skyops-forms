@@ -18,6 +18,7 @@ import {
   searchPassengers,
   updatePassenger,
 } from "../../service/passengerService";
+import { toast } from "react-toastify";
 
 const Title = styled.h2`
   font-size: 26px;
@@ -66,7 +67,7 @@ export const PassengerList = () => {
         const passengers = await getPassengers();
         setAllPassengers(passengers);
       } catch (error) {
-        console.error(error);
+        toast.error((error as Error).message);
       }
     };
     fetchPassengers();
@@ -120,6 +121,7 @@ export const PassengerList = () => {
           email,
           phoneNumber,
         );
+        toast.success("Passenger updated");
       } else {
         await createPassenger(
           firstName,
@@ -130,13 +132,14 @@ export const PassengerList = () => {
           email,
           phoneNumber,
         );
+        toast.success("Passenger created");
       }
       dispatch({ type: PassengerFilterActionType.RESET_PASSENGER_FILTERS });
       const passengers = await getPassengers();
       setAllPassengers(passengers);
       handleClosePassengerModal();
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
@@ -152,8 +155,9 @@ export const PassengerList = () => {
       const passengers = await getPassengers();
       setAllPassengers(passengers);
       handleCloseTicketModal();
+      toast.success("Ticket booked");
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
@@ -176,8 +180,9 @@ export const PassengerList = () => {
         ),
       );
       handleCloseDeleteModal();
+      toast.success("Passenger deleted");
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
@@ -219,7 +224,7 @@ export const PassengerList = () => {
       const passengers = await getPassengers();
       setAllPassengers(passengers);
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
@@ -233,7 +238,7 @@ export const PassengerList = () => {
       );
       setAllPassengers(passengers);
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 

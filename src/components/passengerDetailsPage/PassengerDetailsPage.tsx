@@ -10,6 +10,8 @@ import {
   cancelTicket,
   getTicketsByPassenger,
 } from "../../service/ticketService";
+import { toast } from "react-toastify";
+import { NotFound } from "../notFound/NotFound";
 
 const BackLink = styled(Link)`
   font-size: 13px;
@@ -87,20 +89,32 @@ export const PassengerDetailsPage = () => {
   const [passenger, setPassenger] = useState<Passenger>();
 
   useEffect(() => {
-    const fetchPassengerAndTickets = async () => {
+    const fetchPassenger = async () => {
       try {
         if (passportNumber) {
           const loadedPassenger = await getPassenger(passportNumber);
           setPassenger(loadedPassenger);
-          const loadedTickets = await getTicketsByPassenger(loadedPassenger.id);
+        }
+      } catch (error) {
+        toast.error((error as Error).message);
+      }
+    };
+    fetchPassenger();
+  }, [passportNumber]);
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        if (passenger) {
+          const loadedTickets = await getTicketsByPassenger(passenger.id);
           setTickets(loadedTickets);
         }
       } catch (error) {
-        console.error(error);
+        toast.error((error as Error).message);
       }
     };
-    fetchPassengerAndTickets();
-  }, [passportNumber]);
+    fetchTickets();
+  }, [passenger]);
 
   const handleOpenCancelModal = useCallback((ticketId: string) => {
     setTicketToCancel(ticketId);
@@ -120,8 +134,9 @@ export const PassengerDetailsPage = () => {
         setTickets(loadedTickets);
       }
       handleCloseCancelModal();
+      toast.success("Ticket cancelled");
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
@@ -129,7 +144,7 @@ export const PassengerDetailsPage = () => {
     (ticket) => ticket.id === ticketToCancel,
   );
 
-  if (!passenger) return null;
+  if (!passenger) return <NotFound />;
 
   return (
     <>

@@ -9,18 +9,30 @@ import { TicketList } from "../components/ticketList/TicketList";
 import { FlightDetailsPage } from "../components/flightDetailsPage/FlightDetailsPage";
 import { PassengerDetailsPage } from "../components/passengerDetailsPage/PassengerDetailsPage";
 import { loginToApi } from "../service/axios";
+import { StyledToastContainer } from "../components/shared/styledToastContainer/StyledToastContainer";
+import { toast } from "react-toastify";
 
 export const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    void loginToApi().then(() => setIsLoggedIn(true));
+    void loginToApi()
+      .then(() => setIsLoggedIn(true))
+      .catch((error) => toast.error((error as Error).message));
   }, []);
 
-  if (!isLoggedIn) return <p>Connecting...</p>;
+  if (!isLoggedIn) {
+    return (
+      <>
+        <StyledToastContainer position="top-right" autoClose={3200} />
+        <p>Connecting...</p>
+      </>
+    );
+  }
 
   return (
     <>
+      <StyledToastContainer position="top-right" autoClose={3200} />
       <GlobalStyle />
       <Routes>
         <Route element={<RootLayout />}>

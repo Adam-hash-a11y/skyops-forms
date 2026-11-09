@@ -18,6 +18,7 @@ import {
   searchFlights,
   updateFlight,
 } from "../../service/flightService";
+import { toast } from "react-toastify";
 
 const Title = styled.h2`
   font-size: 26px;
@@ -66,7 +67,7 @@ export const FlightsList = () => {
         const flights = await getFlights();
         setAllFlights(flights);
       } catch (error) {
-        console.error(error);
+        toast.error((error as Error).message);
       }
     };
     fetchFlights();
@@ -141,8 +142,9 @@ export const FlightsList = () => {
       const flights = await getFlights();
       setAllFlights(flights);
       handleCloseFlightModal();
+      toast.success(flightToEdit ? "Flight updated" : "Flight created");
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
@@ -163,8 +165,9 @@ export const FlightsList = () => {
         prev.filter((flight) => flight.flightNumber !== flightToDelete),
       );
       handleCloseDeleteModal();
+      toast.success("Flight deleted");
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
@@ -194,7 +197,7 @@ export const FlightsList = () => {
       const flights = await getFlights();
       setAllFlights(flights);
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
@@ -208,7 +211,7 @@ export const FlightsList = () => {
       );
       setAllFlights(flights);
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
@@ -230,8 +233,9 @@ export const FlightsList = () => {
       const flights = await getFlights();
       setAllFlights(flights);
       handleCloseTicketModal();
+      toast.success("Ticket booked");
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 

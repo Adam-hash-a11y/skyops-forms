@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 import type { Flight } from "../../types/flightTypes";
 import type { Ticket } from "../../types/ticketTypes";
 import { TicketCard } from "../shared/ticketCard/TicketCard";
 import { TicketCancelModal } from "../shared/ticketCancelModal/TicketCancelModal";
 import { getFlight } from "../../service/flightService";
 import { cancelTicket, getTicketsByFlight } from "../../service/ticketService";
+import { NotFound } from "../notFound/NotFound";
 
 const BackLink = styled(Link)`
   font-size: 13px;
@@ -84,20 +86,32 @@ export const FlightDetailsPage = () => {
   const [flight, setFlight] = useState<Flight>();
 
   useEffect(() => {
-    const fetchFlightAndTickets = async () => {
+    const fetchFlight = async () => {
       try {
         if (flightNumber) {
           const loadedFlight = await getFlight(flightNumber);
           setFlight(loadedFlight);
-          const loadedTickets = await getTicketsByFlight(loadedFlight.id);
+        }
+      } catch (error) {
+        toast.error((error as Error).message);
+      }
+    };
+    fetchFlight();
+  }, [flightNumber]);
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        if (flight) {
+          const loadedTickets = await getTicketsByFlight(flight.id);
           setTickets(loadedTickets);
         }
       } catch (error) {
-        console.error(error);
+        toast.error((error as Error).message);
       }
     };
-    fetchFlightAndTickets();
-  }, [flightNumber]);
+    fetchTickets();
+  }, [flight]);
 
   const handleOpenCancelModal = useCallback((ticketId: string) => {
     setTicketToCancel(ticketId);
@@ -117,8 +131,9 @@ export const FlightDetailsPage = () => {
         setTickets(loadedTickets);
       }
       handleCloseCancelModal();
+      toast.success("Ticket cancelled");
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
@@ -126,7 +141,7 @@ export const FlightDetailsPage = () => {
     (ticket) => ticket.id === ticketToCancel,
   );
 
-  if (!flight) return null;
+  if (!flight) return <NotFound />;
 
   return (
     <>

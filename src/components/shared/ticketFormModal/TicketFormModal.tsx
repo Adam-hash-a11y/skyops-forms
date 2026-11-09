@@ -12,6 +12,7 @@ import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import { TicketFormActionType } from "./action";
 import { getFlights, getFreeSeats } from "../../../service/flightService";
 import { getPassengers } from "../../../service/passengerService";
+import { toast } from "react-toastify";
 
 interface Props {
   handleClose: () => void;
@@ -147,7 +148,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
         const loadedFlights = await getFlights();
         setFlights(loadedFlights);
       } catch (error) {
-        console.error(error);
+        toast.error((error as Error).message);
       }
     };
     fetchFlights();
@@ -159,7 +160,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
         const loadedPassengers = await getPassengers();
         setPassengers(loadedPassengers);
       } catch (error) {
-        console.error(error);
+        toast.error((error as Error).message);
       }
     };
     fetchPassengers();
@@ -173,7 +174,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
         setCounts(data.counts);
         setPrices(data.prices);
       } catch (error) {
-        console.error(error);
+        toast.error((error as Error).message);
       }
     };
     if (state.flightNumber !== "") {
@@ -315,6 +316,8 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
         state.seatNumber,
         state.ticketClass,
       );
+    } else {
+      toast.error("Flight or passenger not found");
     }
   };
 
