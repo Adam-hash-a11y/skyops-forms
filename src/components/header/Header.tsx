@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { LuPlane } from "react-icons/lu";
 
@@ -40,7 +40,7 @@ const LinkGroup = styled.div`
   display: flex;
 `;
 
-const StyledLink = styled(NavLink)`
+const StyledLink = styled(Link)`
   padding: 18px 16px;
   color: #a9b8ce;
   text-decoration: none;
@@ -59,6 +59,8 @@ const StyledLink = styled(NavLink)`
 `;
 
 export const Header = () => {
+  const location = useLocation();
+
   return (
     <HeaderWrapper>
       <NavBar>
@@ -69,9 +71,26 @@ export const Header = () => {
           SkyOps
         </Skyops>
         <LinkGroup>
-          <StyledLink to="/flights">Flights</StyledLink>
-          <StyledLink to="/passengers">Passengers</StyledLink>
-          <StyledLink to="/tickets">Tickets</StyledLink>
+          <StyledLink
+            to="/flights"
+            className={location.pathname.startsWith("/flights") ? "active" : ""}
+          >
+            Flights
+          </StyledLink>
+          <StyledLink
+            to="/passengers"
+            className={
+              location.pathname.startsWith("/passengers") ? "active" : ""
+            }
+          >
+            Passengers
+          </StyledLink>
+          <StyledLink
+            to="/tickets"
+            className={location.pathname.startsWith("/tickets") ? "active" : ""}
+          >
+            Tickets
+          </StyledLink>
         </LinkGroup>
       </NavBar>
     </HeaderWrapper>
