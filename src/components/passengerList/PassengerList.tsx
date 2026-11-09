@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import { type Passenger } from "../../types/passengerTypes";
 import styled from "styled-components";
 import { PassengerCard } from "../passengerCard/PassengerCard";
@@ -82,9 +82,9 @@ export const PassengerList = () => {
     setPassengerToBook("");
   };
 
-  const handleOpenPassengerCreateModal = () => {
+  const handleOpenPassengerCreateModal = useCallback(() => {
     setIsModalOpen(true);
-  };
+  }, []);
 
   const handleClosePassengerModal = () => {
     setIsModalOpen(false);
@@ -193,19 +193,25 @@ export const PassengerList = () => {
       ")"
     : "";
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: PassengerFilterActionType.SET_PASSENGER_FILTER,
-      payload: { value: e.target.value, name: e.target.name },
-    });
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch({
+        type: PassengerFilterActionType.SET_PASSENGER_FILTER,
+        payload: { value: e.target.value, name: e.target.name },
+      });
+    },
+    [],
+  );
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({
-      type: PassengerFilterActionType.SET_PASSENGER_FILTER,
-      payload: { value: e.target.value, name: e.target.name },
-    });
-  };
+  const handleSelectChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      dispatch({
+        type: PassengerFilterActionType.SET_PASSENGER_FILTER,
+        payload: { value: e.target.value, name: e.target.name },
+      });
+    },
+    [],
+  );
 
   const handleResetFilter = async () => {
     dispatch({ type: PassengerFilterActionType.RESET_PASSENGER_FILTERS });

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import type { Flight } from "../../types/flightTypes";
@@ -99,10 +99,10 @@ export const FlightDetailsPage = () => {
     fetchFlightAndTickets();
   }, [flightNumber]);
 
-  const handleOpenCancelModal = (ticketId: string) => {
+  const handleOpenCancelModal = useCallback((ticketId: string) => {
     setTicketToCancel(ticketId);
     setIsCancelModalOpen(true);
-  };
+  }, []);
 
   const handleCloseCancelModal = () => {
     setIsCancelModalOpen(false);
