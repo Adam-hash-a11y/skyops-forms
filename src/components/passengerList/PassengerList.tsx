@@ -193,11 +193,14 @@ export const PassengerList = () => {
       ")"
     : "";
 
-  const handleChangeFilter = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({
+      type: PassengerFilterActionType.SET_PASSENGER_FILTER,
+      payload: { value: e.target.value, name: e.target.name },
+    });
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch({
       type: PassengerFilterActionType.SET_PASSENGER_FILTER,
       payload: { value: e.target.value, name: e.target.name },
@@ -249,7 +252,8 @@ export const PassengerList = () => {
         lastName={state.lastName}
         nationality={state.nationality}
         sortBy={state.sortBy}
-        handleChange={handleChangeFilter}
+        handleInputChange={handleInputChange}
+        handleSelectChange={handleSelectChange}
         handleReset={handleResetFilter}
         handleSearch={handleSearch}
       />
