@@ -8,7 +8,7 @@ import type { Flight } from "../../../types/flightTypes";
 import type { Passenger } from "../../../types/passengerTypes";
 import { formatUtcDate, formatUtcTime } from "../../../utils/formatDateTime";
 import { initialState, ticketReducer } from "./reducer";
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import { TicketFormActionType } from "./action";
 import { getFlights, getFreeSeats } from "../../../service/flightService";
 import { getPassengers } from "../../../service/passengerService";
@@ -181,19 +181,22 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
     }
   }, [state.flightNumber]);
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({
-      type: TicketFormActionType.SET_FIELD,
-      field: e.target.name,
-      value: e.target.value,
-    });
+  const handleSelectChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      dispatch({
+        type: TicketFormActionType.SET_FIELD,
+        field: e.target.name,
+        value: e.target.value,
+      });
 
-    if (e.target.name === "flightNumber" && e.target.value === "") {
-      setFreeSeats([]);
-      setCounts({ first: 0, business: 0, economy: 0 });
-      setPrices({});
-    }
-  };
+      if (e.target.name === "flightNumber" && e.target.value === "") {
+        setFreeSeats([]);
+        setCounts({ first: 0, business: 0, economy: 0 });
+        setPrices({});
+      }
+    },
+    [],
+  );
 
   const bookableFlights = useMemo(() => {
     return flights.filter(
@@ -278,7 +281,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
       value: seat.seat,
       label: seat.seat,
     }));
-    
+
     const economyOptions = economySeats.map((seat) => ({
       value: seat.seat,
       label: seat.seat,
