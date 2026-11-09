@@ -1,4 +1,4 @@
-import { RESET, SET_FIELD, SET_TOUCHED, type Action } from "./action";
+import { FlightFormActionType, type Action } from "./action";
 import type { Status } from "./types";
 import {
   isValidFlightNumber,
@@ -94,7 +94,7 @@ export const initialState: State = {
 
 export const flightReducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case SET_FIELD: {
+    case FlightFormActionType.SET_FIELD: {
       const newState = {
         ...state,
         [action.field]: action.value,
@@ -159,7 +159,7 @@ export const flightReducer = (state: State, action: Action): State => {
       };
     }
 
-    case SET_TOUCHED: {
+    case FlightFormActionType.SET_TOUCHED: {
       const newTouched = { ...state.touched, [action.field]: true };
       const newErrors = { ...state.errors };
 
@@ -200,7 +200,7 @@ export const flightReducer = (state: State, action: Action): State => {
 
       return { ...state, touched: newTouched, errors: newErrors };
     }
-    case RESET:
+    case FlightFormActionType.RESET:
       return initialState;
     default: {
       return state;
