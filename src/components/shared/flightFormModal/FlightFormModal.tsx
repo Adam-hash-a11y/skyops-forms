@@ -4,7 +4,7 @@ import { useReducer, type FunctionComponent } from "react";
 import { LuX } from "react-icons/lu";
 import { FormInput } from "../formInput/FlightFormInput";
 import { flightReducer, initialState } from "./reducer";
-import { SET_FIELD, SET_TOUCHED } from "./action";
+import { FlightFormActionType } from "./action";
 import { Button, ButtonVariant } from "../button/Button";
 import { FormType, type Status } from "./types";
 import { type Flight } from "../../../types/flightTypes";
@@ -123,7 +123,7 @@ export const FlightFormModal: FunctionComponent<Props> = ({
       | React.ChangeEvent<HTMLSelectElement>,
   ) => {
     dispatch({
-      type: SET_FIELD,
+      type: FlightFormActionType.SET_FIELD,
       field: e.target.name,
       value: e.target.value,
     });
@@ -134,7 +134,7 @@ export const FlightFormModal: FunctionComponent<Props> = ({
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    dispatch({ type: SET_TOUCHED, field: e.target.name });
+    dispatch({ type: FlightFormActionType.SET_TOUCHED, field: e.target.name });
   };
 
   const handleSubmit = () => {
