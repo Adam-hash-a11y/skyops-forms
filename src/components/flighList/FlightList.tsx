@@ -168,11 +168,14 @@ export const FlightsList = () => {
     }
   };
 
-  const handleChangeFilter = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({
+      type: FlightFilterActionType.SET_FILTER,
+      payload: { value: e.target.value, name: e.target.name },
+    });
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch({
       type: FlightFilterActionType.SET_FILTER,
       payload: { value: e.target.value, name: e.target.name },
@@ -249,7 +252,8 @@ export const FlightsList = () => {
         origin={state.origin}
         destination={state.destination}
         sortBy={state.sortBy}
-        handleChange={handleChangeFilter}
+        handleInputChange={handleInputChange}
+        handleSelectChange={handleSelectChange}
         handleReset={handleResetFilter}
         handleSearch={handleSearch}
         searchDisabled={searchDisabled}
