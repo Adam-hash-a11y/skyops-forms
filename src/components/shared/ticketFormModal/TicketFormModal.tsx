@@ -8,7 +8,7 @@ import type { Flight } from "../../../types/flightTypes";
 import type { Passenger } from "../../../types/passengerTypes";
 import { formatUtcDate, formatUtcTime } from "../../../utils/formatDateTime";
 import { initialState, ticketReducer } from "./reducer";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import { TicketFormActionType } from "./action";
 import { getFlights, getFreeSeats } from "../../../service/flightService";
 import { getPassengers } from "../../../service/passengerService";
@@ -195,78 +195,105 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
     }
   };
 
-  const bookableFlights = flights.filter(
-    (flight) => flight.status === "Scheduled" || flight.status === "Delayed",
-  );
-  const flightOptions = [
-    { value: "", label: "Select a flight..." },
-    ...bookableFlights.map((flight) => ({
-      value: flight.flightNumber,
-      label:
-        flight.flightNumber +
-        " · " +
-        flight.origin +
-        " → " +
-        flight.destination +
-        " · " +
-        formatUtcDate(flight.departureTime) +
-        ", " +
-        formatUtcTime(flight.departureTime),
-    })),
-  ];
+  const bookableFlights = useMemo(() => {
+    return flights.filter(
+      (flight) => flight.status === "Scheduled" || flight.status === "Delayed",
+    );
+  }, [flights]);
 
-  const passengerOptions = [
-    { value: "", label: "Select a passenger..." },
-    ...passengers.map((passenger) => ({
-      value: passenger.passportNumber,
-      label:
-        passenger.lastName +
-        ", " +
-        passenger.firstName +
-        " · " +
-        passenger.passportNumber,
-    })),
-  ];
+  const flightOptions = useMemo(() => {
+    return [
+      { value: "", label: "Select a flight..." },
+      ...bookableFlights.map((flight) => ({
+        value: flight.flightNumber,
+        label:
+          flight.flightNumber +
+          " · " +
+          flight.origin +
+          " → " +
+          flight.destination +
+          " · " +
+          formatUtcDate(flight.departureTime) +
+          ", " +
+          formatUtcTime(flight.departureTime),
+      })),
+    ];
+  }, [bookableFlights]);
 
-  const classOptions = [
-    { value: "", label: "Select a class...", disabled: false },
-  ];
+  const passengerOptions = useMemo(() => {
+    return [
+      { value: "", label: "Select a passenger..." },
+      ...passengers.map((passenger) => ({
+        value: passenger.passportNumber,
+        label:
+          passenger.lastName +
+          ", " +
+          passenger.firstName +
+          " · " +
+          passenger.passportNumber,
+      })),
+    ];
+  }, [passengers]);
 
-  if (counts.economy > 0) {
-    classOptions.push({
-      value: "Economy",
-      label: "Economy (" + counts.economy + " free)",
-      disabled: false,
-    });
-  }
+  const classOptions = useMemo(() => {
+    const options = [{ value: "", label: "Select a class..." }];
 
-  if (counts.business > 0) {
-    classOptions.push({
-      value: "Business",
-      label: "Business (" + counts.business + " free)",
-      disabled: false,
-    });
-  }
+    if (counts.economy > 0) {
+      options.push({
+        value: "Economy",
+        label: "Economy (" + counts.economy + " free)",
+      });
+    }
 
-  if (counts.first > 0) {
-    classOptions.push({
-      value: "First",
-      label: "First (" + counts.first + " free)",
-      disabled: false,
-    });
-  }
+    if (counts.business > 0) {
+      options.push({
+        value: "Business",
+        label: "Business (" + counts.business + " free)",
+      });
+    }
 
-  const classSeats = freeSeats.filter(
-    (seat) => seat.class === state.ticketClass.toLowerCase(),
-  );
+    if (counts.first > 0) {
+      options.push({
+        value: "First",
+        label: "First (" + counts.first + " free)",
+      });
+    }
 
-  const seatOptions = [
-    { value: "", label: "Select a seat..." },
-    ...classSeats.map((seat) => ({
+    return options;
+  }, [counts]);
+
+  const seatOptionsByClass = useMemo(() => {
+    const emptyOption = { value: "", label: "Select a seat..." };
+
+    const firstSeats = freeSeats.filter((seat) => seat.class === "first");
+    const businessSeats = freeSeats.filter((seat) => seat.class === "business");
+    const economySeats = freeSeats.filter((seat) => seat.class === "economy");
+
+    const firstOptions = firstSeats.map((seat) => ({
       value: seat.seat,
       label: seat.seat,
-    })),
-  ];
+    }));
+
+    const businessOptions = businessSeats.map((seat) => ({
+      value: seat.seat,
+      label: seat.seat,
+    }));
+    
+    const economyOptions = economySeats.map((seat) => ({
+      value: seat.seat,
+      label: seat.seat,
+    }));
+
+    const options: Record<string, { value: string; label: string }[]> = {
+      first: [emptyOption, ...firstOptions],
+      business: [emptyOption, ...businessOptions],
+      economy: [emptyOption, ...economyOptions],
+    };
+
+    return options;
+  }, [freeSeats]);
+
+  const seatOptions = seatOptionsByClass[state.ticketClass.toLowerCase()];
 
   const classPrice = prices[state.ticketClass.toLowerCase()];
 
