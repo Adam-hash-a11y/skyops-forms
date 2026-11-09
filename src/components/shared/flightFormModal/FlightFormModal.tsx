@@ -117,11 +117,7 @@ export const FlightFormModal: FunctionComponent<Props> = ({
       }
     : initialState;
   const [state, dispatch] = useReducer(flightReducer, startState);
-  const handleChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
       type: FlightFormActionType.SET_FIELD,
       field: e.target.name,
@@ -129,11 +125,19 @@ export const FlightFormModal: FunctionComponent<Props> = ({
     });
   };
 
-  const handleBlur = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch({
+      type: FlightFormActionType.SET_FIELD,
+      field: e.target.name,
+      value: e.target.value,
+    });
+  };
+
+  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    dispatch({ type: FlightFormActionType.SET_TOUCHED, field: e.target.name });
+  };
+
+  const handleSelectBlur = (e: React.FocusEvent<HTMLSelectElement>) => {
     dispatch({ type: FlightFormActionType.SET_TOUCHED, field: e.target.name });
   };
 
@@ -170,8 +174,8 @@ export const FlightFormModal: FunctionComponent<Props> = ({
               placeholder="SKYOPS-10042"
               id="FlightNumberInput"
               label="Flight number"
-              handleChange={handleChange}
-              handleBlur={handleBlur}
+              handleInputChange={handleInputChange}
+              handleInputBlur={handleInputBlur}
               hint="Must start with SKYOPS-"
               error={state.errors.flightNumber}
               touched={state.touched.flightNumber}
@@ -186,9 +190,9 @@ export const FlightFormModal: FunctionComponent<Props> = ({
               value={state.airline}
               placeholder="Airline"
               id="FlightAirlineInput"
-              handleChange={handleChange}
+              handleInputChange={handleInputChange}
+              handleInputBlur={handleInputBlur}
               label="Airline"
-              handleBlur={handleBlur}
               error={state.errors.airline}
               touched={state.touched.airline}
               hint="Letters only, no spaces, min. 5"
@@ -200,9 +204,9 @@ export const FlightFormModal: FunctionComponent<Props> = ({
               value={state.status}
               placeholder="Status"
               id="StatusInput"
-              handleChange={handleChange}
+              handleSelectChange={handleSelectChange}
+              handleSelectBlur={handleSelectBlur}
               label="Status"
-              handleBlur={handleBlur}
               error={state.errors.status}
               touched={state.touched.status}
               options={statusOptions}
@@ -215,9 +219,9 @@ export const FlightFormModal: FunctionComponent<Props> = ({
               value={state.origin}
               placeholder="Origin"
               id="FlightOriginInput"
-              handleChange={handleChange}
               label="Origin"
-              handleBlur={handleBlur}
+              handleInputChange={handleInputChange}
+              handleInputBlur={handleInputBlur}
               error={state.errors.origin}
               touched={state.touched.origin}
               hint="3-letter IATA code"
@@ -229,9 +233,9 @@ export const FlightFormModal: FunctionComponent<Props> = ({
               value={state.destination}
               placeholder="Destination"
               id="FlightDestinationInput"
-              handleChange={handleChange}
+              handleInputChange={handleInputChange}
+              handleInputBlur={handleInputBlur}
               label="Destination"
-              handleBlur={handleBlur}
               error={state.errors.destination}
               touched={state.touched.destination}
               hint="3-letter IATA code"
@@ -244,9 +248,9 @@ export const FlightFormModal: FunctionComponent<Props> = ({
               value={state.departureTime}
               placeholder="Departure Time"
               id="DepartureTimeInput"
-              handleChange={handleChange}
+              handleInputChange={handleInputChange}
+              handleInputBlur={handleInputBlur}
               label="Departure (UTC)"
-              handleBlur={handleBlur}
               error={state.errors.departureTime}
               touched={state.touched.departureTime}
               hint="YYYY-MM-DD HH:mm, 24-hour"
@@ -258,9 +262,9 @@ export const FlightFormModal: FunctionComponent<Props> = ({
               value={state.arrivalTime}
               placeholder="Arrival Time"
               id="ArrivalTimeInput"
-              handleChange={handleChange}
               label="Arrival (UTC)"
-              handleBlur={handleBlur}
+              handleInputChange={handleInputChange}
+              handleInputBlur={handleInputBlur}
               error={state.errors.arrivalTime}
               touched={state.touched.arrivalTime}
               hint="YYYY-MM-DD HH:mm, 24-hour"
@@ -275,9 +279,9 @@ export const FlightFormModal: FunctionComponent<Props> = ({
                 value={state.firstSeats}
                 placeholder="First Seats"
                 id="FirstSeatsInput"
-                handleChange={handleChange}
+                handleInputChange={handleInputChange}
+                handleInputBlur={handleInputBlur}
                 label="First seats"
-                handleBlur={handleBlur}
                 error={state.errors.firstSeats}
                 touched={state.touched.firstSeats}
               />
@@ -288,9 +292,9 @@ export const FlightFormModal: FunctionComponent<Props> = ({
                 value={state.businessSeats}
                 placeholder="Business Seats"
                 id="BusinessSeatsInput"
-                handleChange={handleChange}
+                handleInputChange={handleInputChange}
+                handleInputBlur={handleInputBlur}
                 label="Business seats"
-                handleBlur={handleBlur}
                 error={state.errors.businessSeats}
                 touched={state.touched.businessSeats}
               />
@@ -301,9 +305,9 @@ export const FlightFormModal: FunctionComponent<Props> = ({
                 value={state.economySeats}
                 placeholder="Economy Seats"
                 id="EconomySeatsInput"
-                handleChange={handleChange}
+                handleInputChange={handleInputChange}
+                handleInputBlur={handleInputBlur}
                 label="Economy seats"
-                handleBlur={handleBlur}
                 error={state.errors.economySeats}
                 touched={state.touched.economySeats}
               />
