@@ -8,16 +8,10 @@ interface Props {
   value: string | number;
   placeholder?: string;
   id: string;
-  handleChange: (
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => void;
-  handleBlur?: (
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => void;
+  handleInputChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSelectChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleInputBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  handleSelectBlur?: (event: React.FocusEvent<HTMLSelectElement>) => void;
   label: string;
   error?: string;
   touched?: boolean;
@@ -103,8 +97,10 @@ export const FormInput: React.FunctionComponent<Props> = ({
   placeholder,
   id,
   label,
-  handleChange,
-  handleBlur,
+  handleInputChange,
+  handleSelectChange,
+  handleInputBlur,
+  handleSelectBlur,
   error,
   touched,
   options = [],
@@ -121,8 +117,8 @@ export const FormInput: React.FunctionComponent<Props> = ({
         <StyledSelect
           name={name}
           value={value}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          onChange={handleSelectChange}
+          onBlur={handleSelectBlur}
           id={id}
           disabled={disabled}
         >
@@ -144,8 +140,8 @@ export const FormInput: React.FunctionComponent<Props> = ({
           value={value}
           placeholder={placeholder}
           id={id}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          onChange={handleInputChange}
+          onBlur={handleInputBlur}
           disabled={disabled}
         />
       )}
