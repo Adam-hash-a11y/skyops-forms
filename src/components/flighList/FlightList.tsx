@@ -3,7 +3,7 @@ import { type Flight } from "../../types/flightTypes";
 import { FligthCard } from "../flightCard/FlightCard";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuPlus } from "react-icons/lu";
-import { useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import { FlightFormModal } from "../shared/flightFormModal/FlightFormModal";
 import { DeleteModal } from "../shared/deleteModal/DeleteModal";
 import { FlightFilters } from "../flightFilters/FlightFilters";
@@ -82,9 +82,9 @@ export const FlightsList = () => {
     setFlightToBook("");
   };
 
-  const handleOpenFlightCreateModal = () => {
+  const handleOpenFlightCreateModal = useCallback(() => {
     setIsModalOpen(true);
-  };
+  }, []);
 
   const handleCloseFlightModal = () => {
     setIsModalOpen(false);
@@ -168,19 +168,25 @@ export const FlightsList = () => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: FlightFilterActionType.SET_FILTER,
-      payload: { value: e.target.value, name: e.target.name },
-    });
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch({
+        type: FlightFilterActionType.SET_FILTER,
+        payload: { value: e.target.value, name: e.target.name },
+      });
+    },
+    [],
+  );
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({
-      type: FlightFilterActionType.SET_FILTER,
-      payload: { value: e.target.value, name: e.target.name },
-    });
-  };
+  const handleSelectChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      dispatch({
+        type: FlightFilterActionType.SET_FILTER,
+        payload: { value: e.target.value, name: e.target.name },
+      });
+    },
+    [],
+  );
 
   const handleResetFilter = async () => {
     dispatch({ type: FlightFilterActionType.RESET_FILTERS });
