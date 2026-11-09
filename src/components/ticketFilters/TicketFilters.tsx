@@ -12,11 +12,7 @@ interface Props {
   filterBy: string;
   filterValue: string;
   filterValueOptions: SelectOption[];
-  handleChange: (
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => void;
+  handleSelectChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleReset: () => void;
   handleSearch: () => void;
 }
@@ -49,7 +45,7 @@ export const TicketFilters: React.FunctionComponent<Props> = ({
   filterBy,
   filterValue,
   filterValueOptions,
-  handleChange,
+  handleSelectChange,
   handleReset,
   handleSearch,
 }) => {
@@ -62,7 +58,7 @@ export const TicketFilters: React.FunctionComponent<Props> = ({
         label="Filter by"
         value={filterBy}
         options={filterByOptions}
-        handleChange={handleChange}
+        handleSelectChange={handleSelectChange}
       />
       {filterBy !== "" && (
         <FormInput
@@ -72,7 +68,7 @@ export const TicketFilters: React.FunctionComponent<Props> = ({
           label={filterBy === "flight" ? "Flight" : "Passenger"}
           value={filterValue}
           options={filterValueOptions}
-          handleChange={handleChange}
+          handleSelectChange={handleSelectChange}
         />
       )}
       <FilterButtons>
