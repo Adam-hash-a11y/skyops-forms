@@ -8,11 +8,8 @@ interface Props {
   lastName: string;
   nationality: string;
   sortBy: string;
-  handleChange: (
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => void;
+  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSelectChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleReset: () => void;
   handleSearch: () => void;
 }
@@ -58,7 +55,8 @@ export const PassengerFilters: React.FunctionComponent<Props> = ({
   lastName,
   nationality,
   sortBy,
-  handleChange,
+  handleInputChange,
+  handleSelectChange,
   handleReset,
   handleSearch,
 }) => {
@@ -71,7 +69,7 @@ export const PassengerFilters: React.FunctionComponent<Props> = ({
         label="First name"
         value={firstName}
         placeholder="e.g. Lena"
-        handleChange={handleChange}
+        handleInputChange={handleInputChange}
       />
       <FormInput
         id="LastNameFilter"
@@ -80,7 +78,7 @@ export const PassengerFilters: React.FunctionComponent<Props> = ({
         label="Last name"
         value={lastName}
         placeholder="e.g. Fischer"
-        handleChange={handleChange}
+        handleInputChange={handleInputChange}
       />
       <FormInput
         id="NationalityFilter"
@@ -89,7 +87,7 @@ export const PassengerFilters: React.FunctionComponent<Props> = ({
         label="Nationality"
         value={nationality}
         options={nationalityOptions}
-        handleChange={handleChange}
+        handleSelectChange={handleSelectChange}
       />
       <FormInput
         id="SortByFilter"
@@ -98,7 +96,7 @@ export const PassengerFilters: React.FunctionComponent<Props> = ({
         label="Sort by"
         value={sortBy}
         options={sortByOptions}
-        handleChange={handleChange}
+        handleSelectChange={handleSelectChange}
       />
       <FilterButtons>
         <Button

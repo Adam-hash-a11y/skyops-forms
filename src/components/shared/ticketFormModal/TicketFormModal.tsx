@@ -181,11 +181,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
     }
   }, [state.flightNumber]);
 
-  const handleChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch({
       type: TicketFormActionType.SET_FIELD,
       field: e.target.name,
@@ -309,7 +305,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
               value={state.flightNumber}
               id="TicketFlightInput"
               label="Flight"
-              handleChange={handleChange}
+              handleSelectChange={handleSelectChange}
               options={flightOptions}
             />
           </FormRow>
@@ -320,7 +316,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
               value={state.passportNumber}
               id="TicketPassengerInput"
               label="Passenger"
-              handleChange={handleChange}
+              handleSelectChange={handleSelectChange}
               options={passengerOptions}
             />
           </FormRow>
@@ -331,7 +327,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
               value={state.ticketClass}
               id="TicketClassInput"
               label="Class"
-              handleChange={handleChange}
+              handleSelectChange={handleSelectChange}
               options={classOptions}
               disabled={
                 state.flightNumber === "" || state.passportNumber === ""
@@ -343,7 +339,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
               value={state.seatNumber}
               id="SeatNumberInput"
               label="Seat"
-              handleChange={handleChange}
+              handleSelectChange={handleSelectChange}
               disabled={state.ticketClass === ""}
               options={seatOptions}
             />

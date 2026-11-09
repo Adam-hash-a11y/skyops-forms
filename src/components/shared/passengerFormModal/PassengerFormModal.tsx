@@ -114,11 +114,7 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
     : initialState;
   const [state, dispatch] = useReducer(passengerReducer, startState);
 
-  const handleChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
       type: PassengerFormActionType.SET_FIELD,
       field: e.target.name,
@@ -126,11 +122,22 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
     });
   };
 
-  const handleBlur = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch({
+      type: PassengerFormActionType.SET_FIELD,
+      field: e.target.name,
+      value: e.target.value,
+    });
+  };
+
+  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    dispatch({
+      type: PassengerFormActionType.SET_PASSENGER_TOUCHED,
+      field: e.target.name,
+    });
+  };
+
+  const handleSelectBlur = (e: React.FocusEvent<HTMLSelectElement>) => {
     dispatch({
       type: PassengerFormActionType.SET_PASSENGER_TOUCHED,
       field: e.target.name,
@@ -169,8 +176,8 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               placeholder="Lena"
               id="FirstNameInput"
               label="First name"
-              handleChange={handleChange}
-              handleBlur={handleBlur}
+              handleInputChange={handleInputChange}
+              handleInputBlur={handleInputBlur}
               hint="Letters and spaces, min. 3 characters"
               error={state.errors.firstName}
               touched={state.touched.firstName}
@@ -183,8 +190,8 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               placeholder="Banks"
               id="LastNameInput"
               label="Last name"
-              handleChange={handleChange}
-              handleBlur={handleBlur}
+              handleInputChange={handleInputChange}
+              handleInputBlur={handleInputBlur}
               hint="Letters and spaces, min. 3 characters"
               error={state.errors.lastName}
               touched={state.touched.lastName}
@@ -198,8 +205,8 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               placeholder="DE7731902"
               id="PassportNumberInput"
               label="Passport number"
-              handleChange={handleChange}
-              handleBlur={handleBlur}
+              handleInputChange={handleInputChange}
+              handleInputBlur={handleInputBlur}
               hint="Min. 6 characters, unique"
               error={state.errors.passportNumber}
               touched={state.touched.passportNumber}
@@ -210,9 +217,9 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               type={FormType.SELECT}
               value={state.nationality}
               id="NationalityInput"
-              handleChange={handleChange}
+              handleSelectChange={handleSelectChange}
+              handleSelectBlur={handleSelectBlur}
               label="Nationality"
-              handleBlur={handleBlur}
               hint="Select a nationality"
               error={state.errors.nationality}
               touched={state.touched.nationality}
@@ -227,8 +234,8 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               placeholder="1992-11-02"
               id="DateOfBirthInput"
               label="Date of birth"
-              handleChange={handleChange}
-              handleBlur={handleBlur}
+              handleInputChange={handleInputChange}
+              handleInputBlur={handleInputBlur}
               hint="YYYY-MM-DD, in the past"
               error={state.errors.dateOfBirth}
               touched={state.touched.dateOfBirth}
@@ -240,8 +247,8 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               placeholder="name@example.com"
               id="EmailInput"
               label="Email"
-              handleChange={handleChange}
-              handleBlur={handleBlur}
+              handleInputChange={handleInputChange}
+              handleInputBlur={handleInputBlur}
               hint="Unique"
               error={state.errors.email}
               touched={state.touched.email}
@@ -255,8 +262,8 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               placeholder="+4915194300275"
               id="PhoneNumberInput"
               label="Phone number"
-              handleChange={handleChange}
-              handleBlur={handleBlur}
+              handleInputChange={handleInputChange}
+              handleInputBlur={handleInputBlur}
               hint="Valid mobile number"
               error={state.errors.phoneNumber}
               touched={state.touched.phoneNumber}
