@@ -132,11 +132,7 @@ export const TicketList = () => {
     }
   };
 
-  const handleChangeFilter = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch({
       type: TicketFilterActionType.SET_TICKET_FILTER,
       payload: { value: e.target.value, name: e.target.name },
@@ -225,7 +221,7 @@ export const TicketList = () => {
         filterBy={state.filterBy}
         filterValue={state.filterValue}
         filterValueOptions={filterValueOptions}
-        handleChange={handleChangeFilter}
+        handleSelectChange={handleSelectChange}
         handleReset={handleResetFilter}
         handleSearch={handleSearch}
       />
