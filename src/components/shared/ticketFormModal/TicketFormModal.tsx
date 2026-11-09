@@ -9,7 +9,7 @@ import type { Passenger } from "../../../types/passengerTypes";
 import { formatUtcDate, formatUtcTime } from "../../../utils/formatDateTime";
 import { initialState, ticketReducer } from "./reducer";
 import { useEffect, useReducer, useState } from "react";
-import { SET_FIELD } from "./action";
+import { TicketFormActionType } from "./action";
 import { getFlights, getFreeSeats } from "../../../service/flightService";
 import { getPassengers } from "../../../service/passengerService";
 
@@ -187,7 +187,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
       | React.ChangeEvent<HTMLSelectElement>,
   ) => {
     dispatch({
-      type: SET_FIELD,
+      type: TicketFormActionType.SET_FIELD,
       field: e.target.name,
       value: e.target.value,
     });
