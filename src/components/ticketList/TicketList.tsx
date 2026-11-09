@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import styled from "styled-components";
 import type { Ticket } from "../../types/ticketTypes";
 import type { Flight } from "../../types/flightTypes";
@@ -166,21 +166,25 @@ export const TicketList = () => {
     }
   };
 
-  const flightOptions = [
-    { value: "", label: "Select..." },
-    ...flights.map((flight) => ({
-      value: flight.id,
-      label: flight.flightNumber,
-    })),
-  ];
+  const flightOptions = useMemo(() => {
+    return [
+      { value: "", label: "Select..." },
+      ...flights.map((flight) => ({
+        value: flight.id,
+        label: flight.flightNumber,
+      })),
+    ];
+  }, [flights]);
 
-  const passengerOptions = [
-    { value: "", label: "Select..." },
-    ...passengers.map((passenger) => ({
-      value: passenger.id,
-      label: passenger.lastName + ", " + passenger.firstName,
-    })),
-  ];
+  const passengerOptions = useMemo(() => {
+    return [
+      { value: "", label: "Select..." },
+      ...passengers.map((passenger) => ({
+        value: passenger.id,
+        label: passenger.lastName + ", " + passenger.firstName,
+      })),
+    ];
+  }, [passengers]);
 
   const filterValueOptions =
     state.filterBy === "flight" ? flightOptions : passengerOptions;
