@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { ToastContainer } from "react-toastify";
 
 export const StyledToastContainer = styled(ToastContainer)`
+  --toastify-z-index: 10000;
+
   .Toastify__toast {
     border-radius: 8px;
     padding: 12px 16px;
