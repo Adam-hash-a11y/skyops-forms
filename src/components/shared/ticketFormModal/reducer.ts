@@ -1,9 +1,10 @@
 import { TicketFormActionType, type Action } from "./action";
+import type { TicketClass } from "../../../types/ticketTypes";
 
 export interface State {
   flightNumber: string;
   passportNumber: string;
-  ticketClass: string;
+  ticketClass: TicketClass | "";
   seatNumber: string;
   disabled: boolean;
 }
