@@ -5,6 +5,7 @@ import { LuArrowRight, LuPencil, LuTicket, LuTrash2 } from "react-icons/lu";
 import type { FunctionComponent } from "react";
 import { formatUtcDate } from "../../utils/formatDateTime";
 import { Link } from "react-router-dom";
+import { theme } from "../../theme/theme";
 
 interface Props {
   firstName: string;
@@ -20,19 +21,19 @@ interface Props {
 }
 
 const PassengerCardContainer = styled.div`
-  border-radius: 10px;
-  border: 1px solid #dce2eb;
+  border-radius: ${theme.borderRadius.lg};
+  border: 1px solid ${theme.colors.border.main};
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: ${theme.spacing[18]};
   width: 32%;
-  padding: 20px;
-  background-color: #fff;
+  padding: ${theme.spacing[20]};
+  background-color: ${theme.colors.background.paper};
 
-  @media (max-width: 1200px) {
+  @media (max-width: ${theme.breakpoints.desktop}) {
     width: 49%;
   }
-  @media (max-width: 900px) {
+  @media (max-width: ${theme.breakpoints.tablet}) {
     width: 100%;
   }
 `;
@@ -48,7 +49,7 @@ const PassengerInfo = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 12px;
+  gap: ${theme.spacing[12]};
 `;
 
 const Avatar = styled.span`
@@ -57,11 +58,11 @@ const Avatar = styled.span`
   justify-content: center;
   width: 38px;
   height: 38px;
-  border-radius: 50%;
-  background-color: #e7f0fd;
-  color: #1b63d6;
-  font-size: 13px;
-  font-weight: 600;
+  border-radius: ${theme.borderRadius.round};
+  background-color: ${theme.colors.status.info.background};
+  color: ${theme.colors.primary.main};
+  font-size: ${theme.fontSizes.sm};
+  font-weight: ${theme.fontWeights.semibold};
   flex: none;
 `;
 
@@ -71,55 +72,55 @@ const NameBlock = styled.div`
 `;
 
 const PassengerName = styled.p`
-  font-size: 15px;
-  font-weight: 600;
+  font-size: ${theme.fontSizes.base};
+  font-weight: ${theme.fontWeights.semibold};
 `;
 
 const PassportNumber = styled.p`
-  font-size: 12px;
-  font-weight: 400;
-  color: #566377;
+  font-size: ${theme.fontSizes.xs};
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.text.secondary};
 `;
 
 const NationalityBadge = styled.span`
   display: flex;
   align-items: center;
   height: 24px;
-  padding: 0 10px;
-  border-radius: 12px;
-  background-color: #eef2f7;
-  color: #344054;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 0 ${theme.spacing[10]};
+  border-radius: ${theme.borderRadius.pill};
+  background-color: ${theme.colors.background.subtle};
+  color: ${theme.colors.text.badge};
+  font-size: ${theme.fontSizes.xs};
+  font-weight: ${theme.fontWeights.semibold};
 `;
 
 const Details = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  font-size: 13px;
+  gap: ${theme.spacing[8]};
+  font-size: ${theme.fontSizes.sm};
 `;
 
 const DetailRow = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 12px;
+  gap: ${theme.spacing[12]};
 `;
 
 const DetailLabel = styled.span`
-  font-weight: 400;
-  color: #566377;
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.text.secondary};
 `;
 
 const DetailValue = styled.span`
-  font-weight: 500;
+  font-weight: ${theme.fontWeights.medium};
   text-align: right;
 `;
 
 const CardDivider = styled.div`
   height: 1px;
-  background-color: #edf0f5;
+  background-color: ${theme.colors.border.light};
 `;
 
 const CardFooter = styled.div`
@@ -133,10 +134,10 @@ const TicketsLink = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #1b63d6;
+  gap: ${theme.spacing[5]};
+  font-size: ${theme.fontSizes.sm};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.primary.main};
   text-decoration: none;
 
   &:hover {
@@ -148,7 +149,7 @@ const TicketsLink = styled(Link)`
 const FooterActions = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 5px;
+  gap: ${theme.spacing[5]};
 `;
 
 export const PassengerCard: FunctionComponent<Props> = ({

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import styled, { css } from "styled-components";
+import { theme } from "../../../theme/theme";
 
 export enum IconButtonVariant {
   DEFAULT = "default",
@@ -19,10 +20,10 @@ const baseIconButtonStyles = css`
   width: 32px;
   height: 32px;
   border: none;
-  border-radius: 6px;
+  border-radius: ${theme.borderRadius.sm};
   background-color: transparent;
-  color: #566377;
-  font-size: 16px;
+  color: ${theme.colors.text.secondary};
+  font-size: ${theme.fontSizes.lg};
   cursor: pointer;
 `;
 
@@ -30,8 +31,8 @@ const DefaultIconButton = styled.button`
   ${baseIconButtonStyles}
 
   &:hover {
-    background-color: #eef2f7;
-    color: #162033;
+    background-color: ${theme.colors.background.subtle};
+    color: ${theme.colors.text.primary};
   }
 `;
 
@@ -39,8 +40,8 @@ const DangerIconButton = styled.button`
   ${baseIconButtonStyles}
 
   &:hover {
-    background-color: #fde8e8;
-    color: #a4202a;
+    background-color: ${theme.colors.status.error.background};
+    color: ${theme.colors.status.error.text};
   }
 `;
 

@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Header } from "../header/Header";
 import styled from "styled-components";
+import { theme } from "../../theme/theme";
 
 const RootWrapper = styled.div`
   display: flex;
@@ -13,7 +14,7 @@ const MainContent = styled.main`
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: ${theme.spacing[24]};
 `;
 
 export const RootLayout = () => {

@@ -2,6 +2,7 @@ import type React from "react";
 import styled from "styled-components";
 import { FlightStatus } from "../../../types/flightTypes";
 import { TicketStatus } from "../../../types/ticketTypes";
+import { theme } from "../../../theme/theme";
 
 interface Props {
   status: FlightStatus | TicketStatus;
@@ -11,22 +12,22 @@ const Badge = styled.div<{ $background: string; $text: string }>`
   display: flex;
   align-items: center;
   height: 24px;
-  padding: 0 10px;
-  border-radius: 12px;
-  gap: 6px;
+  padding: 0 ${theme.spacing[10]};
+  border-radius: ${theme.borderRadius.pill};
+  gap: ${theme.spacing[6]};
   background-color: ${({ $background }) => $background};
   color: ${({ $text }) => $text};
 `;
 
 const Status = styled.div`
-  font-size: 12px;
-  font-weight: 600;
+  font-size: ${theme.fontSizes.xs};
+  font-weight: ${theme.fontWeights.semibold};
 `;
 
 const Dot = styled.div<{ $color: string }>`
   width: 6px;
   height: 6px;
-  border-radius: 50%;
+  border-radius: ${theme.borderRadius.round};
   background-color: ${({ $color }) => $color};
 `;
 
@@ -34,11 +35,11 @@ const STATUS_BADGE_COLORS: Record<
   FlightStatus | TicketStatus,
   { background: string; text: string }
 > = {
-  [FlightStatus.SCHEDULED]: { background: "#E7F0FD", text: "#144AA0" },
-  [FlightStatus.DELAYED]: { background: "#FFF1D6", text: "#8A4B00" },
-  [FlightStatus.CANCELLED]: { background: "#FDE8E8", text: "#A4202A" },
-  [FlightStatus.LANDED]: { background: "#E3F4EA", text: "#17653D" },
-  [TicketStatus.CONFIRMED]: { background: "#E3F4EA", text: "#17653D" },
+  [FlightStatus.SCHEDULED]: theme.colors.status.info,
+  [FlightStatus.DELAYED]: theme.colors.status.warning,
+  [FlightStatus.CANCELLED]: theme.colors.status.error,
+  [FlightStatus.LANDED]: theme.colors.status.success,
+  [TicketStatus.CONFIRMED]: theme.colors.status.success,
 };
 
 export const StatusBadge: React.FunctionComponent<Props> = ({ status }) => {

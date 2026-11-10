@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import type { FunctionComponent } from "react";
+import { theme } from "../../../theme/theme";
 
 interface Props {
   value: number;
@@ -8,23 +9,23 @@ interface Props {
 
 const ProgressBarFill = styled.div<{ $widthPercent: number }>`
   height: 6px;
-  border-radius: 3px;
+  border-radius: ${theme.borderRadius.xs};
   width: ${(props) => props.$widthPercent}%;
   background-color: ${(props) => {
     if (props.$widthPercent >= 100) {
-      return "#c0262d";
+      return theme.colors.status.error.main;
     }
     if (props.$widthPercent >= 90) {
-      return "#d98a00";
+      return theme.colors.status.warning.main;
     }
-    return "#1b63d6";
+    return theme.colors.primary.main;
   }};
 `;
 
 const ProgressBarTrack = styled.div`
   height: 6px;
-  border-radius: 3px;
-  background-color: #edf0f5;
+  border-radius: ${theme.borderRadius.xs};
+  background-color: ${theme.colors.border.light};
 `;
 
 export const ProgressBar: FunctionComponent<Props> = ({ value, max }) => {

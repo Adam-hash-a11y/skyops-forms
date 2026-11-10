@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { FormInputError } from "../formInputError/FormInputError";
 import type { FormType } from "../flightFormModal/types";
+import { theme } from "../../../theme/theme";
 
 interface Props {
   name: string;
@@ -29,65 +30,68 @@ interface SelectOption {
 const Field = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: ${theme.spacing[6]};
   width: 100%;
   flex: 1;
 `;
 
 const StyledLabel = styled.label`
-  font-size: 13px;
-  color: #162033;
-  font-weight: 500;
+  font-size: ${theme.fontSizes.sm};
+  color: ${theme.colors.text.primary};
+  font-weight: ${theme.fontWeights.medium};
 `;
 
 const baseInputStyles = `
   width: 100%;
   height: 36px;
-  padding: 0 12px;
-  border-radius: 6px;
-  color: #162033;
+  padding: 0 ${theme.spacing[12]};
+  border-radius: ${theme.borderRadius.sm};
+  color: ${theme.colors.text.primary};
   font: inherit;
-  font-size: 14px;
-  font-weight: 400;
+  font-size: ${theme.fontSizes.md};
+  font-weight: ${theme.fontWeights.regular};
 
   &:focus-visible {
-    outline: 2px solid #1b63d6;
+    outline: 2px solid ${theme.colors.primary.main};
     outline-offset: 1px;
   }
 `;
 
 const StyledInput = styled.input<{ $error: boolean }>`
   ${baseInputStyles}
-  border: 1px solid ${(p) => (p.$error ? "#c0262d" : "#c9d2df")};
-  background: ${(p) => (p.$error ? "#fff8f8" : "#fff")};
+  border: 1px solid
+    ${(p) =>
+    p.$error ? theme.colors.status.error.main : theme.colors.border.dashed};
+  background: ${(p) =>
+    p.$error ? theme.colors.background.error : theme.colors.background.paper};
 
   &::placeholder {
-    color: #566377;
+    color: ${theme.colors.text.secondary};
     opacity: 0.8;
   }
   &:disabled {
-    background: #f2f4f8;
-    color: #566377;
+    background: ${theme.colors.background.main};
+    color: ${theme.colors.text.secondary};
     cursor: not-allowed;
   }
 `;
 
 const StyledSelect = styled.select`
   ${baseInputStyles}
-  border: 1px solid #c9d2df;
-  background: #fff;
+  border: 1px solid ${theme.colors.border.dashed};
+  background: ${theme.colors.background.paper};
 
   &:disabled {
-    background: #f2f4f8;
-    color: #566377;
+    background: ${theme.colors.background.main};
+    color: ${theme.colors.text.secondary};
     cursor: not-allowed;
   }
 `;
 
 const HintBox = styled.span`
-  color: #566377;
-  font-size: 12px;
-  font-weight: 400;
+  color: ${theme.colors.text.secondary};
+  font-size: ${theme.fontSizes.xs};
+  font-weight: ${theme.fontWeights.regular};
 `;
 
 export const FormInput: React.FunctionComponent<Props> = ({

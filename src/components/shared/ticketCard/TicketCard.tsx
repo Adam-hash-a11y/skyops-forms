@@ -5,6 +5,7 @@ import { Button, ButtonVariant } from "../button/Button";
 import { formatUtcDate, formatUtcTime } from "../../../utils/formatDateTime";
 import { priceFormatter } from "../../../utils/priceFormater";
 import type { TicketClass, TicketStatus } from "../../../types/ticketTypes";
+import { theme } from "../../../theme/theme";
 
 interface Props {
   passengerName: string;
@@ -25,16 +26,16 @@ interface Props {
 const TicketCardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
-  border: 1px solid #dce2eb;
-  gap: 18px;
+  border-radius: ${theme.borderRadius.lg};
+  border: 1px solid ${theme.colors.border.main};
+  gap: ${theme.spacing[18]};
   width: 32%;
-  padding: 20px;
-  background-color: #fff;
-  @media (max-width: 1220px) {
+  padding: ${theme.spacing[20]};
+  background-color: ${theme.colors.background.paper};
+  @media (max-width: ${theme.breakpoints.ticketTablet}) {
     width: 49%;
   }
-  @media (max-width: 760px) {
+  @media (max-width: ${theme.breakpoints.ticketMobile}) {
     width: 100%;
   }
 `;
@@ -43,7 +44,7 @@ const Header = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 8px;
+  gap: ${theme.spacing[8]};
 `;
 
 const HeaderInfo = styled.div`
@@ -52,9 +53,9 @@ const HeaderInfo = styled.div`
 `;
 
 const PassengerName = styled.div`
-  font-size: 13px;
-  font-weight: 600;
-  color: #1b63d6;
+  font-size: ${theme.fontSizes.sm};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.primary.main};
   cursor: pointer;
   &:hover {
     text-decoration: underline;
@@ -62,23 +63,23 @@ const PassengerName = styled.div`
 `;
 
 const DeletedPassengerName = styled.div`
-  font-size: 13px;
-  font-weight: 600;
-  color: #566377;
+  font-size: ${theme.fontSizes.sm};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.text.secondary};
 `;
 
 const FlightLine = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 8px;
-  margin-top: 4px;
-  font-size: 12px;
-  font-weight: 400;
-  color: #566377;
+  gap: ${theme.spacing[8]};
+  margin-top: ${theme.spacing[4]};
+  font-size: ${theme.fontSizes.xs};
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.text.secondary};
 `;
 
 const FlightNumber = styled.span`
-  color: #1b63d6;
+  color: ${theme.colors.primary.main};
   cursor: pointer;
   &:hover {
     text-decoration: underline;
@@ -86,42 +87,42 @@ const FlightNumber = styled.span`
 `;
 
 const DeletedFlightNumber = styled.span`
-  color: #566377;
+  color: ${theme.colors.text.secondary};
 `;
 
 const FlightSeparator = styled.span`
-  color: #566377;
+  color: ${theme.colors.text.secondary};
 `;
 
 const FlightRoute = styled.span`
-  color: #566377;
+  color: ${theme.colors.text.secondary};
 `;
 
 const Details = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: ${theme.spacing[8]};
 `;
 
 const DetailBox = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  background-color: #f2f4f8;
+  gap: ${theme.spacing[2]};
+  background-color: ${theme.colors.background.main};
   flex: 1;
-  padding: 10px 12px;
-  border-radius: 8px;
+  padding: ${theme.spacing[10]} ${theme.spacing[12]};
+  border-radius: ${theme.borderRadius.md};
 `;
 
 const DetailLabel = styled.div`
-  font-size: 12px;
-  color: #566377;
+  font-size: ${theme.fontSizes.xs};
+  color: ${theme.colors.text.secondary};
 `;
 
 const DetailValue = styled.div`
-  font-size: 16px;
-  font-weight: 600;
-  color: #162033;
+  font-size: ${theme.fontSizes.lg};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.text.primary};
 `;
 
 const CardFooter = styled.div`
@@ -129,14 +130,14 @@ const CardFooter = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #edf0f5;
-  padding-top: 10px;
+  border-top: 1px solid ${theme.colors.border.light};
+  padding-top: ${theme.spacing[10]};
 `;
 
 const BookedAt = styled.div`
-  font-size: 12px;
-  font-weight: 400;
-  color: #566377;
+  font-size: ${theme.fontSizes.xs};
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.text.secondary};
 `;
 
 export const TicketCard: React.FunctionComponent<Props> = ({
