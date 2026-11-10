@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import styled, { css } from "styled-components";
+import { theme } from "../../../theme/theme";
 
 export enum ButtonVariant {
   PRIMARY = "primary",
@@ -23,14 +24,14 @@ const baseButtonStyles = css`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: ${theme.spacing[8]};
   height: 38px;
-  padding: 0 16px;
+  padding: 0 ${theme.spacing[16]};
   border: none;
-  border-radius: 6px;
+  border-radius: ${theme.borderRadius.sm};
   font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: ${theme.fontSizes.md};
+  font-weight: ${theme.fontWeights.semibold};
   white-space: nowrap;
   cursor: pointer;
 
@@ -42,76 +43,76 @@ const baseButtonStyles = css`
 
 const PrimaryButton = styled.button`
   ${baseButtonStyles}
-  background-color: #1b63d6;
-  color: #ffffff;
+  background-color: ${theme.colors.primary.main};
+  color: ${theme.colors.background.paper};
 
   &:hover:not(:disabled) {
-    background-color: #1553b5;
+    background-color: ${theme.colors.primary.dark};
   }
 `;
 
 const SecondaryButton = styled.button`
   ${baseButtonStyles}
-  background-color: #ffffff;
-  border: 1px solid #c9d2df;
-  color: #162033;
+  background-color: ${theme.colors.background.paper};
+  border: 1px solid ${theme.colors.border.dashed};
+  color: ${theme.colors.text.primary};
 
   &:hover:not(:disabled) {
-    background-color: #eef2f7;
+    background-color: ${theme.colors.background.subtle};
   }
 `;
 
 const DangerButton = styled.button`
   ${baseButtonStyles}
-  background-color: #c0262d;
-  color: #ffffff;
+  background-color: ${theme.colors.status.error.main};
+  color: ${theme.colors.background.paper};
 `;
 
 const DangerOutlineButton = styled.button`
   ${baseButtonStyles}
-  background-color: #ffffff;
-  border: 1px solid #c0262d;
-  color: #a4202a;
+  background-color: ${theme.colors.background.paper};
+  border: 1px solid ${theme.colors.status.error.main};
+  color: ${theme.colors.status.error.text};
 
   &:hover:not(:disabled) {
-    background-color: #fde8e8;
+    background-color: ${theme.colors.status.error.background};
   }
 `;
 
 const DangerOutlineSmallButton = styled.button`
   ${baseButtonStyles}
-  gap: 6px;
+  gap: ${theme.spacing[6]};
   height: 32px;
-  padding: 0 12px;
-  font-size: 13px;
-  background-color: #ffffff;
-  border: 1px solid #c0262d;
-  color: #a4202a;
+  padding: 0 ${theme.spacing[12]};
+  font-size: ${theme.fontSizes.sm};
+  background-color: ${theme.colors.background.paper};
+  border: 1px solid ${theme.colors.status.error.main};
+  color: ${theme.colors.status.error.text};
 
   &:hover:not(:disabled) {
-    background-color: #fde8e8;
+    background-color: ${theme.colors.status.error.background};
   }
 
   &:disabled {
-    border-color: #c0262d;
-    color: #a4202a;
-    background-color: #f2f4f8;
+    border-color: ${theme.colors.status.error.main};
+    color: ${theme.colors.status.error.text};
+    background-color: ${theme.colors.background.main};
     cursor: not-allowed;
   }
 `;
 
 const OutlineSmallButton = styled.button`
   ${baseButtonStyles}
-  gap: 6px;
+  gap: ${theme.spacing[6]};
   height: 32px;
-  padding: 0 12px;
-  font-size: 13px;
-  background-color: #ffffff;
-  border: 1px solid #1b63d6;
-  color: #1b63d6;
+  padding: 0 ${theme.spacing[12]};
+  font-size: ${theme.fontSizes.sm};
+  background-color: ${theme.colors.background.paper};
+  border: 1px solid ${theme.colors.primary.main};
+  color: ${theme.colors.primary.main};
 
   &:hover:not(:disabled) {
-    background-color: #e7f0fd;
+    background-color: ${theme.colors.status.info.background};
   }
 `;
 
@@ -120,19 +121,19 @@ const FilterButton = styled.button`
   align-items: center;
   justify-content: center;
   height: 36px;
-  padding: 0 12px;
+  padding: 0 ${theme.spacing[12]};
   border: none;
-  border-radius: 6px;
+  border-radius: ${theme.borderRadius.sm};
   background-color: transparent;
-  color: #1b63d6;
+  color: ${theme.colors.primary.main};
   font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: ${theme.fontSizes.sm};
+  font-weight: ${theme.fontWeights.semibold};
   white-space: nowrap;
   cursor: pointer;
 
   &:hover {
-    background-color: #e7f0fd;
+    background-color: ${theme.colors.status.info.background};
   }
 `;
 
