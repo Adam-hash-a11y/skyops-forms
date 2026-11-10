@@ -6,7 +6,14 @@ export interface Flight {
   destination: string;
   departureTime: string;
   arrivalTime: string;
-  status: string;
+  status: FlightStatus;
   totalSeats: number;
   bookedSeats: number;
+}
+
+export enum FlightStatus {
+  SCHEDULED = "Scheduled",
+  DELAYED = "Delayed",
+  CANCELLED = "Cancelled",
+  LANDED = "Landed",
 }
