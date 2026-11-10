@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import { theme } from "../theme/theme";
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -8,8 +9,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: "IBM Plex Sans", system-ui, sans-serif;
-    background-color: #F2F4F8;
-    color: #162033;
+    font-family: ${theme.fontFamily};
+    background-color: ${theme.colors.background.main};
+    color: ${theme.colors.text.primary};
   }
 `;
