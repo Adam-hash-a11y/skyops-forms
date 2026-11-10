@@ -4,8 +4,9 @@ import { LuX } from "react-icons/lu";
 import { Button, ButtonVariant } from "../button/Button";
 import { FormInput } from "../formInput/FlightFormInput";
 import { FormType } from "../flightFormModal/types";
-import type { Flight } from "../../../types/flightTypes";
+import { type Flight, FlightStatus } from "../../../types/flightTypes";
 import type { Passenger } from "../../../types/passengerTypes";
+import { TicketClass } from "../../../types/ticketTypes";
 import { formatUtcDate, formatUtcTime } from "../../../utils/formatDateTime";
 import { initialState, ticketReducer } from "./reducer";
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
@@ -201,7 +202,9 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
 
   const bookableFlights = useMemo(() => {
     return flights.filter(
-      (flight) => flight.status === "Scheduled" || flight.status === "Delayed",
+      (flight) =>
+        flight.status === FlightStatus.SCHEDULED ||
+        flight.status === FlightStatus.DELAYED,
     );
   }, [flights]);
 
@@ -244,21 +247,21 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
 
     if (counts.economy > 0) {
       options.push({
-        value: "Economy",
+        value: TicketClass.ECONOMY,
         label: "Economy (" + counts.economy + " free)",
       });
     }
 
     if (counts.business > 0) {
       options.push({
-        value: "Business",
+        value: TicketClass.BUSINESS,
         label: "Business (" + counts.business + " free)",
       });
     }
 
     if (counts.first > 0) {
       options.push({
-        value: "First",
+        value: TicketClass.FIRST,
         label: "First (" + counts.first + " free)",
       });
     }
