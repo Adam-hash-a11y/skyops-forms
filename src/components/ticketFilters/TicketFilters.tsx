@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { FormInput } from "../shared/formInput/FlightFormInput";
 import { FormType } from "../shared/flightFormModal/types";
 import { Button, ButtonVariant } from "../shared/button/Button";
+import { TicketFilterBy } from "../../types/ticketTypes";
 
 interface SelectOption {
   value: string;
@@ -37,8 +38,8 @@ const FilterButtons = styled.div`
 
 const filterByOptions = [
   { value: "", label: "All tickets" },
-  { value: "flight", label: "Flight" },
-  { value: "passenger", label: "Passenger" },
+  { value: TicketFilterBy.FLIGHT, label: "Flight" },
+  { value: TicketFilterBy.PASSENGER, label: "Passenger" },
 ];
 
 export const TicketFilters: React.FunctionComponent<Props> = ({
@@ -65,7 +66,7 @@ export const TicketFilters: React.FunctionComponent<Props> = ({
           id="FilterValueFilter"
           name="filterValue"
           type={FormType.SELECT}
-          label={filterBy === "flight" ? "Flight" : "Passenger"}
+          label={filterBy === TicketFilterBy.FLIGHT ? "Flight" : "Passenger"}
           value={filterValue}
           options={filterValueOptions}
           handleSelectChange={handleSelectChange}
