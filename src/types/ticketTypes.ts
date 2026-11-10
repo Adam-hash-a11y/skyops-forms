@@ -1,3 +1,19 @@
+export enum TicketStatus {
+  CONFIRMED = "Confirmed",
+  CANCELLED = "Cancelled",
+}
+
+export enum TicketClass {
+  ECONOMY = "Economy",
+  BUSINESS = "Business",
+  FIRST = "First",
+}
+
+export enum TicketFilterBy {
+  FLIGHT = "flight",
+  PASSENGER = "passenger",
+}
+
 export interface Ticket {
   id: string;
   flightNumber: string;
@@ -6,8 +22,8 @@ export interface Ticket {
   origin: string;
   destination: string;
   seatNumber: string;
-  ticketClass: string;
+  ticketClass: TicketClass;
   price: number;
-  status: string;
+  status: TicketStatus;
   createdAt: string;
 }
