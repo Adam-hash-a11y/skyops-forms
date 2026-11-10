@@ -1,8 +1,10 @@
 import type React from "react";
 import styled from "styled-components";
+import { FlightStatus } from "../../../types/flightTypes";
+import { TicketStatus } from "../../../types/ticketTypes";
 
 interface Props {
-  status: string;
+  status: FlightStatus | TicketStatus;
 }
 
 const Badge = styled.div<{ $background: string; $text: string }>`
@@ -29,14 +31,14 @@ const Dot = styled.div<{ $color: string }>`
 `;
 
 const STATUS_BADGE_COLORS: Record<
-  string,
+  FlightStatus | TicketStatus,
   { background: string; text: string }
 > = {
-  Scheduled: { background: "#E7F0FD", text: "#144AA0" },
-  Delayed: { background: "#FFF1D6", text: "#8A4B00" },
-  Cancelled: { background: "#FDE8E8", text: "#A4202A" },
-  Landed: { background: "#E3F4EA", text: "#17653D" },
-  Confirmed: { background: "#E3F4EA", text: "#17653D" },
+  [FlightStatus.SCHEDULED]: { background: "#E7F0FD", text: "#144AA0" },
+  [FlightStatus.DELAYED]: { background: "#FFF1D6", text: "#8A4B00" },
+  [FlightStatus.CANCELLED]: { background: "#FDE8E8", text: "#A4202A" },
+  [FlightStatus.LANDED]: { background: "#E3F4EA", text: "#17653D" },
+  [TicketStatus.CONFIRMED]: { background: "#E3F4EA", text: "#17653D" },
 };
 
 export const StatusBadge: React.FunctionComponent<Props> = ({ status }) => {
