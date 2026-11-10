@@ -8,6 +8,7 @@ import { FlightFormActionType } from "./action";
 import { Button, ButtonVariant } from "../button/Button";
 import { FormType } from "./types";
 import { type Flight, FlightStatus } from "../../../types/flightTypes";
+import { theme } from "../../../theme/theme";
 
 interface Props {
   handleClose: () => void;
@@ -32,16 +33,16 @@ const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${theme.colors.overlay};
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: ${theme.zIndex.modal};
 `;
 const ModalBox = styled.div`
-  border-radius: 12px;
+  border-radius: ${theme.borderRadius.xl};
   width: 620px;
-  background-color: white;
+  background-color: ${theme.colors.background.paper};
   height: 665px;
   display: flex;
   flex-direction: column;
@@ -51,21 +52,21 @@ const ModalHeader = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 20px 24px;
+  padding: ${theme.spacing[20]} ${theme.spacing[24]};
   align-items: center;
-  border-bottom: 1px solid #dce2eb;
+  border-bottom: 1px solid ${theme.colors.border.main};
 `;
 
 const HeaderTitle = styled.div`
-  font-size: 18px;
-  font-weight: 600;
+  font-size: ${theme.fontSizes.xl};
+  font-weight: ${theme.fontWeights.semibold};
 `;
 
 const ModalBody = styled.div`
-  padding: 24px;
+  padding: ${theme.spacing[24]};
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: ${theme.spacing[18]};
   overflow-y: auto;
   flex: 1;
 `;
@@ -73,8 +74,8 @@ const ModalBody = styled.div`
 const FormRow = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 20px;
-  @media (max-width: 550px) {
+  gap: ${theme.spacing[20]};
+  @media (max-width: ${theme.breakpoints.mobile}) {
     flex-direction: column;
   }
 `;
@@ -83,11 +84,11 @@ const ModalFooter = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  background-color: #f2f4f8;
-  border-top: 1px solid #dce2eb;
-  padding: 16px 24px;
-  border-radius: 0 0 12px 12px;
-  gap: 10px;
+  background-color: ${theme.colors.background.main};
+  border-top: 1px solid ${theme.colors.border.main};
+  padding: ${theme.spacing[16]} ${theme.spacing[24]};
+  border-radius: 0 0 ${theme.borderRadius.xl} ${theme.borderRadius.xl};
+  gap: ${theme.spacing[10]};
 `;
 
 const statusOptions = [
