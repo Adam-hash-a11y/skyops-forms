@@ -3,6 +3,7 @@ import { FormInput } from "../shared/formInput/FlightFormInput";
 import { FormType } from "../shared/flightFormModal/types";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { TicketFilterBy } from "../../types/ticketTypes";
+import { theme } from "../../theme/theme";
 
 interface SelectOption {
   value: string;
@@ -21,19 +22,19 @@ interface Props {
 const FilterBar = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 16px;
-  background-color: #ffffff;
-  border: 1px solid #dce2eb;
-  padding: 16px 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  gap: ${theme.spacing[16]};
+  background-color: ${theme.colors.background.paper};
+  border: 1px solid ${theme.colors.border.main};
+  padding: ${theme.spacing[16]} ${theme.spacing[20]};
+  border-radius: ${theme.borderRadius.lg};
+  margin-bottom: ${theme.spacing[20]};
 `;
 
 const FilterButtons = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 10px;
-  margin-top: 20px;
+  gap: ${theme.spacing[10]};
+  margin-top: ${theme.spacing[20]};
 `;
 
 const filterByOptions = [
