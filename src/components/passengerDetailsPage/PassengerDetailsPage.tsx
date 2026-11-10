@@ -12,6 +12,7 @@ import {
 } from "../../service/ticketService";
 import { toast } from "react-toastify";
 import { NotFound } from "../notFound/NotFound";
+import { TicketStatus } from "../../types/ticketTypes";
 
 const BackLink = styled(Link)`
   font-size: 13px;
@@ -203,7 +204,7 @@ export const PassengerDetailsPage = () => {
               price={ticket.price}
               createdAt={ticket.createdAt}
               handleCancel={() => handleOpenCancelModal(ticket.id)}
-              cancelDisabled={ticket.status === "Cancelled"}
+              cancelDisabled={ticket.status === TicketStatus.CANCELLED}
             />
           );
         })}
