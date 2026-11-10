@@ -13,11 +13,12 @@ import {
 import { toast } from "react-toastify";
 import { NotFound } from "../notFound/NotFound";
 import { TicketStatus } from "../../types/ticketTypes";
+import { theme } from "../../theme/theme";
 
 const BackLink = styled(Link)`
-  font-size: 13px;
-  font-weight: 600;
-  color: #1b63d6;
+  font-size: ${theme.fontSizes.sm};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.primary.main};
   text-decoration: none;
 `;
 
@@ -25,60 +26,60 @@ const PageHeader = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 20px 0;
+  margin: ${theme.spacing[20]} 0;
 `;
 
 const TitleBlock = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: ${theme.spacing[10]};
 `;
 
 const Title = styled.h2`
-  font-size: 26px;
-  font-weight: 600;
+  font-size: ${theme.fontSizes.title};
+  font-weight: ${theme.fontWeights.semibold};
 `;
 
 const Subtitle = styled.div`
-  font-size: 14px;
-  font-weight: 400;
-  color: #566377;
+  font-size: ${theme.fontSizes.md};
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.text.secondary};
 `;
 
 const SectionHeading = styled.h3`
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 8px;
-  margin-bottom: 20px;
+  font-size: ${theme.fontSizes.lg};
+  font-weight: ${theme.fontWeights.semibold};
+  margin-top: ${theme.spacing[8]};
+  margin-bottom: ${theme.spacing[20]};
 `;
 
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 20px 2%;
+  gap: ${theme.spacing[20]} 2%;
 `;
 
 const EmptyTickets = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #fff;
-  border: 1px dashed #c9d2df;
-  border-radius: 10px;
-  padding: 48px 24px;
-  color: #566377;
+  background: ${theme.colors.background.paper};
+  border: 1px dashed ${theme.colors.border.dashed};
+  border-radius: ${theme.borderRadius.lg};
+  padding: ${theme.spacing[48]} ${theme.spacing[24]};
+  color: ${theme.colors.text.secondary};
 `;
 
 const EmptyTitle = styled.div`
-  font-size: 16px;
-  font-weight: 600;
-  color: #162033;
-  margin-bottom: 5px;
+  font-size: ${theme.fontSizes.lg};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.text.primary};
+  margin-bottom: ${theme.spacing[5]};
 `;
 
 const EmptyText = styled.div`
-  font-size: 14px;
-  font-weight: 400;
+  font-size: ${theme.fontSizes.md};
+  font-weight: ${theme.fontWeights.regular};
 `;
 
 export const PassengerDetailsPage = () => {
