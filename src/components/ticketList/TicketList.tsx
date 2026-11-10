@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import styled from "styled-components";
 import { toast } from "react-toastify";
-import type { Ticket } from "../../types/ticketTypes";
+import {
+  type Ticket,
+  TicketFilterBy,
+  TicketStatus,
+} from "../../types/ticketTypes";
 import type { Flight } from "../../types/flightTypes";
 import type { Passenger } from "../../types/passengerTypes";
 import { Button, ButtonVariant } from "../shared/button/Button";
@@ -156,10 +160,16 @@ export const TicketList = () => {
 
   const handleSearch = async () => {
     try {
-      if (state.filterBy === "flight" && state.filterValue !== "") {
+      if (
+        state.filterBy === TicketFilterBy.FLIGHT &&
+        state.filterValue !== ""
+      ) {
         const loadedTickets = await getTicketsByFlight(state.filterValue);
         setAllTickets(loadedTickets);
-      } else if (state.filterBy === "passenger" && state.filterValue !== "") {
+      } else if (
+        state.filterBy === TicketFilterBy.PASSENGER &&
+        state.filterValue !== ""
+      ) {
         const loadedTickets = await getTicketsByPassenger(state.filterValue);
         setAllTickets(loadedTickets);
       } else {
@@ -191,7 +201,7 @@ export const TicketList = () => {
   }, [passengers]);
 
   const filterValueOptions =
-    state.filterBy === "flight" ? flightOptions : passengerOptions;
+    state.filterBy === TicketFilterBy.FLIGHT ? flightOptions : passengerOptions;
 
   const handleCancelTicket = async () => {
     try {
@@ -279,7 +289,7 @@ export const TicketList = () => {
               price={ticket.price}
               createdAt={ticket.createdAt}
               handleCancel={() => handleOpenCancelModal(ticket.id)}
-              cancelDisabled={ticket.status === "Cancelled"}
+              cancelDisabled={ticket.status === TicketStatus.CANCELLED}
             />
           );
         })}
