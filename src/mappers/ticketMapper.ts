@@ -1,3 +1,5 @@
+import type { TicketClass, TicketStatus } from "../types/ticketTypes";
+
 interface TicketApi {
   _id: string;
   flight: {
@@ -26,9 +28,11 @@ export const mapTicketFromApi = (ticket: TicketApi) => ({
     ? ticket.passenger.firstName + " " + ticket.passenger.lastName
     : "",
   seatNumber: ticket.seatNumber,
-  ticketClass: ticket.class.charAt(0).toUpperCase() + ticket.class.slice(1),
+  ticketClass: (ticket.class.charAt(0).toUpperCase() +
+    ticket.class.slice(1)) as TicketClass,
   price: ticket.price,
-  status: ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1),
+  status: (ticket.status.charAt(0).toUpperCase() +
+    ticket.status.slice(1)) as TicketStatus,
   createdAt: ticket.createdAt,
 });
 
