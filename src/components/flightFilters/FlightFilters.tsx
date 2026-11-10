@@ -2,9 +2,10 @@ import styled from "styled-components";
 import { FormInput } from "../shared/formInput/FlightFormInput";
 import { FormType } from "../shared/flightFormModal/types";
 import { Button, ButtonVariant } from "../shared/button/Button";
+import { FlightStatus } from "../../types/flightTypes";
 
 interface Props {
-  status: string;
+  status: FlightStatus | "";
   origin: string;
   destination: string;
   sortBy: string;
@@ -35,10 +36,10 @@ const FilterButtons = styled.div`
 
 const statusOptions = [
   { value: "", label: "All statuses" },
-  { value: "Scheduled", label: "Scheduled" },
-  { value: "Delayed", label: "Delayed" },
-  { value: "Cancelled", label: "Cancelled" },
-  { value: "Landed", label: "Landed" },
+  { value: FlightStatus.SCHEDULED, label: "Scheduled" },
+  { value: FlightStatus.DELAYED, label: "Delayed" },
+  { value: FlightStatus.CANCELLED, label: "Cancelled" },
+  { value: FlightStatus.LANDED, label: "Landed" },
 ];
 
 const sortByOptions = [
