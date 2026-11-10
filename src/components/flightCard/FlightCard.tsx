@@ -10,6 +10,7 @@ import { formatUtcDate, formatUtcTime } from "../../utils/formatDateTime";
 import { getCityName } from "../../utils/cityNames";
 import { Link } from "react-router-dom";
 import type { FlightStatus } from "../../types/flightTypes";
+import { theme } from "../../theme/theme";
 
 interface Props {
   flightNumber: string;
@@ -30,19 +31,19 @@ interface Props {
 }
 
 const FlightCard = styled.div`
-  border-radius: 10px;
-  border: 1px solid #dce2eb;
+  border-radius: ${theme.borderRadius.lg};
+  border: 1px solid ${theme.colors.border.main};
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: ${theme.spacing[18]};
   width: 32%;
-  padding: 20px;
-  background-color: #fff;
+  padding: ${theme.spacing[20]};
+  background-color: ${theme.colors.background.paper};
 
-  @media (max-width: 1200px) {
+  @media (max-width: ${theme.breakpoints.desktop}) {
     width: 49%;
   }
-  @media (max-width: 900px) {
+  @media (max-width: ${theme.breakpoints.tablet}) {
     width: 100%;
   }
 `;
@@ -58,34 +59,34 @@ const AirlineInfo = styled.div`
 `;
 
 const Airline = styled.p`
-  font-size: 15px;
-  font-weight: 600;
+  font-size: ${theme.fontSizes.base};
+  font-weight: ${theme.fontWeights.semibold};
 `;
 
 const FlightNumber = styled.p`
-  font-size: 12px;
-  font-weight: 400;
-  color: #566377;
+  font-size: ${theme.fontSizes.xs};
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.text.secondary};
 `;
 
 const Route = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 18px;
+  gap: ${theme.spacing[18]};
   align-items: center;
 `;
 
 const CityIATA = styled.div`
-  font-size: 28px;
-  font-weight: 600;
-  color: #0b2545;
+  font-size: ${theme.fontSizes.display};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.header.background};
 `;
 
 const City = styled.div`
-  font-size: 12px;
-  font-weight: 400;
-  color: #566377;
+  font-size: ${theme.fontSizes.xs};
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.text.secondary};
 `;
 
 const RouteStart = styled.div`
@@ -113,31 +114,31 @@ const FlightTimeDateBlockArrival = styled.div`
   text-align: right;
 `;
 const FlightTime = styled.div`
-  font-size: 13px;
-  font-weight: 600;
+  font-size: ${theme.fontSizes.sm};
+  font-weight: ${theme.fontWeights.semibold};
 `;
 
 const FlightDate = styled.div`
-  font-size: 12px;
-  font-weight: 400;
-  color: #566377;
+  font-size: ${theme.fontSizes.xs};
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.text.secondary};
 `;
 
 const FlightSeats = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: ${theme.spacing[8]};
 `;
 
 const SeatsLabel = styled.span`
-  font-size: 13px;
-  font-weight: 400;
-  color: #566377;
+  font-size: ${theme.fontSizes.sm};
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.text.secondary};
 `;
 
 const SeatsCount = styled.div`
-  font-size: 13px;
-  font-weight: 600;
+  font-size: ${theme.fontSizes.sm};
+  font-weight: ${theme.fontWeights.semibold};
 `;
 
 const BookedSeatsCount = styled.div`
@@ -148,7 +149,7 @@ const BookedSeatsCount = styled.div`
 
 const CardDivider = styled.div`
   height: 1px;
-  background-color: #edf0f5;
+  background-color: ${theme.colors.border.light};
 `;
 
 const CardFooter = styled.div`
@@ -162,10 +163,10 @@ const FlightDetails = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #1b63d6;
+  gap: ${theme.spacing[5]};
+  font-size: ${theme.fontSizes.sm};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.primary.main};
   text-decoration: none;
 
   &:hover {
@@ -177,7 +178,7 @@ const FlightDetails = styled(Link)`
 const FooterActions = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 5px;
+  gap: ${theme.spacing[5]};
 `;
 
 export const FligthCard: FunctionComponent<Props> = ({
