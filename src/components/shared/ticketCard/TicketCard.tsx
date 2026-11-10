@@ -4,15 +4,16 @@ import { StatusBadge } from "../statusBadge/StatusBadge";
 import { Button, ButtonVariant } from "../button/Button";
 import { formatUtcDate, formatUtcTime } from "../../../utils/formatDateTime";
 import { priceFormatter } from "../../../utils/priceFormater";
+import type { TicketClass, TicketStatus } from "../../../types/ticketTypes";
 
 interface Props {
   passengerName: string;
   flightNumber: string;
   origin: string;
   destination: string;
-  status: string;
+  status: TicketStatus;
   seatNumber: string;
-  ticketClass: string;
+  ticketClass: TicketClass;
   price: number;
   createdAt: string;
   cancelDisabled: boolean;
