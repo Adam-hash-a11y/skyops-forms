@@ -20,36 +20,37 @@ import {
 } from "../../service/flightService";
 import { toast } from "react-toastify";
 import { EntityName } from "../../types/entityTypes";
+import { theme } from "../../theme/theme";
 
 const Title = styled.h2`
-  font-size: 26px;
-  font-weight: 600;
+  font-size: ${theme.fontSizes.title};
+  font-weight: ${theme.fontWeights.semibold};
 `;
 
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 20px 2%;
+  gap: ${theme.spacing[20]} 2%;
 `;
 
 const PageHeader = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: ${theme.spacing[20]};
   align-items: flex-end;
 `;
 
 const TitleBlock = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: ${theme.spacing[10]};
 `;
 
 const Subtitle = styled.div`
-  font-size: 14px;
-  font-weight: 400;
-  color: #566377;
+  font-size: ${theme.fontSizes.md};
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.text.secondary};
 `;
 export const FlightsList = () => {
   const [state, dispatch] = useReducer(flightFilterReducer, initialState);
