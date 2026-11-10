@@ -19,6 +19,7 @@ import {
   updatePassenger,
 } from "../../service/passengerService";
 import { toast } from "react-toastify";
+import { EntityName } from "../../types/entityTypes";
 
 const Title = styled.h2`
   font-size: 26px;
@@ -285,7 +286,7 @@ export const PassengerList = () => {
           itemName={deletedPassengerName}
           deleteButtonLabel="Delete passenger"
           handleDelete={handleDeletePassenger}
-          entityName="passenger"
+          entityName={EntityName.PASSENGER}
         />
       )}
 
