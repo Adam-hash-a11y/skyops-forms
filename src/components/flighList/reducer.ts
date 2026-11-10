@@ -1,11 +1,11 @@
-import type { Status } from "../shared/flightFormModal/types";
+import type { FlightStatus } from "../../types/flightTypes";
 import { FlightFilterActionType, type Action } from "./action";
 
 interface State {
   origin: string;
   destination: string;
   sortBy: string;
-  status: Status;
+  status: FlightStatus | "";
 }
 
 export const initialState: State = {
