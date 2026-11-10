@@ -9,6 +9,7 @@ import { TicketCancelModal } from "../shared/ticketCancelModal/TicketCancelModal
 import { getFlight } from "../../service/flightService";
 import { cancelTicket, getTicketsByFlight } from "../../service/ticketService";
 import { NotFound } from "../notFound/NotFound";
+import { TicketStatus } from "../../types/ticketTypes";
 
 const BackLink = styled(Link)`
   font-size: 13px;
@@ -194,7 +195,7 @@ export const FlightDetailsPage = () => {
               price={ticket.price}
               createdAt={ticket.createdAt}
               handleCancel={() => handleOpenCancelModal(ticket.id)}
-              cancelDisabled={ticket.status === "Cancelled"}
+              cancelDisabled={ticket.status === TicketStatus.CANCELLED}
             />
           );
         })}

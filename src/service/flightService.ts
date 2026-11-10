@@ -4,6 +4,7 @@ import {
   mapFlightToApi,
   mapFlightUpdateToApi,
 } from "../mappers/flightMapper";
+import type { FlightStatus } from "../types/flightTypes";
 
 export const getFlights = async () => {
   const response = await api.get("/flights");
@@ -31,7 +32,7 @@ export const createFlight = async (
   destination: string,
   departureTime: string,
   arrivalTime: string,
-  status: string,
+  status: FlightStatus,
   firstSeats: string,
   businessSeats: string,
   economySeats: string,
@@ -60,7 +61,7 @@ export const updateFlight = async (
   destination: string,
   departureTime: string,
   arrivalTime: string,
-  status: string,
+  status: FlightStatus,
 ) => {
   await api.patch(
     `/flights/${flightNumber}`,

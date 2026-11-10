@@ -1,5 +1,5 @@
 import { FlightFormActionType, type Action } from "./action";
-import type { Status } from "./types";
+import { FlightStatus } from "../../../types/flightTypes";
 import {
   isValidFlightNumber,
   isValidOrigin,
@@ -21,7 +21,7 @@ export interface State {
   destination: string;
   departureTime: string;
   arrivalTime: string;
-  status: Status;
+  status: FlightStatus;
   firstSeats: string;
   businessSeats: string;
   economySeats: string;
@@ -60,7 +60,7 @@ export const initialState: State = {
   destination: "",
   departureTime: "",
   arrivalTime: "",
-  status: "Scheduled",
+  status: FlightStatus.SCHEDULED,
   firstSeats: "0",
   businessSeats: "0",
   economySeats: "0",

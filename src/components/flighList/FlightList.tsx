@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { type Flight } from "../../types/flightTypes";
+import { FlightStatus, type Flight } from "../../types/flightTypes";
 import { FligthCard } from "../flightCard/FlightCard";
 import { Button, ButtonVariant } from "../shared/button/Button";
 import { LuPlus } from "react-icons/lu";
@@ -19,6 +19,7 @@ import {
   updateFlight,
 } from "../../service/flightService";
 import { toast } from "react-toastify";
+import { EntityName } from "../../types/entityTypes";
 
 const Title = styled.h2`
   font-size: 26px;
@@ -108,7 +109,7 @@ export const FlightsList = () => {
     destination: string,
     departureTime: string,
     arrivalTime: string,
-    status: string,
+    status: FlightStatus,
     firstSeats: string,
     businessSeats: string,
     economySeats: string,
@@ -285,7 +286,7 @@ export const FlightsList = () => {
           itemName={flightToDelete}
           deleteButtonLabel="Delete flight"
           handleDelete={handleDeleteFlight}
-          entityName="flight"
+          entityName={EntityName.FLIGHT}
         />
       )}
 
@@ -301,7 +302,8 @@ export const FlightsList = () => {
         {allFlights.map((flight) => {
           const isFull = flight.bookedSeats >= flight.totalSeats;
           const isBookableStatus =
-            flight.status === "Scheduled" || flight.status === "Delayed";
+            flight.status === FlightStatus.SCHEDULED ||
+            flight.status === FlightStatus.DELAYED;
           return (
             <FligthCard
               key={flight.flightNumber}

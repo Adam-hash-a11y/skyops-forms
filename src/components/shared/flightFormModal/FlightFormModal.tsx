@@ -6,8 +6,8 @@ import { FormInput } from "../formInput/FlightFormInput";
 import { flightReducer, initialState } from "./reducer";
 import { FlightFormActionType } from "./action";
 import { Button, ButtonVariant } from "../button/Button";
-import { FormType, type Status } from "./types";
-import { type Flight } from "../../../types/flightTypes";
+import { FormType } from "./types";
+import { type Flight, FlightStatus } from "../../../types/flightTypes";
 
 interface Props {
   handleClose: () => void;
@@ -18,7 +18,7 @@ interface Props {
     destination: string,
     departureTime: string,
     arrivalTime: string,
-    status: string,
+    status: FlightStatus,
     firstSeats: string,
     businessSeats: string,
     economySeats: string,
@@ -91,10 +91,10 @@ const ModalFooter = styled.div`
 `;
 
 const statusOptions = [
-  { value: "Scheduled", label: "Scheduled" },
-  { value: "Delayed", label: "Delayed" },
-  { value: "Cancelled", label: "Cancelled" },
-  { value: "Landed", label: "Landed" },
+  { value: FlightStatus.SCHEDULED, label: "Scheduled" },
+  { value: FlightStatus.DELAYED, label: "Delayed" },
+  { value: FlightStatus.CANCELLED, label: "Cancelled" },
+  { value: FlightStatus.LANDED, label: "Landed" },
 ];
 
 export const FlightFormModal: FunctionComponent<Props> = ({
@@ -111,7 +111,7 @@ export const FlightFormModal: FunctionComponent<Props> = ({
         destination: flight.destination,
         departureTime: flight.departureTime.slice(0, 16),
         arrivalTime: flight.arrivalTime.slice(0, 16),
-        status: flight.status as Status,
+        status: flight.status,
         isEdit: true,
         disabled: false,
       }

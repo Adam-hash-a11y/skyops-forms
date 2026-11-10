@@ -9,11 +9,12 @@ import { ProgressBar } from "../shared/progressBar/ProgressBar";
 import { formatUtcDate, formatUtcTime } from "../../utils/formatDateTime";
 import { getCityName } from "../../utils/cityNames";
 import { Link } from "react-router-dom";
+import type { FlightStatus } from "../../types/flightTypes";
 
 interface Props {
   flightNumber: string;
   airline: string;
-  status: string;
+  status: FlightStatus;
   origin: string;
   destination: string;
   departureTime: string;

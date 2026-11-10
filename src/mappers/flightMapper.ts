@@ -1,3 +1,5 @@
+import type { FlightStatus } from "../types/flightTypes";
+
 interface FlightApi {
   _id: string;
   flightNumber: string;
@@ -17,7 +19,8 @@ export const mapFlightFromApi = (flight: FlightApi) => ({
   destination: flight.route.destination,
   departureTime: flight.schedule.departureTime,
   arrivalTime: flight.schedule.arrivalTime,
-  status: flight.status.charAt(0).toUpperCase() + flight.status.slice(1),
+  status: (flight.status.charAt(0).toUpperCase() +
+    flight.status.slice(1)) as FlightStatus,
   totalSeats: flight.totalSeats,
   bookedSeats: flight.bookedSeats,
 });

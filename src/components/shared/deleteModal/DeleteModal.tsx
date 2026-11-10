@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { IconButton } from "../iconButton/IconButton";
 import { LuX } from "react-icons/lu";
 import { WarningBox } from "../warningBox/WarningBox";
+import type { EntityName } from "../../../types/entityTypes";
 
 interface Props {
   title: string;
@@ -13,7 +14,7 @@ interface Props {
   ticketCount?: number;
   deleteButtonLabel: string;
   handleDelete: () => void;
-  entityName?: string;
+  entityName?: EntityName;
 }
 
 const ModalOverlay = styled.div`
