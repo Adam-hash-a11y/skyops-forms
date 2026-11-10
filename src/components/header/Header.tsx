@@ -1,28 +1,29 @@
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { LuPlane } from "react-icons/lu";
+import { theme } from "../../theme/theme";
 
 const HeaderWrapper = styled.header`
-  background-color: #0b2545;
+  background-color: ${theme.colors.header.background};
 `;
 
 const NavBar = styled.nav`
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: ${theme.spacing[40]};
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 ${theme.spacing[24]};
 `;
 
 const Skyops = styled(Link)`
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: #ffffff;
+  gap: ${theme.spacing[10]};
+  color: ${theme.colors.background.paper};
   text-decoration: none;
-  font-size: 17px;
-  font-weight: 600;
+  font-size: ${theme.fontSizes.brand};
+  font-weight: ${theme.fontWeights.semibold};
 `;
 
 const LogoMark = styled.span`
@@ -31,9 +32,9 @@ const LogoMark = styled.span`
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: 8px;
-  background-color: #1b63d6;
-  color: #ffffff;
+  border-radius: ${theme.borderRadius.md};
+  background-color: ${theme.colors.primary.main};
+  color: ${theme.colors.background.paper};
 `;
 
 const LinkGroup = styled.div`
@@ -41,20 +42,20 @@ const LinkGroup = styled.div`
 `;
 
 const StyledLink = styled(Link)`
-  padding: 18px 16px;
-  color: #a9b8ce;
+  padding: ${theme.spacing[18]} ${theme.spacing[16]};
+  color: ${theme.colors.header.link};
   text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: ${theme.fontSizes.md};
+  font-weight: ${theme.fontWeights.medium};
   border-bottom: 3px solid transparent;
 
   &:hover {
-    color: #ffffff;
+    color: ${theme.colors.background.paper};
   }
 
   &.active {
-    color: #ffffff;
-    border-bottom-color: #5b9bff;
+    color: ${theme.colors.background.paper};
+    border-bottom-color: ${theme.colors.header.linkActive};
   }
 `;
 
