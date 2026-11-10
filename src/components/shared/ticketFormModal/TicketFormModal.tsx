@@ -14,6 +14,7 @@ import { TicketFormActionType } from "./action";
 import { getFlights, getFreeSeats } from "../../../service/flightService";
 import { getPassengers } from "../../../service/passengerService";
 import { toast } from "react-toastify";
+import { theme } from "../../../theme/theme";
 
 interface Props {
   handleClose: () => void;
@@ -33,17 +34,17 @@ const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${theme.colors.overlay};
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: ${theme.zIndex.modal};
 `;
 
 const ModalBox = styled.div`
-  border-radius: 12px;
+  border-radius: ${theme.borderRadius.xl};
   width: 620px;
-  background-color: white;
+  background-color: ${theme.colors.background.paper};
   display: flex;
   flex-direction: column;
 `;
@@ -52,28 +53,28 @@ const ModalHeader = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 20px 24px;
+  padding: ${theme.spacing[20]} ${theme.spacing[24]};
   align-items: center;
-  border-bottom: 1px solid #dce2eb;
+  border-bottom: 1px solid ${theme.colors.border.main};
 `;
 
 const HeaderTitle = styled.div`
-  font-size: 18px;
-  font-weight: 600;
+  font-size: ${theme.fontSizes.xl};
+  font-weight: ${theme.fontWeights.semibold};
 `;
 
 const ModalBody = styled.div`
-  padding: 24px;
+  padding: ${theme.spacing[24]};
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: ${theme.spacing[18]};
 `;
 
 const FormRow = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 20px;
-  @media (max-width: 550px) {
+  gap: ${theme.spacing[20]};
+  @media (max-width: ${theme.breakpoints.mobile}) {
     flex-direction: column;
   }
 `;
@@ -83,45 +84,45 @@ const PriceBox = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: #f2f4f8;
-  border: 1px solid #dce2eb;
-  border-radius: 10px;
-  padding: 14px 16px;
+  background-color: ${theme.colors.background.main};
+  border: 1px solid ${theme.colors.border.main};
+  border-radius: ${theme.borderRadius.lg};
+  padding: ${theme.spacing[14]} ${theme.spacing[16]};
 `;
 
 const PriceInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: ${theme.spacing[4]};
 `;
 
 const PriceTitle = styled.div`
-  font-size: 14px;
-  font-weight: 600;
-  color: #162033;
+  font-size: ${theme.fontSizes.md};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.text.primary};
 `;
 
 const PriceNote = styled.div`
-  font-size: 13px;
-  font-weight: 400;
-  color: #566377;
+  font-size: ${theme.fontSizes.sm};
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.text.secondary};
 `;
 
 const PriceValue = styled.div`
-  font-size: 18px;
-  font-weight: 600;
-  color: #162033;
+  font-size: ${theme.fontSizes.xl};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.text.primary};
 `;
 
 const ModalFooter = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  background-color: #f2f4f8;
-  border-top: 1px solid #dce2eb;
-  padding: 16px 24px;
-  border-radius: 0 0 12px 12px;
-  gap: 10px;
+  background-color: ${theme.colors.background.main};
+  border-top: 1px solid ${theme.colors.border.main};
+  padding: ${theme.spacing[16]} ${theme.spacing[24]};
+  border-radius: 0 0 ${theme.borderRadius.xl} ${theme.borderRadius.xl};
+  gap: ${theme.spacing[10]};
 `;
 
 export const TicketFormModal: React.FunctionComponent<Props> = ({
