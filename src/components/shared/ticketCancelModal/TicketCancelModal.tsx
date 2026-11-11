@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { IconButton } from "../iconButton/IconButton";
 import { LuX } from "react-icons/lu";
 import { WarningBox } from "../warningBox/WarningBox";
+import { useTranslation } from "react-i18next";
 import { theme } from "../../../theme/theme";
 
 interface Props {
@@ -74,27 +75,31 @@ export const TicketCancelModal: React.FunctionComponent<Props> = ({
   handleClose,
   handleCancel,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <ModalOverlay>
       <ModalBox>
         <ModalHeader>
-          <HeaderTitle>Cancel ticket</HeaderTitle>
+          <HeaderTitle>{t("ticketCancelModal.title")}</HeaderTitle>
           <IconButton handleButton={handleClose}>
             <LuX />
           </IconButton>
         </ModalHeader>
         <ModalBody>
           <div>
-            Cancel seat <b>{seatNumber}</b> on <b>{flightNumber}</b>?
+            {t("ticketCancelModal.cancelSeat")} <b>{seatNumber}</b>{" "}
+            {t("ticketCancelModal.on")} <b>{flightNumber}</b>?
           </div>
-          <WarningBox>
-            The seat stays blocked after cancelling. No seat is released.
-          </WarningBox>
+          <WarningBox>{t("ticketCancelModal.warning")}</WarningBox>
         </ModalBody>
         <ModalFooter>
-          <Button label="Keep ticket" handleButton={handleClose} />
           <Button
-            label="Cancel ticket"
+            label={t("ticketCancelModal.keepTicket")}
+            handleButton={handleClose}
+          />
+          <Button
+            label={t("ticketCancelModal.title")}
             variant={ButtonVariant.DANGER}
             handleButton={handleCancel}
           />
