@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { LuTriangleAlert } from "react-icons/lu";
+import { useTranslation } from "react-i18next";
 import { theme } from "../../../theme/theme";
 
 interface Props {
@@ -16,10 +17,12 @@ const ErrorText = styled.span`
 `;
 
 export const FormInputError: React.FunctionComponent<Props> = ({ message }) => {
+  const { t } = useTranslation();
+
   return (
     <ErrorText>
       <LuTriangleAlert />
-      {message}
+      {t(message)}
     </ErrorText>
   );
 };

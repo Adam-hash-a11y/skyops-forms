@@ -1,5 +1,6 @@
 import type React from "react";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 import { StatusBadge } from "../statusBadge/StatusBadge";
 import { Button, ButtonVariant } from "../button/Button";
 import { formatUtcDate, formatUtcTime } from "../../../utils/formatDateTime";
@@ -155,6 +156,8 @@ export const TicketCard: React.FunctionComponent<Props> = ({
   isDeletedFlight,
   handleCancel,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <TicketCardContainer>
       <Header>
@@ -180,25 +183,26 @@ export const TicketCard: React.FunctionComponent<Props> = ({
       </Header>
       <Details>
         <DetailBox>
-          <DetailLabel>Seat</DetailLabel>
+          <DetailLabel>{t("ticketCard.seat")}</DetailLabel>
           <DetailValue>{seatNumber}</DetailValue>
         </DetailBox>
         <DetailBox>
-          <DetailLabel>Class</DetailLabel>
-          <DetailValue>{ticketClass}</DetailValue>
+          <DetailLabel>{t("ticketCard.class")}</DetailLabel>
+          <DetailValue>{t(`ticketClass.${ticketClass}`)}</DetailValue>
         </DetailBox>
         <DetailBox>
-          <DetailLabel>Price</DetailLabel>
+          <DetailLabel>{t("ticketCard.price")}</DetailLabel>
           <DetailValue>{priceFormatter.format(price)}</DetailValue>
         </DetailBox>
       </Details>
 
       <CardFooter>
         <BookedAt>
-          Booked {formatUtcDate(createdAt)}, {formatUtcTime(createdAt)}
+          {t("ticketCard.booked")} {formatUtcDate(createdAt)},{" "}
+          {formatUtcTime(createdAt)}
         </BookedAt>
         <Button
-          label="Cancel ticket"
+          label={t("ticketCancelModal.title")}
           handleButton={handleCancel}
           variant={ButtonVariant.DANGER_OUTLINE_SMALL}
           disabled={cancelDisabled}

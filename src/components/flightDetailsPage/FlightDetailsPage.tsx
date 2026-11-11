@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 import type { Flight } from "../../types/flightTypes";
 import type { Ticket } from "../../types/ticketTypes";
 import { TicketCard } from "../shared/ticketCard/TicketCard";
@@ -80,6 +81,7 @@ const EmptyText = styled.div`
 `;
 
 export const FlightDetailsPage = () => {
+  const { t } = useTranslation();
   const { flightNumber } = useParams();
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -133,7 +135,7 @@ export const FlightDetailsPage = () => {
         setTickets(loadedTickets);
       }
       handleCloseCancelModal();
-      toast.success("Ticket cancelled");
+      toast.success(t("toast.ticketCancelled"));
     } catch (error) {
       toast.error((error as Error).message);
     }
@@ -147,7 +149,7 @@ export const FlightDetailsPage = () => {
 
   return (
     <>
-      <BackLink to="/flights">← All flights</BackLink>
+      <BackLink to="/flights">{t("flightDetails.backLink")}</BackLink>
       <PageHeader>
         <TitleBlock>
           <Title>{flight.flightNumber}</Title>
@@ -157,7 +159,9 @@ export const FlightDetailsPage = () => {
         </TitleBlock>
       </PageHeader>
 
-      <SectionHeading>Tickets on this flight ({tickets.length})</SectionHeading>
+      <SectionHeading>
+        {t("flightDetails.ticketsOnFlight", { ticketCount: tickets.length })}
+      </SectionHeading>
 
       {isCancelModalOpen && cancelledTicket && (
         <TicketCancelModal
@@ -170,8 +174,8 @@ export const FlightDetailsPage = () => {
 
       {tickets.length === 0 && (
         <EmptyTickets>
-          <EmptyTitle>No tickets yet</EmptyTitle>
-          <EmptyText>Book the first ticket for this flight.</EmptyText>
+          <EmptyTitle>{t("flightDetails.noTicketsTitle")}</EmptyTitle>
+          <EmptyText>{t("flightDetails.noTicketsText")}</EmptyText>
         </EmptyTickets>
       )}
 
@@ -183,7 +187,9 @@ export const FlightDetailsPage = () => {
             <TicketCard
               key={ticket.id}
               passengerName={
-                isDeletedPassenger ? "Deleted passenger" : ticket.passengerName
+                isDeletedPassenger
+                  ? t("common.deletedPassenger")
+                  : ticket.passengerName
               }
               isDeletedPassenger={isDeletedPassenger}
               isDeletedFlight={false}

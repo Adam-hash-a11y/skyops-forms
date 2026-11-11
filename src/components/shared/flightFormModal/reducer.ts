@@ -13,6 +13,7 @@ import {
   isValidStatus,
   isValidAirline,
 } from "../../../validators/flightForm.validator";
+import i18n from "../../../i18n/i18n";
 
 export interface State {
   flightNumber: string;
@@ -124,22 +125,25 @@ export const flightReducer = (state: State, action: Action): State => {
             Number(newState.economySeats),
           )
         ) {
-          newErrors.firstSeats = "A flight needs at least one seat";
-          newErrors.businessSeats = "A flight needs at least one seat";
-          newErrors.economySeats = "A flight needs at least one seat";
+          const message = i18n.t("validation.flight.noSeats");
+          newErrors.firstSeats = message;
+          newErrors.businessSeats = message;
+          newErrors.economySeats = message;
         }
       }
 
       if (isSameOriginDestination(newState.origin, newState.destination)) {
-        newErrors.origin = "Origin and destination can't be the same";
-        newErrors.destination = "Origin and destination can't be the same";
+        const message = i18n.t("validation.flight.sameOriginDestination");
+        newErrors.origin = message;
+        newErrors.destination = message;
       }
 
       if (
         !isDepartureBeforeArrival(newState.departureTime, newState.arrivalTime)
       ) {
-        newErrors.departureTime = "departure time must be before arrival time";
-        newErrors.arrivalTime = "departure time must be before arrival time";
+        const message = i18n.t("validation.flight.departureAfterArrival");
+        newErrors.departureTime = message;
+        newErrors.arrivalTime = message;
       }
 
       return {

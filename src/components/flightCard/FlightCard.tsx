@@ -10,6 +10,7 @@ import { formatUtcDate, formatUtcTime } from "../../utils/formatDateTime";
 import { getCityName } from "../../utils/cityNames";
 import { Link } from "react-router-dom";
 import type { FlightStatus } from "../../types/flightTypes";
+import { useTranslation } from "react-i18next";
 import { theme } from "../../theme/theme";
 
 interface Props {
@@ -198,6 +199,8 @@ export const FligthCard: FunctionComponent<Props> = ({
   handleEdit,
   handleDelete,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <FlightCard>
       <CardHeader>
@@ -233,7 +236,7 @@ export const FligthCard: FunctionComponent<Props> = ({
 
       <FlightSeats>
         <BookedSeatsCount>
-          <SeatsLabel>Seats booked</SeatsLabel>
+          <SeatsLabel>{t("flightCard.seatsBooked")}</SeatsLabel>
           <SeatsCount>
             {bookedSeats} / {totalSeats}
           </SeatsCount>
@@ -244,13 +247,13 @@ export const FligthCard: FunctionComponent<Props> = ({
       <CardDivider></CardDivider>
       <CardFooter>
         <FlightDetails to={"/flights/" + flightNumber}>
-          View details
+          {t("flightCard.viewDetails")}
           <LuArrowRight />
         </FlightDetails>
 
         <FooterActions>
           <Button
-            label="Book"
+            label={t("flightCard.book")}
             handleButton={handleBook}
             disabled={bookDisabled}
             variant={ButtonVariant.OUTLINE_SMALL}

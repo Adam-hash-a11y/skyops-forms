@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { IconButton } from "../iconButton/IconButton";
 import { useCallback, useReducer, type FunctionComponent } from "react";
 import { LuX } from "react-icons/lu";
+import { useTranslation } from "react-i18next";
 import { FormInput } from "../formInput/FlightFormInput";
 import { flightReducer, initialState } from "./reducer";
 import { FlightFormActionType } from "./action";
@@ -91,18 +92,20 @@ const ModalFooter = styled.div`
   gap: ${theme.spacing[10]};
 `;
 
-const statusOptions = [
-  { value: FlightStatus.SCHEDULED, label: "Scheduled" },
-  { value: FlightStatus.DELAYED, label: "Delayed" },
-  { value: FlightStatus.CANCELLED, label: "Cancelled" },
-  { value: FlightStatus.LANDED, label: "Landed" },
-];
-
 export const FlightFormModal: FunctionComponent<Props> = ({
   handleClose,
   flight,
   handleSave,
 }) => {
+  const { t } = useTranslation();
+
+  const statusOptions = [
+    { value: FlightStatus.SCHEDULED, label: t("status.Scheduled") },
+    { value: FlightStatus.DELAYED, label: t("status.Delayed") },
+    { value: FlightStatus.CANCELLED, label: t("status.Cancelled") },
+    { value: FlightStatus.LANDED, label: t("status.Landed") },
+  ];
+
   const startState = flight
     ? {
         ...initialState,
@@ -180,7 +183,9 @@ export const FlightFormModal: FunctionComponent<Props> = ({
     <ModalOverlay>
       <ModalBox>
         <ModalHeader>
-          <HeaderTitle>{flight ? "Edit flight" : "New flight"}</HeaderTitle>
+          <HeaderTitle>
+            {flight ? t("flightForm.editTitle") : t("flightForm.newTitle")}
+          </HeaderTitle>
           <IconButton handleButton={handleClose}>
             <LuX />
           </IconButton>
@@ -193,10 +198,10 @@ export const FlightFormModal: FunctionComponent<Props> = ({
               value={state.flightNumber}
               placeholder="SKYOPS-10042"
               id="FlightNumberInput"
-              label="Flight number"
+              label={t("flightForm.flightNumber")}
               handleInputChange={handleInputChange}
               handleInputBlur={handleInputBlur}
-              hint="Must start with SKYOPS-"
+              hint={t("flightForm.flightNumberHint")}
               error={state.errors.flightNumber}
               touched={state.touched.flightNumber}
               disabled={Boolean(flight)}
@@ -208,25 +213,25 @@ export const FlightFormModal: FunctionComponent<Props> = ({
               name="airline"
               type={FormType.TEXT}
               value={state.airline}
-              placeholder="Airline"
+              placeholder={t("flightForm.airline")}
               id="FlightAirlineInput"
               handleInputChange={handleInputChange}
               handleInputBlur={handleInputBlur}
-              label="Airline"
+              label={t("flightForm.airline")}
               error={state.errors.airline}
               touched={state.touched.airline}
-              hint="Letters only, no spaces, min. 5"
+              hint={t("flightForm.airlineHint")}
             />
 
             <FormInput
               name="status"
               type={FormType.SELECT}
               value={state.status}
-              placeholder="Status"
+              placeholder={t("flightForm.status")}
               id="StatusInput"
               handleSelectChange={handleSelectChange}
               handleSelectBlur={handleSelectBlur}
-              label="Status"
+              label={t("flightForm.status")}
               error={state.errors.status}
               touched={state.touched.status}
               options={statusOptions}
@@ -237,28 +242,28 @@ export const FlightFormModal: FunctionComponent<Props> = ({
               name="origin"
               type={FormType.TEXT}
               value={state.origin}
-              placeholder="Origin"
+              placeholder={t("flightForm.origin")}
               id="FlightOriginInput"
-              label="Origin"
+              label={t("flightForm.origin")}
               handleInputChange={handleInputChange}
               handleInputBlur={handleInputBlur}
               error={state.errors.origin}
               touched={state.touched.origin}
-              hint="3-letter IATA code"
+              hint={t("flightForm.iataHint")}
             />
 
             <FormInput
               name="destination"
               type={FormType.TEXT}
               value={state.destination}
-              placeholder="Destination"
+              placeholder={t("flightForm.destination")}
               id="FlightDestinationInput"
               handleInputChange={handleInputChange}
               handleInputBlur={handleInputBlur}
-              label="Destination"
+              label={t("flightForm.destination")}
               error={state.errors.destination}
               touched={state.touched.destination}
-              hint="3-letter IATA code"
+              hint={t("flightForm.iataHint")}
             />
           </FormRow>
           <FormRow>
@@ -266,28 +271,28 @@ export const FlightFormModal: FunctionComponent<Props> = ({
               name="departureTime"
               type={FormType.DATE_TIME_LOCAL}
               value={state.departureTime}
-              placeholder="Departure Time"
+              placeholder={t("flightForm.departureTime")}
               id="DepartureTimeInput"
               handleInputChange={handleInputChange}
               handleInputBlur={handleInputBlur}
-              label="Departure (UTC)"
+              label={t("flightForm.departure")}
               error={state.errors.departureTime}
               touched={state.touched.departureTime}
-              hint="YYYY-MM-DD HH:mm, 24-hour"
+              hint={t("flightForm.dateTimeHint")}
             />
 
             <FormInput
               name="arrivalTime"
               type={FormType.DATE_TIME_LOCAL}
               value={state.arrivalTime}
-              placeholder="Arrival Time"
+              placeholder={t("flightForm.arrivalTime")}
               id="ArrivalTimeInput"
-              label="Arrival (UTC)"
+              label={t("flightForm.arrival")}
               handleInputChange={handleInputChange}
               handleInputBlur={handleInputBlur}
               error={state.errors.arrivalTime}
               touched={state.touched.arrivalTime}
-              hint="YYYY-MM-DD HH:mm, 24-hour"
+              hint={t("flightForm.dateTimeHint")}
             />
           </FormRow>
 
@@ -297,11 +302,11 @@ export const FlightFormModal: FunctionComponent<Props> = ({
                 name="firstSeats"
                 type={FormType.NUMBER}
                 value={state.firstSeats}
-                placeholder="First Seats"
+                placeholder={t("flightForm.firstSeats")}
                 id="FirstSeatsInput"
                 handleInputChange={handleInputChange}
                 handleInputBlur={handleInputBlur}
-                label="First seats"
+                label={t("flightForm.firstSeats")}
                 error={state.errors.firstSeats}
                 touched={state.touched.firstSeats}
               />
@@ -310,11 +315,11 @@ export const FlightFormModal: FunctionComponent<Props> = ({
                 name="businessSeats"
                 type={FormType.NUMBER}
                 value={state.businessSeats}
-                placeholder="Business Seats"
+                placeholder={t("flightForm.businessSeats")}
                 id="BusinessSeatsInput"
                 handleInputChange={handleInputChange}
                 handleInputBlur={handleInputBlur}
-                label="Business seats"
+                label={t("flightForm.businessSeats")}
                 error={state.errors.businessSeats}
                 touched={state.touched.businessSeats}
               />
@@ -323,11 +328,11 @@ export const FlightFormModal: FunctionComponent<Props> = ({
                 name="economySeats"
                 type={FormType.NUMBER}
                 value={state.economySeats}
-                placeholder="Economy Seats"
+                placeholder={t("flightForm.economySeats")}
                 id="EconomySeatsInput"
                 handleInputChange={handleInputChange}
                 handleInputBlur={handleInputBlur}
-                label="Economy seats"
+                label={t("flightForm.economySeats")}
                 error={state.errors.economySeats}
                 touched={state.touched.economySeats}
               />
@@ -335,9 +340,11 @@ export const FlightFormModal: FunctionComponent<Props> = ({
           )}
         </ModalBody>
         <ModalFooter>
-          <Button label="Cancel" handleButton={handleClose} />
+          <Button label={t("common.cancel")} handleButton={handleClose} />
           <Button
-            label={flight ? "Save changes" : "Create flight"}
+            label={
+              flight ? t("flightForm.saveChanges") : t("flightForm.create")
+            }
             variant={ButtonVariant.PRIMARY}
             disabled={state.disabled}
             handleButton={handleSubmit}

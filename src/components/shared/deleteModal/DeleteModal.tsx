@@ -5,6 +5,7 @@ import { IconButton } from "../iconButton/IconButton";
 import { LuX } from "react-icons/lu";
 import { WarningBox } from "../warningBox/WarningBox";
 import type { EntityName } from "../../../types/entityTypes";
+import { useTranslation } from "react-i18next";
 import { theme } from "../../../theme/theme";
 
 interface Props {
@@ -82,6 +83,8 @@ export const DeleteModal: React.FunctionComponent<Props> = ({
   handleDelete,
   entityName,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <ModalOverlay>
       <ModalBox>
@@ -93,15 +96,19 @@ export const DeleteModal: React.FunctionComponent<Props> = ({
         </ModalHeader>
         <ModalBody>
           <div>
-            {action} <b>{itemName}</b> ? This cannot be undone.
+            {action} <b>{itemName}</b> ? {t("deleteModal.cannotUndo")}
           </div>
-          <WarningBox>
-            {ticketCount} tickets reference this {entityName}. The API does not
-            remove them; they will show as deleted.
-          </WarningBox>
+          {ticketCount !== undefined && ticketCount > 0 && (
+            <WarningBox>
+              {t("deleteModal.warning", {
+                ticketCount,
+                entity: t(`entity.${entityName}`),
+              })}
+            </WarningBox>
+          )}
         </ModalBody>
         <ModalFooter>
-          <Button label="Cancel" handleButton={handleClose} />
+          <Button label={t("common.cancel")} handleButton={handleClose} />
           <Button
             label={deleteButtonLabel}
             variant={ButtonVariant.DANGER}

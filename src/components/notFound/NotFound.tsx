@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 import { theme } from "../../theme/theme";
 
 const Wrapper = styled.div`
@@ -18,10 +19,12 @@ const StyledLink = styled(Link)`
 `;
 
 export const NotFound = () => {
+  const { t } = useTranslation();
+
   return (
     <Wrapper>
-      <Title>404 - Page Not Found</Title>
-      <StyledLink to="/flights">Back to Home</StyledLink>
+      <Title>{t("notFound.title")}</Title>
+      <StyledLink to="/flights">{t("notFound.back")}</StyledLink>
     </Wrapper>
   );
 };

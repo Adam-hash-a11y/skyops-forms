@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import styled from "styled-components";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 import {
   type Ticket,
   TicketFilterBy,
@@ -59,6 +60,7 @@ const Subtitle = styled.div`
 `;
 
 export const TicketList = () => {
+  const { t } = useTranslation();
   const [state, dispatch] = useReducer(ticketFilterReducer, initialState);
   const [allTickets, setAllTickets] = useState<Ticket[]>([]);
   const [flights, setFlights] = useState<Flight[]>([]);
@@ -133,7 +135,7 @@ export const TicketList = () => {
       const loadedTickets = await getTickets();
       setAllTickets(loadedTickets);
       handleCloseTicketModal();
-      toast.success("Ticket booked");
+      toast.success(t("toast.ticketBooked"));
     } catch (error) {
       toast.error((error as Error).message);
     }
@@ -174,7 +176,7 @@ export const TicketList = () => {
         const loadedTickets = await getTicketsByPassenger(state.filterValue);
         setAllTickets(loadedTickets);
       } else {
-        toast.error("Select a flight or passenger first");
+        toast.error(t("toast.selectFlightOrPassenger"));
       }
     } catch (error) {
       toast.error((error as Error).message);
@@ -183,23 +185,23 @@ export const TicketList = () => {
 
   const flightOptions = useMemo(() => {
     return [
-      { value: "", label: "Select..." },
+      { value: "", label: t("common.select") },
       ...flights.map((flight) => ({
         value: flight.id,
         label: flight.flightNumber,
       })),
     ];
-  }, [flights]);
+  }, [flights, t]);
 
   const passengerOptions = useMemo(() => {
     return [
-      { value: "", label: "Select..." },
+      { value: "", label: t("common.select") },
       ...passengers.map((passenger) => ({
         value: passenger.id,
         label: passenger.lastName + ", " + passenger.firstName,
       })),
     ];
-  }, [passengers]);
+  }, [passengers, t]);
 
   const filterValueOptions =
     state.filterBy === TicketFilterBy.FLIGHT ? flightOptions : passengerOptions;
@@ -211,7 +213,7 @@ export const TicketList = () => {
       const loadedTickets = await getTickets();
       setAllTickets(loadedTickets);
       handleCloseCancelModal();
-      toast.success("Ticket cancelled");
+      toast.success(t("toast.ticketCancelled"));
     } catch (error) {
       toast.error((error as Error).message);
     }
@@ -225,11 +227,13 @@ export const TicketList = () => {
     <>
       <PageHeader>
         <TitleBlock>
-          <Title>Tickets</Title>
-          <Subtitle>{allTickets.length} tickets</Subtitle>
+          <Title>{t("tickets.title")}</Title>
+          <Subtitle>
+            {t("tickets.subtitle", { total: allTickets.length })}
+          </Subtitle>
         </TitleBlock>
         <Button
-          label="Book ticket"
+          label={t("tickets.book")}
           variant={ButtonVariant.PRIMARY}
           handleButton={handleOpenTicketCreateModal}
         >
@@ -258,7 +262,7 @@ export const TicketList = () => {
           seatNumber={cancelledTicket.seatNumber}
           flightNumber={
             cancelledTicket.flightNumber === ""
-              ? "deleted flight"
+              ? t("common.deletedFlightLower")
               : cancelledTicket.flightNumber
           }
           handleClose={handleCloseCancelModal}
@@ -275,12 +279,16 @@ export const TicketList = () => {
             <TicketCard
               key={ticket.id}
               passengerName={
-                isDeletedPassenger ? "Deleted passenger" : ticket.passengerName
+                isDeletedPassenger
+                  ? t("common.deletedPassenger")
+                  : ticket.passengerName
               }
               isDeletedPassenger={isDeletedPassenger}
               isDeletedFlight={isDeletedFlight}
               flightNumber={
-                isDeletedFlight ? "Deleted flight" : ticket.flightNumber
+                isDeletedFlight
+                  ? t("common.deletedFlight")
+                  : ticket.flightNumber
               }
               origin={ticket.origin}
               destination={ticket.destination}

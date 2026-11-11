@@ -10,7 +10,10 @@ import { PassengerFilters } from "../passengerFilters/PassengerFilters";
 import { initialState, passengerFilterReducer } from "./reducer";
 import { PassengerFilterActionType } from "./action";
 import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
-import { createTicket } from "../../service/ticketService";
+import {
+  createTicket,
+  getTicketsByPassenger,
+} from "../../service/ticketService";
 import {
   createPassenger,
   deletePassenger,
@@ -19,6 +22,7 @@ import {
   updatePassenger,
 } from "../../service/passengerService";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 import { EntityName } from "../../types/entityTypes";
 import { theme } from "../../theme/theme";
 
@@ -54,12 +58,14 @@ const Subtitle = styled.div`
 `;
 
 export const PassengerList = () => {
+  const { t } = useTranslation();
   const [state, dispatch] = useReducer(passengerFilterReducer, initialState);
   const [allPassengers, setAllPassengers] = useState<Passenger[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [passengerToEdit, setPassengerToEdit] = useState("");
   const [passengerToDelete, setPassengerToDelete] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [ticketCount, setTicketCount] = useState(0);
   const [passengerToBook, setPassengerToBook] = useState("");
   const [isTicketModalOpen, setIsTicketModalOpen] = useState(false);
 
@@ -123,7 +129,7 @@ export const PassengerList = () => {
           email,
           phoneNumber,
         );
-        toast.success("Passenger updated");
+        toast.success(t("toast.passengerUpdated"));
       } else {
         await createPassenger(
           firstName,
@@ -134,7 +140,7 @@ export const PassengerList = () => {
           email,
           phoneNumber,
         );
-        toast.success("Passenger created");
+        toast.success(t("toast.passengerCreated"));
       }
       dispatch({ type: PassengerFilterActionType.RESET_PASSENGER_FILTERS });
       const passengers = await getPassengers();
@@ -157,20 +163,32 @@ export const PassengerList = () => {
       const passengers = await getPassengers();
       setAllPassengers(passengers);
       handleCloseTicketModal();
-      toast.success("Ticket booked");
+      toast.success(t("toast.ticketBooked"));
     } catch (error) {
       toast.error((error as Error).message);
     }
   };
 
-  const handleOpenDeleteModal = (passportNumber: string) => {
+  const handleOpenDeleteModal = async (passportNumber: string) => {
     setPassengerToDelete(passportNumber);
+    const passenger = allPassengers.find(
+      (item) => item.passportNumber === passportNumber,
+    );
+    try {
+      if (passenger) {
+        const tickets = await getTicketsByPassenger(passenger.id);
+        setTicketCount(tickets.length);
+      }
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
     setIsDeleteModalOpen(true);
   };
 
   const handleCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
     setPassengerToDelete("");
+    setTicketCount(0);
   };
 
   const handleDeletePassenger = async () => {
@@ -182,7 +200,7 @@ export const PassengerList = () => {
         ),
       );
       handleCloseDeleteModal();
-      toast.success("Passenger deleted");
+      toast.success(t("toast.passengerDeleted"));
     } catch (error) {
       toast.error((error as Error).message);
     }
@@ -248,11 +266,13 @@ export const PassengerList = () => {
     <>
       <PageHeader>
         <TitleBlock>
-          <Title>Passengers</Title>
-          <Subtitle>{allPassengers.length} passengers · registered</Subtitle>
+          <Title>{t("passengers.title")}</Title>
+          <Subtitle>
+            {t("passengers.subtitle", { total: allPassengers.length })}
+          </Subtitle>
         </TitleBlock>
         <Button
-          label="New passenger"
+          label={t("passengers.new")}
           variant={ButtonVariant.PRIMARY}
           handleButton={handleOpenPassengerCreateModal}
         >
@@ -282,10 +302,11 @@ export const PassengerList = () => {
       {isDeleteModalOpen && (
         <DeleteModal
           handleClose={handleCloseDeleteModal}
-          title="Delete passenger"
-          action="Delete"
+          title={t("passengers.deleteTitle")}
+          action={t("common.delete")}
           itemName={deletedPassengerName}
-          deleteButtonLabel="Delete passenger"
+          ticketCount={ticketCount}
+          deleteButtonLabel={t("passengers.deleteButton")}
           handleDelete={handleDeletePassenger}
           entityName={EntityName.PASSENGER}
         />

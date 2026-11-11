@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 import { FormInput } from "../shared/formInput/FlightFormInput";
 import { FormType } from "../shared/flightFormModal/types";
 import { Button, ButtonVariant } from "../shared/button/Button";
@@ -35,19 +36,6 @@ const FilterButtons = styled.div`
   margin-top: ${theme.spacing[20]};
 `;
 
-const statusOptions = [
-  { value: "", label: "All statuses" },
-  { value: FlightStatus.SCHEDULED, label: "Scheduled" },
-  { value: FlightStatus.DELAYED, label: "Delayed" },
-  { value: FlightStatus.CANCELLED, label: "Cancelled" },
-  { value: FlightStatus.LANDED, label: "Landed" },
-];
-
-const sortByOptions = [
-  { value: "", label: "Default order" },
-  { value: "departureTime", label: "Departure time" },
-];
-
 export const FlightFilters: React.FunctionComponent<Props> = ({
   status,
   origin,
@@ -59,13 +47,28 @@ export const FlightFilters: React.FunctionComponent<Props> = ({
   handleSearch,
   searchDisabled,
 }) => {
+  const { t } = useTranslation();
+
+  const statusOptions = [
+    { value: "", label: t("flightFilters.allStatuses") },
+    { value: FlightStatus.SCHEDULED, label: t("status.Scheduled") },
+    { value: FlightStatus.DELAYED, label: t("status.Delayed") },
+    { value: FlightStatus.CANCELLED, label: t("status.Cancelled") },
+    { value: FlightStatus.LANDED, label: t("status.Landed") },
+  ];
+
+  const sortByOptions = [
+    { value: "", label: t("flightFilters.defaultOrder") },
+    { value: "departureTime", label: t("flightFilters.departureTime") },
+  ];
+
   return (
     <FilterBar>
       <FormInput
         id="status"
         name="status"
         type={FormType.SELECT}
-        label="Status"
+        label={t("flightFilters.status")}
         value={status}
         options={statusOptions}
         handleSelectChange={handleSelectChange}
@@ -74,38 +77,38 @@ export const FlightFilters: React.FunctionComponent<Props> = ({
         id="origin"
         name="origin"
         type={FormType.TEXT}
-        label="Origin"
+        label={t("flightFilters.origin")}
         value={origin}
-        placeholder="IATA code, e.g. TUN"
+        placeholder={t("flightFilters.originPlaceholder")}
         handleInputChange={handleInputChange}
       />
       <FormInput
         id="destination"
         name="destination"
         type={FormType.TEXT}
-        label="Destination"
+        label={t("flightFilters.destination")}
         value={destination}
-        placeholder="IATA code, e.g. FRA"
+        placeholder={t("flightFilters.destinationPlaceholder")}
         handleInputChange={handleInputChange}
       />
       <FormInput
         id="sortBy"
         name="sortBy"
         type={FormType.SELECT}
-        label="Sort by"
+        label={t("flightFilters.sortBy")}
         value={sortBy}
         options={sortByOptions}
         handleSelectChange={handleSelectChange}
       />
       <FilterButtons>
         <Button
-          label="Search"
+          label={t("common.search")}
           handleButton={handleSearch}
           variant={ButtonVariant.PRIMARY}
           disabled={searchDisabled}
         />
         <Button
-          label="Reset filters"
+          label={t("common.resetFilters")}
           handleButton={handleReset}
           variant={ButtonVariant.FILTER}
         />
