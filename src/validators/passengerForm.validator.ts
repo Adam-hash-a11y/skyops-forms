@@ -1,61 +1,34 @@
 import validator from "validator";
+import i18n from "../i18n/i18n";
 
-export const isValidFirstname = (value: string) => {
-  if (value.length >= 3) {
-    return "";
-  } else {
-    return "First name must be at least 3 characters";
-  }
-};
+export const isValidFirstname = (value: string): string =>
+  value.length >= 3 ? "" : i18n.t("validation.passenger.firstName");
 
-export const isValidLastName = (value: string) => {
-  if (value.length >= 3) {
-    return "";
-  } else {
-    return "Last name must be at least 3 characters";
-  }
-};
+export const isValidLastName = (value: string): string =>
+  value.length >= 3 ? "" : i18n.t("validation.passenger.lastName");
 
-export const isValidPassportNumber = (value: string) => {
-  if (value.length >= 6) {
-    return "";
-  } else {
-    return "Passport number must be at least 6 characters";
-  }
-};
-export const isValidNationality = (value: string) => {
-  if (value.length > 0) {
-    return "";
-  } else {
-    return "Nationality is required";
-  }
-};
+export const isValidPassportNumber = (value: string): string =>
+  value.length >= 6 ? "" : i18n.t("validation.passenger.passportNumber");
 
-export const isValidDateOfBirth = (value: string) => {
+export const isValidNationality = (value: string): string =>
+  value.length > 0 ? "" : i18n.t("validation.passenger.nationality");
+
+export const isValidDateOfBirth = (value: string): string => {
   if (!validator.isISO8601(value)) {
-    return "Date of birth must be a valid date";
+    return i18n.t("validation.passenger.dateOfBirthInvalid");
   }
 
   const date = new Date(value);
   const minDate = new Date();
-
   minDate.setFullYear(minDate.getFullYear() - 18);
 
-  return date <= minDate ? "" : "You must be at least 18 years old";
+  return date <= minDate
+    ? ""
+    : i18n.t("validation.passenger.dateOfBirthUnderage");
 };
 
-export const isValidEmail = (value: string) => {
-  if (validator.isEmail(value)) {
-    return "";
-  } else {
-    return "Email must be valid";
-  }
-};
+export const isValidEmail = (value: string): string =>
+  validator.isEmail(value) ? "" : i18n.t("validation.passenger.email");
 
-export const isValidPhoneNumber = (value: string) => {
-  if (value.length >= 8) {
-    return "";
-  } else {
-    return "Phone number must be at least 8 characters";
-  }
-};
+export const isValidPhoneNumber = (value: string): string =>
+  value.length >= 8 ? "" : i18n.t("validation.passenger.phoneNumber");
