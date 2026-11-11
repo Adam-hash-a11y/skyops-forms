@@ -1,0 +1,238 @@
+{
+  "common": {
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "search": "Suchen",
+    "resetFilters": "Filter zurücksetzen",
+    "select": "Auswählen...",
+    "deletedPassenger": "Gelöschter Passagier",
+    "deletedFlight": "Gelöschter Flug",
+    "deletedFlightLower": "gelöschter Flug"
+  },
+  "app": {
+    "connecting": "Verbindung wird hergestellt..."
+  },
+  "header": {
+    "flights": "Flüge",
+    "passengers": "Passagiere",
+    "tickets": "Tickets",
+    "language": "Sprache"
+  },
+  "entity": {
+    "flight": "Flug",
+    "passenger": "Passagier"
+  },
+  "deleteModal": {
+    "cannotUndo": "Dies kann nicht rückgängig gemacht werden.",
+    "warning": "{{ticketCount}} Tickets verweisen auf diesen {{entity}}. Die API löscht sie nicht; sie werden als gelöscht angezeigt."
+  },
+  "ticketCancelModal": {
+    "title": "Ticket stornieren",
+    "cancelSeat": "Stornieren: Sitz",
+    "on": "auf",
+    "warning": "Der Sitz bleibt nach der Stornierung gesperrt. Es wird kein Sitz freigegeben.",
+    "keepTicket": "Ticket behalten"
+  },
+  "flights": {
+    "title": "Flüge",
+    "subtitle": "{{total}} Flüge · alle Zeiten in UTC, 24-Stunden-Format",
+    "new": "Neuer Flug",
+    "deleteTitle": "Flug löschen",
+    "deleteButton": "Flug löschen"
+  },
+  "passengers": {
+    "title": "Passagiere",
+    "subtitle": "{{total}} Passagiere · registriert",
+    "new": "Neuer Passagier",
+    "deleteTitle": "Passagier löschen",
+    "deleteButton": "Passagier löschen"
+  },
+  "tickets": {
+    "title": "Tickets",
+    "subtitle": "{{total}} Tickets",
+    "book": "Ticket buchen"
+  },
+  "toast": {
+    "flightCreated": "Flug erstellt",
+    "flightUpdated": "Flug aktualisiert",
+    "flightDeleted": "Flug gelöscht",
+    "passengerCreated": "Passagier erstellt",
+    "passengerUpdated": "Passagier aktualisiert",
+    "passengerDeleted": "Passagier gelöscht",
+    "ticketBooked": "Ticket gebucht",
+    "ticketCancelled": "Ticket storniert",
+    "flightOrPassengerNotFound": "Flug oder Passagier nicht gefunden",
+    "selectFlightOrPassenger": "Wählen Sie zuerst einen Flug oder einen Passagier aus"
+  },
+  "flightCard": {
+    "seatsBooked": "Gebuchte Sitze",
+    "viewDetails": "Details anzeigen",
+    "book": "Buchen"
+  },
+  "flightFilters": {
+    "allStatuses": "Alle Status",
+    "defaultOrder": "Standardreihenfolge",
+    "departureTime": "Abflugzeit",
+    "status": "Status",
+    "origin": "Abflugort",
+    "originPlaceholder": "IATA-Code, z. B. TUN",
+    "destination": "Zielort",
+    "destinationPlaceholder": "IATA-Code, z. B. FRA",
+    "sortBy": "Sortieren nach"
+  },
+  "status": {
+    "Scheduled": "Geplant",
+    "Delayed": "Verspätet",
+    "Cancelled": "Storniert",
+    "Landed": "Gelandet",
+    "Confirmed": "Bestätigt"
+  },
+  "flightDetails": {
+    "backLink": "← Alle Flüge",
+    "ticketsOnFlight": "Tickets für diesen Flug ({{ticketCount}})",
+    "noTicketsTitle": "Noch keine Tickets",
+    "noTicketsText": "Buchen Sie das erste Ticket für diesen Flug."
+  },
+  "passengerDetails": {
+    "backLink": "← Alle Passagiere",
+    "ticketsOfPassenger": "Tickets dieses Passagiers ({{ticketCount}})",
+    "noTicketsTitle": "Noch keine Tickets",
+    "noTicketsText": "Dieser Passagier hat keine Tickets."
+  },
+  "notFound": {
+    "title": "404 - Seite nicht gefunden",
+    "back": "Zurück zur Startseite"
+  },
+  "passengerCard": {
+    "dateOfBirth": "Geburtsdatum",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "viewTickets": "Tickets anzeigen",
+    "book": "Buchen"
+  },
+  "passengerFilters": {
+    "all": "Alle",
+    "defaultOrder": "Standardreihenfolge",
+    "firstName": "Vorname",
+    "firstNamePlaceholder": "z. B. Lena",
+    "lastName": "Nachname",
+    "lastNamePlaceholder": "z. B. Fischer",
+    "nationality": "Nationalität",
+    "sortBy": "Sortieren nach"
+  },
+  "nationality": {
+    "TN": "Tunesisch",
+    "FR": "Französisch",
+    "DE": "Deutsch",
+    "US": "Amerikanisch",
+    "GB": "Britisch",
+    "IT": "Italienisch",
+    "ES": "Spanisch",
+    "CA": "Kanadisch",
+    "MA": "Marokkanisch"
+  },
+  "flightForm": {
+    "newTitle": "Neuer Flug",
+    "editTitle": "Flug bearbeiten",
+    "flightNumber": "Flugnummer",
+    "flightNumberHint": "Muss mit SKYOPS- beginnen",
+    "airline": "Fluggesellschaft",
+    "airlinePlaceholder": "Fluggesellschaft",
+    "airlineHint": "Nur Buchstaben, keine Leerzeichen, mind. 5",
+    "status": "Status",
+    "statusPlaceholder": "Status",
+    "origin": "Abflugort",
+    "originPlaceholder": "Abflugort",
+    "destination": "Zielort",
+    "destinationPlaceholder": "Zielort",
+    "iataHint": "3-Buchstaben-IATA-Code",
+    "departure": "Abflug (UTC)",
+    "departureTimePlaceholder": "Abflugzeit",
+    "arrival": "Ankunft (UTC)",
+    "arrivalTimePlaceholder": "Ankunftszeit",
+    "dateTimeHint": "JJJJ-MM-TT HH:mm, 24-Stunden-Format",
+    "firstSeats": "Sitze First Class",
+    "firstSeatsPlaceholder": "Sitze First Class",
+    "businessSeats": "Sitze Business",
+    "businessSeatsPlaceholder": "Sitze Business",
+    "economySeats": "Sitze Economy",
+    "economySeatsPlaceholder": "Sitze Economy",
+    "saveChanges": "Änderungen speichern",
+    "create": "Flug erstellen"
+  },
+  "passengerForm": {
+    "newTitle": "Neuer Passagier",
+    "editTitle": "Passagier bearbeiten",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "nameHint": "Buchstaben und Leerzeichen, mind. 3 Zeichen",
+    "passportNumber": "Passnummer",
+    "passportHint": "Mind. 6 Zeichen, eindeutig",
+    "nationality": "Nationalität",
+    "nationalityHint": "Nationalität auswählen",
+    "dateOfBirth": "Geburtsdatum",
+    "dateOfBirthHint": "JJJJ-MM-TT, in der Vergangenheit",
+    "email": "E-Mail",
+    "emailHint": "Eindeutig",
+    "phoneNumber": "Telefonnummer",
+    "phoneHint": "Gültige Mobilnummer",
+    "saveChanges": "Änderungen speichern",
+    "create": "Passagier erstellen"
+  },
+  "ticketForm": {
+    "title": "Ticket buchen",
+    "flight": "Flug",
+    "passenger": "Passagier",
+    "class": "Klasse",
+    "seat": "Sitz",
+    "selectFlight": "Flug auswählen...",
+    "selectPassenger": "Passagier auswählen...",
+    "selectClass": "Klasse auswählen...",
+    "selectSeat": "Sitz auswählen...",
+    "classOption": "{{className}} ({{free}} frei)",
+    "ticketPrice": "Ticketpreis",
+    "priceNote": "Richtet sich nach der Ticketklasse, fester Preis pro Stufe"
+  },
+  "ticketClass": {
+    "Economy": "Economy",
+    "Business": "Business",
+    "First": "First Class"
+  },
+  "ticketFilters": {
+    "filterBy": "Filtern nach",
+    "allTickets": "Alle Tickets",
+    "flight": "Flug",
+    "passenger": "Passagier"
+  },
+  "ticketCard": {
+    "seat": "Sitz",
+    "class": "Klasse",
+    "price": "Preis",
+    "booked": "Gebucht am"
+  },
+  "validation": {
+    "flight": {
+      "flightNumber": "Die Flugnummer muss mit SKYOPS-XXX beginnen",
+      "airline": "Die Fluggesellschaft muss mindestens 5 Zeichen haben",
+      "origin": "Der Abflugort muss aus 3 Großbuchstaben bestehen",
+      "destination": "Der Zielort muss aus 3 Großbuchstaben bestehen",
+      "status": "Status ist erforderlich",
+      "departureTime": "Die Abflugzeit muss ein gültiges Datum sein",
+      "arrivalTime": "Die Ankunftszeit muss ein gültiges Datum sein",
+      "seatCount": "Sitze müssen eine positive Zahl größer als 0 sein",
+      "noSeats": "Ein Flug benötigt mindestens einen Sitz",
+      "sameOriginDestination": "Abflugort und Zielort dürfen nicht identisch sein",
+      "departureAfterArrival": "Die Abflugzeit muss vor der Ankunftszeit liegen"
+    },
+    "passenger": {
+      "firstName": "Der Vorname muss mindestens 3 Zeichen haben",
+      "lastName": "Der Nachname muss mindestens 3 Zeichen haben",
+      "passportNumber": "Die Passnummer muss mindestens 6 Zeichen haben",
+      "nationality": "Nationalität ist erforderlich",
+      "dateOfBirthInvalid": "Das Geburtsdatum muss ein gültiges Datum sein",
+      "dateOfBirthUnderage": "Sie müssen mindestens 18 Jahre alt sein",
+      "email": "E-Mail muss gültig sein",
+      "phoneNumber": "Die Telefonnummer muss mindestens 8 Zeichen haben"
+    }
+  }
+}
