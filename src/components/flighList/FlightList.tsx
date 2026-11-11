@@ -1,56 +1,70 @@
 import styled from "styled-components";
-import type { Flight } from "../../data/flightData";
+import { FlightStatus, type Flight } from "../../types/flightTypes";
+import { FligthCard } from "../flightCard/FlightCard";
 import { Button, ButtonVariant } from "../shared/button/Button";
-import { useEffect, useState } from "react";
+import { LuPlus } from "react-icons/lu";
+import { useCallback, useEffect, useReducer, useState } from "react";
+import { FlightFormModal } from "../shared/flightFormModal/FlightFormModal";
 import { DeleteModal } from "../shared/deleteModal/DeleteModal";
-import { EditModal } from "../shared/editModal/EditModal";
-import { FaPen, FaTrash } from "react-icons/fa6";
+import { FlightFilters } from "../flightFilters/FlightFilters";
+import { flightFilterReducer, initialState } from "./reducer";
+import { FlightFilterActionType } from "./action";
+import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
+import { createTicket, getTicketsByFlight } from "../../service/ticketService";
 import {
+  createFlight,
   deleteFlight,
   getFlights,
+  searchFlights,
   updateFlight,
 } from "../../service/flightService";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+import { EntityName } from "../../types/entityTypes";
+import { theme } from "../../theme/theme";
 
 const Title = styled.h2`
-  margin-bottom: 20px;
+  font-size: ${theme.fontSizes.title};
+  font-weight: ${theme.fontWeights.semibold};
 `;
 
-const Card = styled.div`
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 12px;
-  background: white;
-`;
-
-const CardTopRow = styled.div`
+const Container = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  gap: ${theme.spacing[20]} 2%;
+`;
+
+const PageHeader = styled.div`
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 6px;
+  margin-bottom: ${theme.spacing[20]};
+  align-items: flex-end;
 `;
 
-const FlightHeader = styled.p`
-  font-weight: 700;
-  margin: 0;
+const TitleBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[10]};
 `;
 
-const Route = styled.p`
-  color: #475569;
-  margin: 0 0 6px 0;
+const Subtitle = styled.div`
+  font-size: ${theme.fontSizes.md};
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.text.secondary};
 `;
-
-const Meta = styled.p`
-  color: #64748b;
-  font-size: 13px;
-  margin: 0;
-`;
-
 export const FlightsList = () => {
+  const { t } = useTranslation();
+  const [state, dispatch] = useReducer(flightFilterReducer, initialState);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [allFlights, setAllFlights] = useState<Flight[]>([]);
-  const [filter, setFilter] = useState("");
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [flightToEdit, setFlightToEdit] = useState("");
+  const [flightToDelete, setFlightToDelete] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [ticketCount, setTicketCount] = useState(0);
+  const [flightToBook, setFlightToBook] = useState("");
+  const [isTicketModalOpen, setIsTicketModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchFlights = async () => {
@@ -58,149 +72,281 @@ export const FlightsList = () => {
         const flights = await getFlights();
         setAllFlights(flights);
       } catch (error) {
-        console.error(error);
+        toast.error((error as Error).message);
       }
     };
-
     fetchFlights();
   }, []);
 
-  const handleModalOpen = (index: number) => {
-    setOpenIndex(index);
+  const handleOpenTicketCreateModal = (flightNumber: string) => {
+    setFlightToBook(flightNumber);
+    setIsTicketModalOpen(true);
   };
 
-  const handleModalClose = () => {
-    setOpenIndex(null);
+  const handleCloseTicketModal = () => {
+    setIsTicketModalOpen(false);
+    setFlightToBook("");
   };
 
-  const handleEditOpen = (index: number) => {
-    setEditIndex(index);
+  const handleOpenFlightCreateModal = useCallback(() => {
+    setIsModalOpen(true);
+  }, []);
+
+  const handleCloseFlightModal = () => {
+    setIsModalOpen(false);
+    setFlightToEdit("");
   };
 
-  const handleEditClose = () => {
-    setEditIndex(null);
+  const handleEditFlight = (flightNumber: string) => {
+    setFlightToEdit(flightNumber);
+    setIsModalOpen(true);
   };
 
-  const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(e.target.value);
-  };
-
-  const displayedFlights = allFlights.filter((item) =>
-    filter === "" ? true : item.flightNumber.includes(filter),
+  const editedFlight = allFlights.find(
+    (flight) => flight.flightNumber === flightToEdit,
   );
 
-  const handleDelete = async (flightNumber: string) => {
+  const handleSaveFlight = async (
+    flightNumber: string,
+    airline: string,
+    origin: string,
+    destination: string,
+    departureTime: string,
+    arrivalTime: string,
+    status: FlightStatus,
+    firstSeats: string,
+    businessSeats: string,
+    economySeats: string,
+  ) => {
     try {
-      console.log("Deleting flight:", flightNumber);
-      await deleteFlight(flightNumber);
-      setAllFlights((prev) =>
-        prev.filter((flight) => flight.flightNumber !== flightNumber),
+      if (flightToEdit) {
+        await updateFlight(
+          flightNumber,
+          airline,
+          origin,
+          destination,
+          departureTime,
+          arrivalTime,
+          status,
+        );
+      } else {
+        await createFlight(
+          flightNumber,
+          airline,
+          origin,
+          destination,
+          departureTime,
+          arrivalTime,
+          status,
+          firstSeats,
+          businessSeats,
+          economySeats,
+        );
+      }
+      dispatch({ type: FlightFilterActionType.RESET_FILTERS });
+      const flights = await getFlights();
+      setAllFlights(flights);
+      handleCloseFlightModal();
+      toast.success(
+        flightToEdit ? t("toast.flightUpdated") : t("toast.flightCreated"),
       );
-      setOpenIndex(null);
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
     }
   };
 
-  const handleUpdate = async (updatedFlight: Flight) => {
+  const handleOpenDeleteModal = async (flightNumber: string) => {
+    setFlightToDelete(flightNumber);
+    const flight = allFlights.find(
+      (item) => item.flightNumber === flightNumber,
+    );
     try {
-      await updateFlight(
-        updatedFlight.flightNumber,
-        updatedFlight.airline,
-        updatedFlight.origin,
-        updatedFlight.destination,
-        updatedFlight.departureTime,
-        updatedFlight.arrivalTime,
-        updatedFlight.status,
-        String(updatedFlight.totalSeats),
-        String(updatedFlight.bookedSeats),
-      );
-      setAllFlights((prev) =>
-        prev.map((flight) =>
-          flight.flightNumber === updatedFlight.flightNumber
-            ? updatedFlight
-            : flight,
-        ),
-      );
-      setEditIndex(null);
+      if (flight) {
+        const tickets = await getTicketsByFlight(flight.id);
+        setTicketCount(tickets.length);
+      }
     } catch (error) {
-      console.error(error);
+      toast.error((error as Error).message);
+    }
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setFlightToDelete("");
+    setTicketCount(0);
+  };
+
+  const handleDeleteFlight = async () => {
+    try {
+      await deleteFlight(flightToDelete);
+      setAllFlights((prev) =>
+        prev.filter((flight) => flight.flightNumber !== flightToDelete),
+      );
+      handleCloseDeleteModal();
+      toast.success(t("toast.flightDeleted"));
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch({
+        type: FlightFilterActionType.SET_FILTER,
+        payload: { value: e.target.value, name: e.target.name },
+      });
+    },
+    [],
+  );
+
+  const handleSelectChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      dispatch({
+        type: FlightFilterActionType.SET_FILTER,
+        payload: { value: e.target.value, name: e.target.name },
+      });
+    },
+    [],
+  );
+
+  const handleResetFilter = async () => {
+    dispatch({ type: FlightFilterActionType.RESET_FILTERS });
+    try {
+      const flights = await getFlights();
+      setAllFlights(flights);
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  const handleSearch = async () => {
+    try {
+      const flights = await searchFlights(
+        state.status,
+        state.origin,
+        state.destination,
+        state.sortBy,
+      );
+      setAllFlights(flights);
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  const originLength = state.origin.trim().length;
+  const destinationLength = state.destination.trim().length;
+  const searchDisabled =
+    (originLength !== 0 && originLength !== 3) ||
+    (destinationLength !== 0 && destinationLength !== 3);
+
+  const handleSaveTicket = async (
+    flightId: string,
+    passengerId: string,
+    seatNumber: string,
+    ticketClass: string,
+  ) => {
+    try {
+      await createTicket(flightId, passengerId, seatNumber, ticketClass);
+      dispatch({ type: FlightFilterActionType.RESET_FILTERS });
+      const flights = await getFlights();
+      setAllFlights(flights);
+      handleCloseTicketModal();
+      toast.success(t("toast.ticketBooked"));
+    } catch (error) {
+      toast.error((error as Error).message);
     }
   };
 
   return (
     <>
-      <Title>Flights List</Title>
+      <PageHeader>
+        <TitleBlock>
+          <Title>{t("flights.title")}</Title>
+          <Subtitle>
+            {t("flights.subtitle", { total: allFlights.length })}
+          </Subtitle>
+        </TitleBlock>
+        <Button
+          label={t("flights.new")}
+          variant={ButtonVariant.PRIMARY}
+          handleButton={handleOpenFlightCreateModal}
+        >
+          <LuPlus />
+        </Button>
+      </PageHeader>
 
-      <label htmlFor="filterInput">Filter</label>
-      <input
-        id="filterInput"
-        type="text"
-        placeholder="filter by"
-        value={filter}
-        onChange={handleChangeFilter}
+      <FlightFilters
+        status={state.status}
+        origin={state.origin}
+        destination={state.destination}
+        sortBy={state.sortBy}
+        handleInputChange={handleInputChange}
+        handleSelectChange={handleSelectChange}
+        handleReset={handleResetFilter}
+        handleSearch={handleSearch}
+        searchDisabled={searchDisabled}
       />
 
-      {displayedFlights.map((flight, index) => {
-        const currentIndex = allFlights.indexOf(flight);
+      {isModalOpen && (
+        <FlightFormModal
+          flight={editedFlight}
+          handleClose={handleCloseFlightModal}
+          handleSave={handleSaveFlight}
+        />
+      )}
 
-        return (
-          <Card key={flight.flightNumber}>
-            <CardTopRow>
-              <FlightHeader>
-                {flight.flightNumber} — {flight.airline}
-              </FlightHeader>
+      {isDeleteModalOpen && (
+        <DeleteModal
+          handleClose={handleCloseDeleteModal}
+          title={t("flights.deleteTitle")}
+          action={t("common.delete")}
+          itemName={flightToDelete}
+          ticketCount={ticketCount}
+          deleteButtonLabel={t("flights.deleteButton")}
+          handleDelete={handleDeleteFlight}
+          entityName={EntityName.FLIGHT}
+        />
+      )}
 
-              <div>
-                <Button
-                  handleButton={() => handleEditOpen(index)}
-                  label="Edit"
-                  variant={ButtonVariant.PRIMARY}
-                >
-                  <FaPen />
-                </Button>
+      {isTicketModalOpen && (
+        <TicketFormModal
+          flightNumber={flightToBook}
+          handleClose={handleCloseTicketModal}
+          handleSave={handleSaveTicket}
+        />
+      )}
 
-                <Button
-                  handleButton={() => handleModalOpen(index)}
-                  label="Delete"
-                  variant={ButtonVariant.DANGER}
-                >
-                  <FaTrash />
-                </Button>
-              </div>
-            </CardTopRow>
-
-            <Route>
-              {flight.origin} → {flight.destination}
-            </Route>
-
-            <Meta>Status: {flight.status}</Meta>
-
-            <Meta>
-              Seats: {flight.bookedSeats}/{flight.totalSeats}
-            </Meta>
-
-            {openIndex === index && (
-              <DeleteModal
-                itemKey={currentIndex}
-                label="Flight"
-                isOpen={true}
-                handleClose={handleModalClose}
-                handleDelete={() => handleDelete(flight.flightNumber)}
-              />
-            )}
-
-            {editIndex === index && (
-              <EditModal
-                isOpen={true}
-                flight={flight}
-                handleClose={handleEditClose}
-                handleSave={handleUpdate}
-              />
-            )}
-          </Card>
-        );
-      })}
+      <Container>
+        {allFlights.map((flight) => {
+          const isFull = flight.bookedSeats >= flight.totalSeats;
+          const isBookableStatus =
+            flight.status === FlightStatus.SCHEDULED ||
+            flight.status === FlightStatus.DELAYED;
+          return (
+            <FligthCard
+              key={flight.flightNumber}
+              flightNumber={flight.flightNumber}
+              airline={flight.airline}
+              status={flight.status}
+              origin={flight.origin}
+              destination={flight.destination}
+              departureTime={flight.departureTime}
+              departureDate={flight.departureTime}
+              arrivalTime={flight.arrivalTime}
+              arrivalDate={flight.arrivalTime}
+              bookedSeats={flight.bookedSeats}
+              totalSeats={flight.totalSeats}
+              bookDisabled={isFull || !isBookableStatus}
+              handleEdit={() => handleEditFlight(flight.flightNumber)}
+              handleDelete={() => handleOpenDeleteModal(flight.flightNumber)}
+              handleBook={() =>
+                handleOpenTicketCreateModal(flight.flightNumber)
+              }
+            />
+          );
+        })}
+      </Container>
     </>
   );
 };

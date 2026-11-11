@@ -1,0 +1,417 @@
+import styled from "styled-components";
+import { IconButton } from "../iconButton/IconButton";
+import { LuX } from "react-icons/lu";
+import { useTranslation } from "react-i18next";
+import { Button, ButtonVariant } from "../button/Button";
+import { FormInput } from "../formInput/FlightFormInput";
+import { FormType } from "../flightFormModal/types";
+import { type Flight, FlightStatus } from "../../../types/flightTypes";
+import type { Passenger } from "../../../types/passengerTypes";
+import { TicketClass } from "../../../types/ticketTypes";
+import { formatUtcDate, formatUtcTime } from "../../../utils/formatDateTime";
+import { initialState, ticketReducer } from "./reducer";
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import { TicketFormActionType } from "./action";
+import { getFlights, getFreeSeats } from "../../../service/flightService";
+import { getPassengers } from "../../../service/passengerService";
+import { toast } from "react-toastify";
+import { theme } from "../../../theme/theme";
+
+interface Props {
+  handleClose: () => void;
+  handleSave: (
+    flightId: string,
+    passengerId: string,
+    seatNumber: string,
+    ticketClass: string,
+  ) => void;
+  flightNumber?: string;
+  passportNumber?: string;
+}
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: ${theme.colors.overlay};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: ${theme.zIndex.modal};
+`;
+
+const ModalBox = styled.div`
+  border-radius: ${theme.borderRadius.xl};
+  width: 620px;
+  background-color: ${theme.colors.background.paper};
+  display: flex;
+  flex-direction: column;
+`;
+
+const ModalHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: ${theme.spacing[20]} ${theme.spacing[24]};
+  align-items: center;
+  border-bottom: 1px solid ${theme.colors.border.main};
+`;
+
+const HeaderTitle = styled.div`
+  font-size: ${theme.fontSizes.xl};
+  font-weight: ${theme.fontWeights.semibold};
+`;
+
+const ModalBody = styled.div`
+  padding: ${theme.spacing[24]};
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[18]};
+`;
+
+const FormRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: ${theme.spacing[20]};
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    flex-direction: column;
+  }
+`;
+
+const PriceBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: ${theme.colors.background.main};
+  border: 1px solid ${theme.colors.border.main};
+  border-radius: ${theme.borderRadius.lg};
+  padding: ${theme.spacing[14]} ${theme.spacing[16]};
+`;
+
+const PriceInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[4]};
+`;
+
+const PriceTitle = styled.div`
+  font-size: ${theme.fontSizes.md};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.text.primary};
+`;
+
+const PriceNote = styled.div`
+  font-size: ${theme.fontSizes.sm};
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.text.secondary};
+`;
+
+const PriceValue = styled.div`
+  font-size: ${theme.fontSizes.xl};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.text.primary};
+`;
+
+const ModalFooter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  background-color: ${theme.colors.background.main};
+  border-top: 1px solid ${theme.colors.border.main};
+  padding: ${theme.spacing[16]} ${theme.spacing[24]};
+  border-radius: 0 0 ${theme.borderRadius.xl} ${theme.borderRadius.xl};
+  gap: ${theme.spacing[10]};
+`;
+
+export const TicketFormModal: React.FunctionComponent<Props> = ({
+  handleClose,
+  handleSave,
+  flightNumber = "",
+  passportNumber = "",
+}) => {
+  const { t } = useTranslation();
+  const [state, dispatch] = useReducer(ticketReducer, {
+    ...initialState,
+    flightNumber: flightNumber,
+    passportNumber: passportNumber,
+  });
+  const [flights, setFlights] = useState<Flight[]>([]);
+  const [passengers, setPassengers] = useState<Passenger[]>([]);
+  const [freeSeats, setFreeSeats] = useState<{ seat: string; class: string }[]>(
+    [],
+  );
+  const [counts, setCounts] = useState({ first: 0, business: 0, economy: 0 });
+  const [prices, setPrices] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const fetchFlights = async () => {
+      try {
+        const loadedFlights = await getFlights();
+        setFlights(loadedFlights);
+      } catch (error) {
+        toast.error((error as Error).message);
+      }
+    };
+    fetchFlights();
+  }, []);
+
+  useEffect(() => {
+    const fetchPassengers = async () => {
+      try {
+        const loadedPassengers = await getPassengers();
+        setPassengers(loadedPassengers);
+      } catch (error) {
+        toast.error((error as Error).message);
+      }
+    };
+    fetchPassengers();
+  }, []);
+
+  useEffect(() => {
+    const fetchSeats = async () => {
+      try {
+        const data = await getFreeSeats(state.flightNumber);
+        setFreeSeats(data.seats);
+        setCounts(data.counts);
+        setPrices(data.prices);
+      } catch (error) {
+        toast.error((error as Error).message);
+      }
+    };
+    if (state.flightNumber !== "") {
+      fetchSeats();
+    }
+  }, [state.flightNumber]);
+
+  const handleSelectChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      dispatch({
+        type: TicketFormActionType.SET_FIELD,
+        field: e.target.name,
+        value: e.target.value,
+      });
+
+      if (e.target.name === "flightNumber" && e.target.value === "") {
+        setFreeSeats([]);
+        setCounts({ first: 0, business: 0, economy: 0 });
+        setPrices({});
+      }
+    },
+    [],
+  );
+
+  const bookableFlights = useMemo(() => {
+    return flights.filter(
+      (flight) =>
+        flight.status === FlightStatus.SCHEDULED ||
+        flight.status === FlightStatus.DELAYED,
+    );
+  }, [flights]);
+
+  const flightOptions = useMemo(() => {
+    return [
+      { value: "", label: t("ticketForm.selectFlight") },
+      ...bookableFlights.map((flight) => ({
+        value: flight.flightNumber,
+        label:
+          flight.flightNumber +
+          " · " +
+          flight.origin +
+          " → " +
+          flight.destination +
+          " · " +
+          formatUtcDate(flight.departureTime) +
+          ", " +
+          formatUtcTime(flight.departureTime),
+      })),
+    ];
+  }, [bookableFlights, t]);
+
+  const passengerOptions = useMemo(() => {
+    return [
+      { value: "", label: t("ticketForm.selectPassenger") },
+      ...passengers.map((passenger) => ({
+        value: passenger.passportNumber,
+        label:
+          passenger.lastName +
+          ", " +
+          passenger.firstName +
+          " · " +
+          passenger.passportNumber,
+      })),
+    ];
+  }, [passengers, t]);
+
+  const classOptions = useMemo(() => {
+    const options = [{ value: "", label: t("ticketForm.selectClass") }];
+
+    if (counts.economy > 0) {
+      options.push({
+        value: TicketClass.ECONOMY,
+        label: t("ticketForm.classOption", {
+          className: t("ticketClass.Economy"),
+          free: counts.economy,
+        }),
+      });
+    }
+
+    if (counts.business > 0) {
+      options.push({
+        value: TicketClass.BUSINESS,
+        label: t("ticketForm.classOption", {
+          className: t("ticketClass.Business"),
+          free: counts.business,
+        }),
+      });
+    }
+
+    if (counts.first > 0) {
+      options.push({
+        value: TicketClass.FIRST,
+        label: t("ticketForm.classOption", {
+          className: t("ticketClass.First"),
+          free: counts.first,
+        }),
+      });
+    }
+
+    return options;
+  }, [counts, t]);
+
+  const seatOptionsByClass = useMemo(() => {
+    const emptyOption = { value: "", label: t("ticketForm.selectSeat") };
+
+    const firstSeats = freeSeats.filter((seat) => seat.class === "first");
+    const businessSeats = freeSeats.filter((seat) => seat.class === "business");
+    const economySeats = freeSeats.filter((seat) => seat.class === "economy");
+
+    const firstOptions = firstSeats.map((seat) => ({
+      value: seat.seat,
+      label: seat.seat,
+    }));
+
+    const businessOptions = businessSeats.map((seat) => ({
+      value: seat.seat,
+      label: seat.seat,
+    }));
+
+    const economyOptions = economySeats.map((seat) => ({
+      value: seat.seat,
+      label: seat.seat,
+    }));
+
+    const options: Record<string, { value: string; label: string }[]> = {
+      first: [emptyOption, ...firstOptions],
+      business: [emptyOption, ...businessOptions],
+      economy: [emptyOption, ...economyOptions],
+    };
+
+    return options;
+  }, [freeSeats, t]);
+
+  const seatOptions = seatOptionsByClass[state.ticketClass.toLowerCase()];
+
+  const classPrice = prices[state.ticketClass.toLowerCase()];
+
+  const handleSubmit = () => {
+    const selectedFlight = flights.find(
+      (flight) => flight.flightNumber === state.flightNumber,
+    );
+    const selectedPassenger = passengers.find(
+      (passenger) => passenger.passportNumber === state.passportNumber,
+    );
+
+    if (selectedFlight && selectedPassenger) {
+      handleSave(
+        selectedFlight.id,
+        selectedPassenger.id,
+        state.seatNumber,
+        state.ticketClass,
+      );
+    } else {
+      toast.error(t("toast.flightOrPassengerNotFound"));
+    }
+  };
+
+  return (
+    <ModalOverlay>
+      <ModalBox>
+        <ModalHeader>
+          <HeaderTitle>{t("ticketForm.title")}</HeaderTitle>
+          <IconButton handleButton={handleClose}>
+            <LuX />
+          </IconButton>
+        </ModalHeader>
+        <ModalBody>
+          <FormRow>
+            <FormInput
+              name="flightNumber"
+              type={FormType.SELECT}
+              value={state.flightNumber}
+              id="TicketFlightInput"
+              label={t("ticketForm.flight")}
+              handleSelectChange={handleSelectChange}
+              options={flightOptions}
+            />
+          </FormRow>
+          <FormRow>
+            <FormInput
+              name="passportNumber"
+              type={FormType.SELECT}
+              value={state.passportNumber}
+              id="TicketPassengerInput"
+              label={t("ticketForm.passenger")}
+              handleSelectChange={handleSelectChange}
+              options={passengerOptions}
+            />
+          </FormRow>
+          <FormRow>
+            <FormInput
+              name="ticketClass"
+              type={FormType.SELECT}
+              value={state.ticketClass}
+              id="TicketClassInput"
+              label={t("ticketForm.class")}
+              handleSelectChange={handleSelectChange}
+              options={classOptions}
+              disabled={
+                state.flightNumber === "" || state.passportNumber === ""
+              }
+            />
+            <FormInput
+              name="seatNumber"
+              type={FormType.SELECT}
+              value={state.seatNumber}
+              id="SeatNumberInput"
+              label={t("ticketForm.seat")}
+              handleSelectChange={handleSelectChange}
+              disabled={state.ticketClass === ""}
+              options={seatOptions}
+            />
+          </FormRow>
+          <PriceBox>
+            <PriceInfo>
+              <PriceTitle>{t("ticketForm.ticketPrice")}</PriceTitle>
+              <PriceNote>{t("ticketForm.priceNote")}</PriceNote>
+            </PriceInfo>
+            <PriceValue>
+              {classPrice === undefined ? "-" : classPrice + " EUR"}
+            </PriceValue>
+          </PriceBox>
+        </ModalBody>
+        <ModalFooter>
+          <Button label={t("common.cancel")} handleButton={handleClose} />
+          <Button
+            label={t("ticketForm.title")}
+            variant={ButtonVariant.PRIMARY}
+            disabled={state.disabled}
+            handleButton={handleSubmit}
+          />
+        </ModalFooter>
+      </ModalBox>
+    </ModalOverlay>
+  );
+};

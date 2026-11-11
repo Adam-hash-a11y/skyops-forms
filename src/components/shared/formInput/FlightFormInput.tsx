@@ -1,147 +1,97 @@
-import { FormType } from "../../flightForm/types";
 import styled from "styled-components";
-import { FaCircleCheck, FaCircleExclamation } from "react-icons/fa6";
+import { FormInputError } from "../formInputError/FormInputError";
+import type { FormType } from "../flightFormModal/types";
+import { theme } from "../../../theme/theme";
 
 interface Props {
   name: string;
   type: FormType;
   value: string | number;
-  placeholder: string;
+  placeholder?: string;
   id: string;
-  handleChange: (
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => void;
-  handleBlur: (
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => void;
+  handleInputChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSelectChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleInputBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  handleSelectBlur?: (event: React.FocusEvent<HTMLSelectElement>) => void;
   label: string;
   error?: string;
   touched?: boolean;
+  options?: SelectOption[];
+  hint?: string;
+  disabled?: boolean;
 }
 
-function getVariant(touched?: boolean, error?: string) {
-  if (!touched) return "neutral";
-  if (error) return "error";
-  return "success";
+interface SelectOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
 }
 
 const Field = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 16px;
-`;
-
-const InputWrapper = styled.div`
-  position: relative;
-`;
-
-const baseInputStyles = `
-  width: 400px;
-  padding: 11px 38px 11px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-family: inherit;
-  color: #1e1b2e;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
-
-  &::placeholder {
-    color: #94a3b8;
-  }
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-const StyledInput = styled.input<{ $variant: string }>`
-  ${baseInputStyles}
-
-  border: 1px solid
-    ${({ $variant }) =>
-    $variant === "error"
-      ? "#dc2626"
-      : $variant === "success"
-        ? "#16a34a"
-        : "#e2e2ea"};
-
-  background: ${({ $variant }) =>
-    $variant === "error" ? "#fef2f2" : "#ffffff"};
-
-  &:focus {
-    border-color: ${({ $variant }) =>
-      $variant === "error"
-        ? "#dc2626"
-        : $variant === "success"
-          ? "#16a34a"
-          : "#6d5ef8"};
-  }
-`;
-
-const baseSelectStyles = `
-  width: 400px;
-  padding: 11px 38px 11px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-family: inherit;
-  color: #1e1b2e;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-const StyledSelect = styled.select<{ $variant: string }>`
-  ${baseSelectStyles}
-
-  border: 1px solid
-    ${({ $variant }) =>
-    $variant === "error"
-      ? "#dc2626"
-      : $variant === "success"
-        ? "#16a34a"
-        : "#e2e2ea"};
-
-  background: ${({ $variant }) =>
-    $variant === "error" ? "#fef2f2" : "#ffffff"};
-
-  &:focus {
-    border-color: ${({ $variant }) =>
-      $variant === "error"
-        ? "#dc2626"
-        : $variant === "success"
-          ? "#16a34a"
-          : "#6d5ef8"};
-  }
-`;
-
-const SuccessIcon = styled(FaCircleCheck)`
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #16a34a;
-  font-size: 16px;
-`;
-
-const ErrorIcon = styled(FaCircleExclamation)`
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #dc2626;
-  font-size: 16px;
+  gap: ${theme.spacing[6]};
+  width: 100%;
+  flex: 1;
 `;
 
 const StyledLabel = styled.label`
-  font-size: 13px;
-  font-weight: 600;
-  color: #1e1b2e;
-  margin-bottom: 6px;
+  font-size: ${theme.fontSizes.sm};
+  color: ${theme.colors.text.primary};
+  font-weight: ${theme.fontWeights.medium};
+`;
+
+const baseInputStyles = `
+  width: 100%;
+  height: 36px;
+  padding: 0 ${theme.spacing[12]};
+  border-radius: ${theme.borderRadius.sm};
+  color: ${theme.colors.text.primary};
+  font: inherit;
+  font-size: ${theme.fontSizes.md};
+  font-weight: ${theme.fontWeights.regular};
+
+  &:focus-visible {
+    outline: 2px solid ${theme.colors.primary.main};
+    outline-offset: 1px;
+  }
+`;
+
+const StyledInput = styled.input<{ $error: boolean }>`
+  ${baseInputStyles}
+  border: 1px solid
+    ${(p) =>
+    p.$error ? theme.colors.status.error.main : theme.colors.border.dashed};
+  background: ${(p) =>
+    p.$error ? theme.colors.background.error : theme.colors.background.paper};
+
+  &::placeholder {
+    color: ${theme.colors.text.secondary};
+    opacity: 0.8;
+  }
+  &:disabled {
+    background: ${theme.colors.background.main};
+    color: ${theme.colors.text.secondary};
+    cursor: not-allowed;
+  }
+`;
+
+const StyledSelect = styled.select`
+  ${baseInputStyles}
+  border: 1px solid ${theme.colors.border.dashed};
+  background: ${theme.colors.background.paper};
+
+  &:disabled {
+    background: ${theme.colors.background.main};
+    color: ${theme.colors.text.secondary};
+    cursor: not-allowed;
+  }
+`;
+
+const HintBox = styled.span`
+  color: ${theme.colors.text.secondary};
+  font-size: ${theme.fontSizes.xs};
+  font-weight: ${theme.fontWeights.regular};
 `;
 
 export const FormInput: React.FunctionComponent<Props> = ({
@@ -151,65 +101,60 @@ export const FormInput: React.FunctionComponent<Props> = ({
   placeholder,
   id,
   label,
-  handleChange,
-  handleBlur,
+  handleInputChange,
+  handleSelectChange,
+  handleInputBlur,
+  handleSelectBlur,
   error,
   touched,
+  options = [],
+  hint,
+  disabled,
 }) => {
-  const variant = getVariant(touched, error);
-
-  if (type === "select") {
-    return (
-      <Field>
-        <StyledLabel htmlFor={id}>{label}</StyledLabel>
-
-        <InputWrapper>
-          <StyledSelect
-            $variant={variant}
-            value={value}
-            name={name}
-            id={id}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          >
-            <option value="" disabled>
-              --Select a status--
-            </option>
-
-            <option value="Scheduled">Scheduled</option>
-            <option value="Delayed">Delayed</option>
-            <option value="Cancelled">Cancelled</option>
-            <option value="Landed">Landed</option>
-          </StyledSelect>
-
-          {variant === "success" && <SuccessIcon aria-hidden="true" />}
-
-          {variant === "error" && <ErrorIcon aria-hidden="true" />}
-        </InputWrapper>
-      </Field>
-    );
-  }
+  const hasError = Boolean(touched && error);
 
   return (
     <Field>
       <StyledLabel htmlFor={id}>{label}</StyledLabel>
 
-      <InputWrapper>
+      {type === "select" ? (
+        <StyledSelect
+          name={name}
+          value={value}
+          onChange={handleSelectChange}
+          onBlur={handleSelectBlur}
+          id={id}
+          disabled={disabled}
+        >
+          {options.map((option) => (
+            <option
+              key={option.value}
+              value={option.value}
+              disabled={option.disabled}
+            >
+              {option.label}
+            </option>
+          ))}
+        </StyledSelect>
+      ) : (
         <StyledInput
-          $variant={variant}
+          $error={hasError}
           name={name}
           type={type}
           value={value}
           placeholder={placeholder}
           id={id}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          onChange={handleInputChange}
+          onBlur={handleInputBlur}
+          disabled={disabled}
         />
+      )}
 
-        {variant === "success" && <SuccessIcon aria-hidden="true" />}
-
-        {variant === "error" && <ErrorIcon aria-hidden="true" />}
-      </InputWrapper>
+      {touched && error ? (
+        <FormInputError message={error} />
+      ) : (
+        hint && <HintBox>{hint}</HintBox>
+      )}
     </Field>
   );
 };

@@ -1,39 +1,49 @@
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import { FlightForm } from "../components/flightForm/FlightForm";
-import { PassengerForm } from "../components/passengerForm/PassengerForm";
 import { NotFound } from "../components/notFound/NotFound";
 import { RootLayout } from "../components/rootLayout/RootLayout";
-import { Home } from "../components/home/Home";
 import { FlightsList } from "../components/flighList/FlightList";
-import { createGlobalStyle } from "styled-components";
 import { PassengerList } from "../components/passengerList/PassengerList";
-import { DummyData } from "../components/dummyData/DummyData";
+import { GlobalStyle } from "./GlobalStyle";
+import { TicketList } from "../components/ticketList/TicketList";
+import { FlightDetailsPage } from "../components/flightDetailsPage/FlightDetailsPage";
+import { PassengerDetailsPage } from "../components/passengerDetailsPage/PassengerDetailsPage";
+import { loginToApi } from "../service/axios";
+import { StyledToastContainer } from "../components/shared/styledToastContainer/StyledToastContainer";
+import { toast } from "react-toastify";
 
-const GlobalStyle = createGlobalStyle`
-  * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    font-family: "Inter", system-ui, sans-serif;
-    background-color: #f4f3fb;
-    color: #1e1b2e;
-  }
-`;
 export const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    void loginToApi()
+      .then(() => setIsLoggedIn(true))
+      .catch((error) => toast.error((error as Error).message));
+  }, []);
+
+  if (!isLoggedIn) {
+    return (
+      <>
+        <StyledToastContainer position="top-right" autoClose={3200} />
+        <p>Connecting...</p>
+      </>
+    );
+  }
+
   return (
     <>
+      <StyledToastContainer position="top-right" autoClose={3200} />
       <GlobalStyle />
       <Routes>
         <Route element={<RootLayout />}>
-          <Route index element={<Home />} />
-          <Route path="flight" element={<FlightForm />} />
-          <Route path="dummydata" element={<DummyData />} />
-          <Route path="passenger" element={<PassengerForm />} />
           <Route path="flights" element={<FlightsList />} />
+          <Route path="flights/:flightNumber" element={<FlightDetailsPage />} />
           <Route path="passengers" element={<PassengerList />} />
+          <Route
+            path="passengers/:passportNumber"
+            element={<PassengerDetailsPage />}
+          />
+          <Route path="tickets" element={<TicketList />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

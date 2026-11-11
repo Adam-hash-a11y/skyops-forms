@@ -11,12 +11,19 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@date-fns/utc": "^2.1.1",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
     "axios": "^1.19.0",
+    "country-flag-icons": "^1.6.20",
+    "date-fns": "^4.4.0",
+    "i18next": "^27.1.1",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
+    "react-i18next": "^18.0.1",
     "react-icons": "^5.6.0",
     "react-router-dom": "^7.18.0",
-    "react-toastify": "^11.1.0",
+    "react-toastify": "^11.2.0",
     "styled-components": "^6.4.3",
     "validator": "^13.15.35"
   },

@@ -4,6 +4,7 @@ import {
   mapFlightToApi,
   mapFlightUpdateToApi,
 } from "../mappers/flightMapper";
+import type { FlightStatus } from "../types/flightTypes";
 
 export const getFlights = async () => {
   const response = await api.get("/flights");
@@ -14,6 +15,16 @@ export const deleteFlight = async (flightNumber: string) => {
   await api.delete(`/flights/${flightNumber}`);
 };
 
+export const getFreeSeats = async (flightNumber: string) => {
+  const response = await api.get(`/flights/${flightNumber}/seats`);
+  return response.data;
+};
+
+export const getFlight = async (flightNumber: string) => {
+  const response = await api.get(`/flights/${flightNumber}`);
+  return mapFlightFromApi(response.data);
+};
+
 export const createFlight = async (
   flightNumber: string,
   airline: string,
@@ -21,9 +32,10 @@ export const createFlight = async (
   destination: string,
   departureTime: string,
   arrivalTime: string,
-  status: string,
-  totalSeats: string,
-  bookedSeats: string,
+  status: FlightStatus,
+  firstSeats: string,
+  businessSeats: string,
+  economySeats: string,
 ) => {
   await api.post(
     `/flights`,
@@ -35,8 +47,9 @@ export const createFlight = async (
       departureTime,
       arrivalTime,
       status,
-      totalSeats,
-      bookedSeats,
+      firstSeats,
+      businessSeats,
+      economySeats,
     ),
   );
 };
@@ -48,9 +61,7 @@ export const updateFlight = async (
   destination: string,
   departureTime: string,
   arrivalTime: string,
-  status: string,
-  totalSeats: string,
-  bookedSeats: string,
+  status: FlightStatus,
 ) => {
   await api.patch(
     `/flights/${flightNumber}`,
@@ -61,8 +72,22 @@ export const updateFlight = async (
       departureTime,
       arrivalTime,
       status,
-      totalSeats,
-      bookedSeats,
     ),
   );
+};
+
+export const searchFlights = async (
+  status: string,
+  origin: string,
+  destination: string,
+  sortBy: string,
+) => {
+  const params: Record<string, string> = {};
+  if (status !== "") params.status = status.toLowerCase();
+  if (origin !== "") params.origin = origin.trim().toUpperCase();
+  if (destination !== "") params.destination = destination.trim().toUpperCase();
+  if (sortBy !== "") params.sortBy = sortBy;
+
+  const response = await api.get("/flights", { params });
+  return response.data.flights.map(mapFlightFromApi);
 };

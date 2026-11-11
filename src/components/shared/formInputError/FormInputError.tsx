@@ -1,16 +1,28 @@
-import React from "react";
 import styled from "styled-components";
+import { LuTriangleAlert } from "react-icons/lu";
+import { useTranslation } from "react-i18next";
+import { theme } from "../../../theme/theme";
 
 interface Props {
-  error: string;
+  message: string;
 }
 
-const ErrorText = styled.div`
-  color: #dc2626;
-  font-size: 13px;
-  margin: -4px 0 8px 0;
+const ErrorText = styled.span`
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing[6]};
+  font-size: ${theme.fontSizes.xs};
+  font-weight: ${theme.fontWeights.medium};
+  color: ${theme.colors.status.error.text};
 `;
 
-export const FormInputError: React.FunctionComponent<Props> = ({ error }) => {
-  return <ErrorText>{error}</ErrorText>;
+export const FormInputError: React.FunctionComponent<Props> = ({ message }) => {
+  const { t } = useTranslation();
+
+  return (
+    <ErrorText>
+      <LuTriangleAlert />
+      {t(message)}
+    </ErrorText>
+  );
 };

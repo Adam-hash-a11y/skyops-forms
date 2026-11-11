@@ -1,0 +1,238 @@
+{
+  "common": {
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "search": "Rechercher",
+    "resetFilters": "Réinitialiser les filtres",
+    "select": "Sélectionner...",
+    "deletedPassenger": "Passager supprimé",
+    "deletedFlight": "Vol supprimé",
+    "deletedFlightLower": "vol supprimé"
+  },
+  "app": {
+    "connecting": "Connexion en cours..."
+  },
+  "header": {
+    "flights": "Vols",
+    "passengers": "Passagers",
+    "tickets": "Billets",
+    "language": "Langue"
+  },
+  "entity": {
+    "flight": "vol",
+    "passenger": "passager"
+  },
+  "deleteModal": {
+    "cannotUndo": "Cette action est irréversible.",
+    "warning": "{{ticketCount}} billets font référence à ce {{entity}}. L'API ne les supprime pas ; ils seront affichés comme supprimés."
+  },
+  "ticketCancelModal": {
+    "title": "Annuler le billet",
+    "cancelSeat": "Annuler le siège",
+    "on": "sur",
+    "warning": "Le siège reste bloqué après l'annulation. Aucun siège n'est libéré.",
+    "keepTicket": "Garder le billet"
+  },
+  "flights": {
+    "title": "Vols",
+    "subtitle": "{{total}} vols · toutes les heures en UTC, format 24 h",
+    "new": "Nouveau vol",
+    "deleteTitle": "Supprimer le vol",
+    "deleteButton": "Supprimer le vol"
+  },
+  "passengers": {
+    "title": "Passagers",
+    "subtitle": "{{total}} passagers · enregistrés",
+    "new": "Nouveau passager",
+    "deleteTitle": "Supprimer le passager",
+    "deleteButton": "Supprimer le passager"
+  },
+  "tickets": {
+    "title": "Billets",
+    "subtitle": "{{total}} billets",
+    "book": "Réserver un billet"
+  },
+  "toast": {
+    "flightCreated": "Vol créé",
+    "flightUpdated": "Vol modifié",
+    "flightDeleted": "Vol supprimé",
+    "passengerCreated": "Passager créé",
+    "passengerUpdated": "Passager modifié",
+    "passengerDeleted": "Passager supprimé",
+    "ticketBooked": "Billet réservé",
+    "ticketCancelled": "Billet annulé",
+    "flightOrPassengerNotFound": "Vol ou passager introuvable",
+    "selectFlightOrPassenger": "Sélectionnez d'abord un vol ou un passager"
+  },
+  "flightCard": {
+    "seatsBooked": "Sièges réservés",
+    "viewDetails": "Voir les détails",
+    "book": "Réserver"
+  },
+  "flightFilters": {
+    "allStatuses": "Tous les statuts",
+    "defaultOrder": "Ordre par défaut",
+    "departureTime": "Heure de départ",
+    "status": "Statut",
+    "origin": "Origine",
+    "originPlaceholder": "Code IATA, ex. TUN",
+    "destination": "Destination",
+    "destinationPlaceholder": "Code IATA, ex. FRA",
+    "sortBy": "Trier par"
+  },
+  "status": {
+    "Scheduled": "Programmé",
+    "Delayed": "Retardé",
+    "Cancelled": "Annulé",
+    "Landed": "Atterri",
+    "Confirmed": "Confirmé"
+  },
+  "flightDetails": {
+    "backLink": "← Tous les vols",
+    "ticketsOnFlight": "Billets sur ce vol ({{ticketCount}})",
+    "noTicketsTitle": "Aucun billet",
+    "noTicketsText": "Réservez le premier billet pour ce vol."
+  },
+  "passengerDetails": {
+    "backLink": "← Tous les passagers",
+    "ticketsOfPassenger": "Billets de ce passager ({{ticketCount}})",
+    "noTicketsTitle": "Aucun billet",
+    "noTicketsText": "Ce passager n'a aucun billet."
+  },
+  "notFound": {
+    "title": "404 - Page introuvable",
+    "back": "Retour à l'accueil"
+  },
+  "passengerCard": {
+    "dateOfBirth": "Date de naissance",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "viewTickets": "Voir les billets",
+    "book": "Réserver"
+  },
+  "passengerFilters": {
+    "all": "Tous",
+    "defaultOrder": "Ordre par défaut",
+    "firstName": "Prénom",
+    "firstNamePlaceholder": "ex. Lena",
+    "lastName": "Nom",
+    "lastNamePlaceholder": "ex. Fischer",
+    "nationality": "Nationalité",
+    "sortBy": "Trier par"
+  },
+  "nationality": {
+    "TN": "Tunisienne",
+    "FR": "Française",
+    "DE": "Allemande",
+    "US": "Américaine",
+    "GB": "Britannique",
+    "IT": "Italienne",
+    "ES": "Espagnole",
+    "CA": "Canadienne",
+    "MA": "Marocaine"
+  },
+  "flightForm": {
+    "newTitle": "Nouveau vol",
+    "editTitle": "Modifier le vol",
+    "flightNumber": "Numéro de vol",
+    "flightNumberHint": "Doit commencer par SKYOPS-",
+    "airline": "Compagnie aérienne",
+    "airlinePlaceholder": "Compagnie aérienne",
+    "airlineHint": "Lettres uniquement, sans espaces, 5 min.",
+    "status": "Statut",
+    "statusPlaceholder": "Statut",
+    "origin": "Origine",
+    "originPlaceholder": "Origine",
+    "destination": "Destination",
+    "destinationPlaceholder": "Destination",
+    "iataHint": "Code IATA à 3 lettres",
+    "departure": "Départ (UTC)",
+    "departureTimePlaceholder": "Heure de départ",
+    "arrival": "Arrivée (UTC)",
+    "arrivalTimePlaceholder": "Heure d'arrivée",
+    "dateTimeHint": "AAAA-MM-JJ HH:mm, format 24 h",
+    "firstSeats": "Sièges première classe",
+    "firstSeatsPlaceholder": "Sièges première classe",
+    "businessSeats": "Sièges affaires",
+    "businessSeatsPlaceholder": "Sièges affaires",
+    "economySeats": "Sièges économique",
+    "economySeatsPlaceholder": "Sièges économique",
+    "saveChanges": "Enregistrer",
+    "create": "Créer le vol"
+  },
+  "passengerForm": {
+    "newTitle": "Nouveau passager",
+    "editTitle": "Modifier le passager",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "nameHint": "Lettres et espaces, 3 caractères min.",
+    "passportNumber": "Numéro de passeport",
+    "passportHint": "6 caractères min., unique",
+    "nationality": "Nationalité",
+    "nationalityHint": "Sélectionnez une nationalité",
+    "dateOfBirth": "Date de naissance",
+    "dateOfBirthHint": "AAAA-MM-JJ, dans le passé",
+    "email": "E-mail",
+    "emailHint": "Unique",
+    "phoneNumber": "Numéro de téléphone",
+    "phoneHint": "Numéro de mobile valide",
+    "saveChanges": "Enregistrer",
+    "create": "Créer le passager"
+  },
+  "ticketForm": {
+    "title": "Réserver un billet",
+    "flight": "Vol",
+    "passenger": "Passager",
+    "class": "Classe",
+    "seat": "Siège",
+    "selectFlight": "Sélectionnez un vol...",
+    "selectPassenger": "Sélectionnez un passager...",
+    "selectClass": "Sélectionnez une classe...",
+    "selectSeat": "Sélectionnez un siège...",
+    "classOption": "{{className}} ({{free}} libres)",
+    "ticketPrice": "Prix du billet",
+    "priceNote": "Défini par la classe du billet, prix fixe par niveau"
+  },
+  "ticketClass": {
+    "Economy": "Économique",
+    "Business": "Affaires",
+    "First": "Première"
+  },
+  "ticketFilters": {
+    "filterBy": "Filtrer par",
+    "allTickets": "Tous les billets",
+    "flight": "Vol",
+    "passenger": "Passager"
+  },
+  "ticketCard": {
+    "seat": "Siège",
+    "class": "Classe",
+    "price": "Prix",
+    "booked": "Réservé le"
+  },
+  "validation": {
+    "flight": {
+      "flightNumber": "Le numéro de vol doit commencer par SKYOPS-XXX",
+      "airline": "La compagnie aérienne doit contenir au moins 5 caractères",
+      "origin": "L'origine doit comporter 3 lettres majuscules",
+      "destination": "La destination doit comporter 3 lettres majuscules",
+      "status": "Le statut est obligatoire",
+      "departureTime": "L'heure de départ doit être une date valide",
+      "arrivalTime": "L'heure d'arrivée doit être une date valide",
+      "seatCount": "Le nombre de sièges doit être un nombre positif supérieur à 0",
+      "noSeats": "Un vol doit avoir au moins un siège",
+      "sameOriginDestination": "L'origine et la destination ne peuvent pas être identiques",
+      "departureAfterArrival": "L'heure de départ doit précéder l'heure d'arrivée"
+    },
+    "passenger": {
+      "firstName": "Le prénom doit contenir au moins 3 caractères",
+      "lastName": "Le nom doit contenir au moins 3 caractères",
+      "passportNumber": "Le numéro de passeport doit contenir au moins 6 caractères",
+      "nationality": "La nationalité est obligatoire",
+      "dateOfBirthInvalid": "La date de naissance doit être une date valide",
+      "dateOfBirthUnderage": "Vous devez avoir au moins 18 ans",
+      "email": "L'e-mail doit être valide",
+      "phoneNumber": "Le numéro de téléphone doit contenir au moins 8 caractères"
+    }
+  }
+}

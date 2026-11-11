@@ -1,26 +1,30 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
+import { theme } from "../../theme/theme";
 
 const Wrapper = styled.div`
   text-align: center;
-  padding: 60px 0;
+  padding: ${theme.spacing[60]} 0;
 `;
 
 const Title = styled.h2`
-  font-size: 24px;
-  margin-bottom: 12px;
+  font-size: ${theme.fontSizes.xxl};
+  margin-bottom: ${theme.spacing[12]};
 `;
 
 const StyledLink = styled(Link)`
-  color: #2563eb;
-  font-weight: 600;
+  color: ${theme.colors.accent};
+  font-weight: ${theme.fontWeights.semibold};
 `;
 
 export const NotFound = () => {
+  const { t } = useTranslation();
+
   return (
     <Wrapper>
-      <Title>404 - Page Not Found</Title>
-      <StyledLink to="/">Back to Home</StyledLink>
+      <Title>{t("notFound.title")}</Title>
+      <StyledLink to="/flights">{t("notFound.back")}</StyledLink>
     </Wrapper>
   );
 };
