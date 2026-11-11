@@ -1,5 +1,6 @@
 import type React from "react";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 import { FlightStatus } from "../../../types/flightTypes";
 import { TicketStatus } from "../../../types/ticketTypes";
 import { theme } from "../../../theme/theme";
@@ -43,12 +44,13 @@ const STATUS_BADGE_COLORS: Record<
 };
 
 export const StatusBadge: React.FunctionComponent<Props> = ({ status }) => {
+  const { t } = useTranslation();
   const { background, text } = STATUS_BADGE_COLORS[status];
 
   return (
     <Badge $background={background} $text={text}>
       <Dot $color={text} />
-      <Status>{status}</Status>
+      <Status>{t(`status.${status}`)}</Status>
     </Badge>
   );
 };
