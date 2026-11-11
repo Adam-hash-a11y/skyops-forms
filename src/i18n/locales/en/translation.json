@@ -1,0 +1,238 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "search": "Search",
+    "resetFilters": "Reset filters",
+    "select": "Select...",
+    "deletedPassenger": "Deleted passenger",
+    "deletedFlight": "Deleted flight",
+    "deletedFlightLower": "deleted flight"
+  },
+  "app": {
+    "connecting": "Connecting..."
+  },
+  "header": {
+    "flights": "Flights",
+    "passengers": "Passengers",
+    "tickets": "Tickets",
+    "language": "Language"
+  },
+  "entity": {
+    "flight": "flight",
+    "passenger": "passenger"
+  },
+  "deleteModal": {
+    "cannotUndo": "This cannot be undone.",
+    "warning": "{{ticketCount}} tickets reference this {{entity}}. The API does not remove them; they will show as deleted."
+  },
+  "ticketCancelModal": {
+    "title": "Cancel ticket",
+    "cancelSeat": "Cancel seat",
+    "on": "on",
+    "warning": "The seat stays blocked after cancelling. No seat is released.",
+    "keepTicket": "Keep ticket"
+  },
+  "flights": {
+    "title": "Flights",
+    "subtitle": "{{total}} flights · all times in UTC, 24-hour",
+    "new": "New flight",
+    "deleteTitle": "Delete flight",
+    "deleteButton": "Delete flight"
+  },
+  "passengers": {
+    "title": "Passengers",
+    "subtitle": "{{total}} passengers · registered",
+    "new": "New passenger",
+    "deleteTitle": "Delete passenger",
+    "deleteButton": "Delete passenger"
+  },
+  "tickets": {
+    "title": "Tickets",
+    "subtitle": "{{total}} tickets",
+    "book": "Book ticket"
+  },
+  "toast": {
+    "flightCreated": "Flight created",
+    "flightUpdated": "Flight updated",
+    "flightDeleted": "Flight deleted",
+    "passengerCreated": "Passenger created",
+    "passengerUpdated": "Passenger updated",
+    "passengerDeleted": "Passenger deleted",
+    "ticketBooked": "Ticket booked",
+    "ticketCancelled": "Ticket cancelled",
+    "flightOrPassengerNotFound": "Flight or passenger not found",
+    "selectFlightOrPassenger": "Select a flight or passenger first"
+  },
+  "flightCard": {
+    "seatsBooked": "Seats booked",
+    "viewDetails": "View details",
+    "book": "Book"
+  },
+  "flightFilters": {
+    "allStatuses": "All statuses",
+    "defaultOrder": "Default order",
+    "departureTime": "Departure time",
+    "status": "Status",
+    "origin": "Origin",
+    "originPlaceholder": "IATA code, e.g. TUN",
+    "destination": "Destination",
+    "destinationPlaceholder": "IATA code, e.g. FRA",
+    "sortBy": "Sort by"
+  },
+  "status": {
+    "Scheduled": "Scheduled",
+    "Delayed": "Delayed",
+    "Cancelled": "Cancelled",
+    "Landed": "Landed",
+    "Confirmed": "Confirmed"
+  },
+  "flightDetails": {
+    "backLink": "← All flights",
+    "ticketsOnFlight": "Tickets on this flight ({{ticketCount}})",
+    "noTicketsTitle": "No tickets yet",
+    "noTicketsText": "Book the first ticket for this flight."
+  },
+  "passengerDetails": {
+    "backLink": "← All passengers",
+    "ticketsOfPassenger": "Tickets of this passenger ({{ticketCount}})",
+    "noTicketsTitle": "No tickets yet",
+    "noTicketsText": "This passenger has no tickets."
+  },
+  "notFound": {
+    "title": "404 - Page Not Found",
+    "back": "Back to Home"
+  },
+  "passengerCard": {
+    "dateOfBirth": "Date of birth",
+    "email": "Email",
+    "phone": "Phone",
+    "viewTickets": "View tickets",
+    "book": "Book"
+  },
+  "passengerFilters": {
+    "all": "All",
+    "defaultOrder": "Default order",
+    "firstName": "First name",
+    "firstNamePlaceholder": "e.g. Lena",
+    "lastName": "Last name",
+    "lastNamePlaceholder": "e.g. Fischer",
+    "nationality": "Nationality",
+    "sortBy": "Sort by"
+  },
+  "nationality": {
+    "TN": "Tunisian",
+    "FR": "French",
+    "DE": "German",
+    "US": "American",
+    "GB": "British",
+    "IT": "Italian",
+    "ES": "Spanish",
+    "CA": "Canadian",
+    "MA": "Moroccan"
+  },
+  "flightForm": {
+    "newTitle": "New flight",
+    "editTitle": "Edit flight",
+    "flightNumber": "Flight number",
+    "flightNumberHint": "Must start with SKYOPS-",
+    "airline": "Airline",
+    "airlinePlaceholder": "Airline",
+    "airlineHint": "Letters only, no spaces, min. 5",
+    "status": "Status",
+    "statusPlaceholder": "Status",
+    "origin": "Origin",
+    "originPlaceholder": "Origin",
+    "destination": "Destination",
+    "destinationPlaceholder": "Destination",
+    "iataHint": "3-letter IATA code",
+    "departure": "Departure (UTC)",
+    "departureTimePlaceholder": "Departure Time",
+    "arrival": "Arrival (UTC)",
+    "arrivalTimePlaceholder": "Arrival Time",
+    "dateTimeHint": "YYYY-MM-DD HH:mm, 24-hour",
+    "firstSeats": "First seats",
+    "firstSeatsPlaceholder": "First Seats",
+    "businessSeats": "Business seats",
+    "businessSeatsPlaceholder": "Business Seats",
+    "economySeats": "Economy seats",
+    "economySeatsPlaceholder": "Economy Seats",
+    "saveChanges": "Save changes",
+    "create": "Create flight"
+  },
+  "passengerForm": {
+    "newTitle": "New passenger",
+    "editTitle": "Edit passenger",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "nameHint": "Letters and spaces, min. 3 characters",
+    "passportNumber": "Passport number",
+    "passportHint": "Min. 6 characters, unique",
+    "nationality": "Nationality",
+    "nationalityHint": "Select a nationality",
+    "dateOfBirth": "Date of birth",
+    "dateOfBirthHint": "YYYY-MM-DD, in the past",
+    "email": "Email",
+    "emailHint": "Unique",
+    "phoneNumber": "Phone number",
+    "phoneHint": "Valid mobile number",
+    "saveChanges": "Save changes",
+    "create": "Create passenger"
+  },
+  "ticketForm": {
+    "title": "Book ticket",
+    "flight": "Flight",
+    "passenger": "Passenger",
+    "class": "Class",
+    "seat": "Seat",
+    "selectFlight": "Select a flight...",
+    "selectPassenger": "Select a passenger...",
+    "selectClass": "Select a class...",
+    "selectSeat": "Select a seat...",
+    "classOption": "{{className}} ({{free}} free)",
+    "ticketPrice": "Ticket price",
+    "priceNote": "Set by ticket class, fixed per tier"
+  },
+  "ticketClass": {
+    "Economy": "Economy",
+    "Business": "Business",
+    "First": "First"
+  },
+  "ticketFilters": {
+    "filterBy": "Filter by",
+    "allTickets": "All tickets",
+    "flight": "Flight",
+    "passenger": "Passenger"
+  },
+  "ticketCard": {
+    "seat": "Seat",
+    "class": "Class",
+    "price": "Price",
+    "booked": "Booked"
+  },
+  "validation": {
+    "flight": {
+      "flightNumber": "Flight number must start with SKYOPS-XXX",
+      "airline": "Airline must be at least 5 characters",
+      "origin": "Origin must be 3 uppercase letters",
+      "destination": "Destination must be 3 uppercase letters",
+      "status": "Status is required",
+      "departureTime": "departure time must be a valid date",
+      "arrivalTime": "arrival time must be a valid date",
+      "seatCount": "Seats must be a postive number bigger than 0",
+      "noSeats": "A flight needs at least one seat",
+      "sameOriginDestination": "Origin and destination can't be the same",
+      "departureAfterArrival": "Departure time must be before arrival time"
+    },
+    "passenger": {
+      "firstName": "First name must be at least 3 characters",
+      "lastName": "Last name must be at least 3 characters",
+      "passportNumber": "Passport number must be at least 6 characters",
+      "nationality": "Nationality is required",
+      "dateOfBirthInvalid": "Date of birth must be a valid date",
+      "dateOfBirthUnderage": "You must be at least 18 years old",
+      "email": "Email must be valid",
+      "phoneNumber": "Phone number must be at least 8 characters"
+    }
+  }
+}
