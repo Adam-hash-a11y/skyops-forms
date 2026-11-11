@@ -10,7 +10,7 @@ import { FlightFilters } from "../flightFilters/FlightFilters";
 import { flightFilterReducer, initialState } from "./reducer";
 import { FlightFilterActionType } from "./action";
 import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
-import { createTicket } from "../../service/ticketService";
+import { createTicket, getTicketsByFlight } from "../../service/ticketService";
 import {
   createFlight,
   deleteFlight,
@@ -19,6 +19,7 @@ import {
   updateFlight,
 } from "../../service/flightService";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 import { EntityName } from "../../types/entityTypes";
 import { theme } from "../../theme/theme";
 
@@ -53,6 +54,7 @@ const Subtitle = styled.div`
   color: ${theme.colors.text.secondary};
 `;
 export const FlightsList = () => {
+  const { t } = useTranslation();
   const [state, dispatch] = useReducer(flightFilterReducer, initialState);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,6 +62,7 @@ export const FlightsList = () => {
   const [flightToEdit, setFlightToEdit] = useState("");
   const [flightToDelete, setFlightToDelete] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [ticketCount, setTicketCount] = useState(0);
   const [flightToBook, setFlightToBook] = useState("");
   const [isTicketModalOpen, setIsTicketModalOpen] = useState(false);
 
@@ -144,20 +147,34 @@ export const FlightsList = () => {
       const flights = await getFlights();
       setAllFlights(flights);
       handleCloseFlightModal();
-      toast.success(flightToEdit ? "Flight updated" : "Flight created");
+      toast.success(
+        flightToEdit ? t("toast.flightUpdated") : t("toast.flightCreated"),
+      );
     } catch (error) {
       toast.error((error as Error).message);
     }
   };
 
-  const handleOpenDeleteModal = (flightNumber: string) => {
+  const handleOpenDeleteModal = async (flightNumber: string) => {
     setFlightToDelete(flightNumber);
+    const flight = allFlights.find(
+      (item) => item.flightNumber === flightNumber,
+    );
+    try {
+      if (flight) {
+        const tickets = await getTicketsByFlight(flight.id);
+        setTicketCount(tickets.length);
+      }
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
     setIsDeleteModalOpen(true);
   };
 
   const handleCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
     setFlightToDelete("");
+    setTicketCount(0);
   };
 
   const handleDeleteFlight = async () => {
@@ -167,7 +184,7 @@ export const FlightsList = () => {
         prev.filter((flight) => flight.flightNumber !== flightToDelete),
       );
       handleCloseDeleteModal();
-      toast.success("Flight deleted");
+      toast.success(t("toast.flightDeleted"));
     } catch (error) {
       toast.error((error as Error).message);
     }
@@ -235,7 +252,7 @@ export const FlightsList = () => {
       const flights = await getFlights();
       setAllFlights(flights);
       handleCloseTicketModal();
-      toast.success("Ticket booked");
+      toast.success(t("toast.ticketBooked"));
     } catch (error) {
       toast.error((error as Error).message);
     }
@@ -245,13 +262,13 @@ export const FlightsList = () => {
     <>
       <PageHeader>
         <TitleBlock>
-          <Title>Flights</Title>
+          <Title>{t("flights.title")}</Title>
           <Subtitle>
-            {allFlights.length} flights · all times in UTC, 24-hour
+            {t("flights.subtitle", { total: allFlights.length })}
           </Subtitle>
         </TitleBlock>
         <Button
-          label="New flight"
+          label={t("flights.new")}
           variant={ButtonVariant.PRIMARY}
           handleButton={handleOpenFlightCreateModal}
         >
@@ -282,10 +299,11 @@ export const FlightsList = () => {
       {isDeleteModalOpen && (
         <DeleteModal
           handleClose={handleCloseDeleteModal}
-          title="Delete flight"
-          action="Delete"
+          title={t("flights.deleteTitle")}
+          action={t("common.delete")}
           itemName={flightToDelete}
-          deleteButtonLabel="Delete flight"
+          ticketCount={ticketCount}
+          deleteButtonLabel={t("flights.deleteButton")}
           handleDelete={handleDeleteFlight}
           entityName={EntityName.FLIGHT}
         />
