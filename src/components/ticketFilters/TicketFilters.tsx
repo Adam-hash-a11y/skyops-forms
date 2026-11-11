@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 import { FormInput } from "../shared/formInput/FlightFormInput";
 import { FormType } from "../shared/flightFormModal/types";
 import { Button, ButtonVariant } from "../shared/button/Button";
@@ -37,12 +38,6 @@ const FilterButtons = styled.div`
   margin-top: ${theme.spacing[20]};
 `;
 
-const filterByOptions = [
-  { value: "", label: "All tickets" },
-  { value: TicketFilterBy.FLIGHT, label: "Flight" },
-  { value: TicketFilterBy.PASSENGER, label: "Passenger" },
-];
-
 export const TicketFilters: React.FunctionComponent<Props> = ({
   filterBy,
   filterValue,
@@ -51,13 +46,21 @@ export const TicketFilters: React.FunctionComponent<Props> = ({
   handleReset,
   handleSearch,
 }) => {
+  const { t } = useTranslation();
+
+  const filterByOptions = [
+    { value: "", label: t("ticketFilters.allTickets") },
+    { value: TicketFilterBy.FLIGHT, label: t("ticketFilters.flight") },
+    { value: TicketFilterBy.PASSENGER, label: t("ticketFilters.passenger") },
+  ];
+
   return (
     <FilterBar>
       <FormInput
         id="FilterByFilter"
         name="filterBy"
         type={FormType.SELECT}
-        label="Filter by"
+        label={t("ticketFilters.filterBy")}
         value={filterBy}
         options={filterByOptions}
         handleSelectChange={handleSelectChange}
@@ -67,7 +70,11 @@ export const TicketFilters: React.FunctionComponent<Props> = ({
           id="FilterValueFilter"
           name="filterValue"
           type={FormType.SELECT}
-          label={filterBy === TicketFilterBy.FLIGHT ? "Flight" : "Passenger"}
+          label={
+            filterBy === TicketFilterBy.FLIGHT
+              ? t("ticketFilters.flight")
+              : t("ticketFilters.passenger")
+          }
           value={filterValue}
           options={filterValueOptions}
           handleSelectChange={handleSelectChange}
@@ -75,12 +82,12 @@ export const TicketFilters: React.FunctionComponent<Props> = ({
       )}
       <FilterButtons>
         <Button
-          label="Search"
+          label={t("common.search")}
           handleButton={handleSearch}
           variant={ButtonVariant.PRIMARY}
         />
         <Button
-          label="Reset filters"
+          label={t("common.resetFilters")}
           handleButton={handleReset}
           variant={ButtonVariant.FILTER}
         />
