@@ -3,6 +3,7 @@ import type { Passenger } from "../../../types/passengerTypes";
 import styled from "styled-components";
 import { IconButton } from "../iconButton/IconButton";
 import { LuX } from "react-icons/lu";
+import { useTranslation } from "react-i18next";
 import { FormType } from "../flightFormModal/types";
 import { FormInput } from "../formInput/FlightFormInput";
 import { Button, ButtonVariant } from "../button/Button";
@@ -88,24 +89,26 @@ const ModalFooter = styled.div`
   gap: ${theme.spacing[10]};
 `;
 
-const nationalityOptions = [
-  { value: "", label: "Select..." },
-  { value: "TN", label: "Tunisian" },
-  { value: "FR", label: "French" },
-  { value: "DE", label: "German" },
-  { value: "US", label: "American" },
-  { value: "GB", label: "British" },
-  { value: "IT", label: "Italian" },
-  { value: "ES", label: "Spanish" },
-  { value: "CA", label: "Canadian" },
-  { value: "MA", label: "Moroccan" },
-];
-
 export const PassengerFormModal: React.FunctionComponent<Props> = ({
   handleSave,
   handleClose,
   passenger,
 }) => {
+  const { t } = useTranslation();
+
+  const nationalityOptions = [
+    { value: "", label: t("passengerForm.select") },
+    { value: "TN", label: t("nationality.TN") },
+    { value: "FR", label: t("nationality.FR") },
+    { value: "DE", label: t("nationality.DE") },
+    { value: "US", label: t("nationality.US") },
+    { value: "GB", label: t("nationality.GB") },
+    { value: "IT", label: t("nationality.IT") },
+    { value: "ES", label: t("nationality.ES") },
+    { value: "CA", label: t("nationality.CA") },
+    { value: "MA", label: t("nationality.MA") },
+  ];
+
   const startState = passenger
     ? {
         ...initialState,
@@ -174,7 +177,9 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
       <ModalBox>
         <ModalHeader>
           <HeaderTitle>
-            {passenger ? "Edit passenger" : "New passenger"}
+            {passenger
+              ? t("passengerForm.editTitle")
+              : t("passengerForm.newTitle")}
           </HeaderTitle>
           <IconButton handleButton={handleClose}>
             <LuX />
@@ -188,10 +193,10 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               value={state.firstName}
               placeholder="Lena"
               id="FirstNameInput"
-              label="First name"
+              label={t("passengerForm.firstName")}
               handleInputChange={handleInputChange}
               handleInputBlur={handleInputBlur}
-              hint="Letters and spaces, min. 3 characters"
+              hint={t("passengerForm.nameHint")}
               error={state.errors.firstName}
               touched={state.touched.firstName}
             />
@@ -202,10 +207,10 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               value={state.lastName}
               placeholder="Banks"
               id="LastNameInput"
-              label="Last name"
+              label={t("passengerForm.lastName")}
               handleInputChange={handleInputChange}
               handleInputBlur={handleInputBlur}
-              hint="Letters and spaces, min. 3 characters"
+              hint={t("passengerForm.nameHint")}
               error={state.errors.lastName}
               touched={state.touched.lastName}
             />
@@ -217,10 +222,10 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               value={state.passportNumber}
               placeholder="DE7731902"
               id="PassportNumberInput"
-              label="Passport number"
+              label={t("passengerForm.passportNumber")}
               handleInputChange={handleInputChange}
               handleInputBlur={handleInputBlur}
-              hint="Min. 6 characters, unique"
+              hint={t("passengerForm.passportHint")}
               error={state.errors.passportNumber}
               touched={state.touched.passportNumber}
               disabled={Boolean(passenger)}
@@ -232,8 +237,8 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               id="NationalityInput"
               handleSelectChange={handleSelectChange}
               handleSelectBlur={handleSelectBlur}
-              label="Nationality"
-              hint="Select a nationality"
+              label={t("passengerForm.nationality")}
+              hint={t("passengerForm.nationalityHint")}
               error={state.errors.nationality}
               touched={state.touched.nationality}
               options={nationalityOptions}
@@ -246,10 +251,10 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               value={state.dateOfBirth}
               placeholder="1992-11-02"
               id="DateOfBirthInput"
-              label="Date of birth"
+              label={t("passengerForm.dateOfBirth")}
               handleInputChange={handleInputChange}
               handleInputBlur={handleInputBlur}
-              hint="YYYY-MM-DD, in the past"
+              hint={t("passengerForm.dateOfBirthHint")}
               error={state.errors.dateOfBirth}
               touched={state.touched.dateOfBirth}
             />
@@ -259,10 +264,10 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               value={state.email}
               placeholder="name@example.com"
               id="EmailInput"
-              label="Email"
+              label={t("passengerForm.email")}
               handleInputChange={handleInputChange}
               handleInputBlur={handleInputBlur}
-              hint="Unique"
+              hint={t("passengerForm.emailHint")}
               error={state.errors.email}
               touched={state.touched.email}
             />
@@ -274,19 +279,23 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
               value={state.phoneNumber}
               placeholder="+4915194300275"
               id="PhoneNumberInput"
-              label="Phone number"
+              label={t("passengerForm.phoneNumber")}
               handleInputChange={handleInputChange}
               handleInputBlur={handleInputBlur}
-              hint="Valid mobile number"
+              hint={t("passengerForm.phoneHint")}
               error={state.errors.phoneNumber}
               touched={state.touched.phoneNumber}
             />
           </FormRow>
         </ModalBody>
         <ModalFooter>
-          <Button label="Cancel" handleButton={handleClose} />
+          <Button label={t("common.cancel")} handleButton={handleClose} />
           <Button
-            label={passenger ? "Save changes" : "Create passenger"}
+            label={
+              passenger
+                ? t("passengerForm.saveChanges")
+                : t("passengerForm.create")
+            }
             variant={ButtonVariant.PRIMARY}
             disabled={state.disabled}
             handleButton={handleSubmit}
