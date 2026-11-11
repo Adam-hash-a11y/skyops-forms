@@ -5,6 +5,7 @@ import { LuArrowRight, LuPencil, LuTicket, LuTrash2 } from "react-icons/lu";
 import type { FunctionComponent } from "react";
 import { formatUtcDate } from "../../utils/formatDateTime";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { theme } from "../../theme/theme";
 
 interface Props {
@@ -164,6 +165,8 @@ export const PassengerCard: FunctionComponent<Props> = ({
   handleEdit,
   handleDelete,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <PassengerCardContainer>
       <CardHeader>
@@ -184,15 +187,15 @@ export const PassengerCard: FunctionComponent<Props> = ({
 
       <Details>
         <DetailRow>
-          <DetailLabel>Date of birth</DetailLabel>
+          <DetailLabel>{t("passengerCard.dateOfBirth")}</DetailLabel>
           <DetailValue>{formatUtcDate(dateOfBirth)}</DetailValue>
         </DetailRow>
         <DetailRow>
-          <DetailLabel>Email</DetailLabel>
+          <DetailLabel>{t("passengerCard.email")}</DetailLabel>
           <DetailValue>{email}</DetailValue>
         </DetailRow>
         <DetailRow>
-          <DetailLabel>Phone</DetailLabel>
+          <DetailLabel>{t("passengerCard.phone")}</DetailLabel>
           <DetailValue>{phoneNumber}</DetailValue>
         </DetailRow>
       </Details>
@@ -200,12 +203,12 @@ export const PassengerCard: FunctionComponent<Props> = ({
       <CardDivider></CardDivider>
       <CardFooter>
         <TicketsLink to={"/passengers/" + passportNumber}>
-          View tickets
+          {t("passengerCard.viewTickets")}
           <LuArrowRight />
         </TicketsLink>
         <FooterActions>
           <Button
-            label="Book"
+            label={t("passengerCard.book")}
             handleButton={handleBook}
             variant={ButtonVariant.OUTLINE_SMALL}
           >
