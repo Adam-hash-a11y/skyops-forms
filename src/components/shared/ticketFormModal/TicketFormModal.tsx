@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { IconButton } from "../iconButton/IconButton";
 import { LuX } from "react-icons/lu";
+import { useTranslation } from "react-i18next";
 import { Button, ButtonVariant } from "../button/Button";
 import { FormInput } from "../formInput/FlightFormInput";
 import { FormType } from "../flightFormModal/types";
@@ -131,6 +132,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
   flightNumber = "",
   passportNumber = "",
 }) => {
+  const { t } = useTranslation();
   const [state, dispatch] = useReducer(ticketReducer, {
     ...initialState,
     flightNumber: flightNumber,
@@ -211,7 +213,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
 
   const flightOptions = useMemo(() => {
     return [
-      { value: "", label: "Select a flight..." },
+      { value: "", label: t("ticketForm.selectFlight") },
       ...bookableFlights.map((flight) => ({
         value: flight.flightNumber,
         label:
@@ -226,11 +228,11 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
           formatUtcTime(flight.departureTime),
       })),
     ];
-  }, [bookableFlights]);
+  }, [bookableFlights, t]);
 
   const passengerOptions = useMemo(() => {
     return [
-      { value: "", label: "Select a passenger..." },
+      { value: "", label: t("ticketForm.selectPassenger") },
       ...passengers.map((passenger) => ({
         value: passenger.passportNumber,
         label:
@@ -241,37 +243,46 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
           passenger.passportNumber,
       })),
     ];
-  }, [passengers]);
+  }, [passengers, t]);
 
   const classOptions = useMemo(() => {
-    const options = [{ value: "", label: "Select a class..." }];
+    const options = [{ value: "", label: t("ticketForm.selectClass") }];
 
     if (counts.economy > 0) {
       options.push({
         value: TicketClass.ECONOMY,
-        label: "Economy (" + counts.economy + " free)",
+        label: t("ticketForm.classOption", {
+          className: t("ticketClass.Economy"),
+          free: counts.economy,
+        }),
       });
     }
 
     if (counts.business > 0) {
       options.push({
         value: TicketClass.BUSINESS,
-        label: "Business (" + counts.business + " free)",
+        label: t("ticketForm.classOption", {
+          className: t("ticketClass.Business"),
+          free: counts.business,
+        }),
       });
     }
 
     if (counts.first > 0) {
       options.push({
         value: TicketClass.FIRST,
-        label: "First (" + counts.first + " free)",
+        label: t("ticketForm.classOption", {
+          className: t("ticketClass.First"),
+          free: counts.first,
+        }),
       });
     }
 
     return options;
-  }, [counts]);
+  }, [counts, t]);
 
   const seatOptionsByClass = useMemo(() => {
-    const emptyOption = { value: "", label: "Select a seat..." };
+    const emptyOption = { value: "", label: t("ticketForm.selectSeat") };
 
     const firstSeats = freeSeats.filter((seat) => seat.class === "first");
     const businessSeats = freeSeats.filter((seat) => seat.class === "business");
@@ -299,7 +310,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
     };
 
     return options;
-  }, [freeSeats]);
+  }, [freeSeats, t]);
 
   const seatOptions = seatOptionsByClass[state.ticketClass.toLowerCase()];
 
@@ -321,7 +332,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
         state.ticketClass,
       );
     } else {
-      toast.error("Flight or passenger not found");
+      toast.error(t("toast.flightOrPassengerNotFound"));
     }
   };
 
@@ -329,7 +340,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
     <ModalOverlay>
       <ModalBox>
         <ModalHeader>
-          <HeaderTitle>Book ticket</HeaderTitle>
+          <HeaderTitle>{t("ticketForm.title")}</HeaderTitle>
           <IconButton handleButton={handleClose}>
             <LuX />
           </IconButton>
@@ -341,7 +352,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
               type={FormType.SELECT}
               value={state.flightNumber}
               id="TicketFlightInput"
-              label="Flight"
+              label={t("ticketForm.flight")}
               handleSelectChange={handleSelectChange}
               options={flightOptions}
             />
@@ -352,7 +363,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
               type={FormType.SELECT}
               value={state.passportNumber}
               id="TicketPassengerInput"
-              label="Passenger"
+              label={t("ticketForm.passenger")}
               handleSelectChange={handleSelectChange}
               options={passengerOptions}
             />
@@ -363,7 +374,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
               type={FormType.SELECT}
               value={state.ticketClass}
               id="TicketClassInput"
-              label="Class"
+              label={t("ticketForm.class")}
               handleSelectChange={handleSelectChange}
               options={classOptions}
               disabled={
@@ -375,7 +386,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
               type={FormType.SELECT}
               value={state.seatNumber}
               id="SeatNumberInput"
-              label="Seat"
+              label={t("ticketForm.seat")}
               handleSelectChange={handleSelectChange}
               disabled={state.ticketClass === ""}
               options={seatOptions}
@@ -383,8 +394,8 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
           </FormRow>
           <PriceBox>
             <PriceInfo>
-              <PriceTitle>Ticket price</PriceTitle>
-              <PriceNote>Set by ticket class, fixed per tier</PriceNote>
+              <PriceTitle>{t("ticketForm.ticketPrice")}</PriceTitle>
+              <PriceNote>{t("ticketForm.priceNote")}</PriceNote>
             </PriceInfo>
             <PriceValue>
               {classPrice === undefined ? "-" : classPrice + " EUR"}
@@ -392,9 +403,9 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
           </PriceBox>
         </ModalBody>
         <ModalFooter>
-          <Button label="Cancel" handleButton={handleClose} />
+          <Button label={t("common.cancel")} handleButton={handleClose} />
           <Button
-            label="Book ticket"
+            label={t("ticketForm.title")}
             variant={ButtonVariant.PRIMARY}
             disabled={state.disabled}
             handleButton={handleSubmit}
