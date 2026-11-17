@@ -88,6 +88,7 @@ export const FlightDetailsPage = () => {
   const [ticketToCancel, setTicketToCancel] = useState("");
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [flight, setFlight] = useState<Flight>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchFlight = async () => {
@@ -98,6 +99,8 @@ export const FlightDetailsPage = () => {
         }
       } catch (error) {
         toast.error((error as Error).message);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchFlight();
@@ -144,6 +147,8 @@ export const FlightDetailsPage = () => {
   const cancelledTicket = tickets.find(
     (ticket) => ticket.id === ticketToCancel,
   );
+
+  if (isLoading) return <p>{t("common.loading")}</p>;
 
   if (!flight) return <NotFound />;
 
