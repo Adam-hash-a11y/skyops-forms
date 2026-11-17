@@ -36,6 +36,7 @@ export const App = () => {
       <GlobalStyle />
       <Routes>
         <Route element={<RootLayout />}>
+          <Route path="/" element={<FlightsList />} />
           <Route path="flights" element={<FlightsList />} />
           <Route path="flights/:flightNumber" element={<FlightDetailsPage />} />
           <Route path="passengers" element={<PassengerList />} />
