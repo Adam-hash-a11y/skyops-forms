@@ -59,10 +59,22 @@ const Subtitle = styled.div`
   color: ${theme.colors.text.secondary};
 `;
 
+const EmptyState = styled.div`
+  display: flex;
+  justify-content: center;
+  background: ${theme.colors.background.paper};
+  border: 1px dashed ${theme.colors.border.dashed};
+  border-radius: ${theme.borderRadius.lg};
+  padding: ${theme.spacing[48]} ${theme.spacing[24]};
+  color: ${theme.colors.text.secondary};
+  font-size: ${theme.fontSizes.md};
+`;
+
 export const TicketList = () => {
   const { t } = useTranslation();
   const [state, dispatch] = useReducer(ticketFilterReducer, initialState);
   const [allTickets, setAllTickets] = useState<Ticket[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [flights, setFlights] = useState<Flight[]>([]);
   const [passengers, setPassengers] = useState<Passenger[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -76,6 +88,8 @@ export const TicketList = () => {
         setAllTickets(loadedTickets);
       } catch (error) {
         toast.error((error as Error).message);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchTickets();
@@ -268,6 +282,12 @@ export const TicketList = () => {
           handleClose={handleCloseCancelModal}
           handleCancel={handleCancelTicket}
         />
+      )}
+
+      {isLoading && <p>{t("common.loading")}</p>}
+
+      {!isLoading && allTickets.length === 0 && (
+        <EmptyState>{t("tickets.empty")}</EmptyState>
       )}
 
       <Container>
