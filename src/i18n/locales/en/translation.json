@@ -7,7 +7,8 @@
     "select": "Select...",
     "deletedPassenger": "Deleted passenger",
     "deletedFlight": "Deleted flight",
-    "deletedFlightLower": "deleted flight"
+    "deletedFlightLower": "deleted flight",
+    "loading": "Loading..."
   },
   "app": {
     "connecting": "Connecting..."
@@ -38,19 +39,22 @@
     "subtitle": "{{total}} flights · all times in UTC, 24-hour",
     "new": "New flight",
     "deleteTitle": "Delete flight",
-    "deleteButton": "Delete flight"
+    "deleteButton": "Delete flight",
+    "empty": "No flights found"
   },
   "passengers": {
     "title": "Passengers",
     "subtitle": "{{total}} passengers · registered",
     "new": "New passenger",
     "deleteTitle": "Delete passenger",
-    "deleteButton": "Delete passenger"
+    "deleteButton": "Delete passenger",
+    "empty": "No passengers found"
   },
   "tickets": {
     "title": "Tickets",
     "subtitle": "{{total}} tickets",
-    "book": "Book ticket"
+    "book": "Book ticket",
+    "empty": "No tickets found"
   },
   "toast": {
     "flightCreated": "Flight created",

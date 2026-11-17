@@ -53,12 +53,25 @@ const Subtitle = styled.div`
   font-weight: ${theme.fontWeights.regular};
   color: ${theme.colors.text.secondary};
 `;
+
+const EmptyState = styled.div`
+  display: flex;
+  justify-content: center;
+  background: ${theme.colors.background.paper};
+  border: 1px dashed ${theme.colors.border.dashed};
+  border-radius: ${theme.borderRadius.lg};
+  padding: ${theme.spacing[48]} ${theme.spacing[24]};
+  color: ${theme.colors.text.secondary};
+  font-size: ${theme.fontSizes.md};
+`;
+
 export const FlightsList = () => {
   const { t } = useTranslation();
   const [state, dispatch] = useReducer(flightFilterReducer, initialState);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [allFlights, setAllFlights] = useState<Flight[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [flightToEdit, setFlightToEdit] = useState("");
   const [flightToDelete, setFlightToDelete] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -73,6 +86,8 @@ export const FlightsList = () => {
         setAllFlights(flights);
       } catch (error) {
         toast.error((error as Error).message);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchFlights();
@@ -157,6 +172,7 @@ export const FlightsList = () => {
 
   const handleOpenDeleteModal = async (flightNumber: string) => {
     setFlightToDelete(flightNumber);
+    setIsDeleteModalOpen(true);
     const flight = allFlights.find(
       (item) => item.flightNumber === flightNumber,
     );
@@ -168,7 +184,6 @@ export const FlightsList = () => {
     } catch (error) {
       toast.error((error as Error).message);
     }
-    setIsDeleteModalOpen(true);
   };
 
   const handleCloseDeleteModal = () => {
@@ -315,6 +330,12 @@ export const FlightsList = () => {
           handleClose={handleCloseTicketModal}
           handleSave={handleSaveTicket}
         />
+      )}
+
+      {isLoading && <p>{t("common.loading")}</p>}
+
+      {!isLoading && allFlights.length === 0 && (
+        <EmptyState>{t("flights.empty")}</EmptyState>
       )}
 
       <Container>

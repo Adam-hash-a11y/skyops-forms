@@ -57,10 +57,22 @@ const Subtitle = styled.div`
   color: ${theme.colors.text.secondary};
 `;
 
+const EmptyState = styled.div`
+  display: flex;
+  justify-content: center;
+  background: ${theme.colors.background.paper};
+  border: 1px dashed ${theme.colors.border.dashed};
+  border-radius: ${theme.borderRadius.lg};
+  padding: ${theme.spacing[48]} ${theme.spacing[24]};
+  color: ${theme.colors.text.secondary};
+  font-size: ${theme.fontSizes.md};
+`;
+
 export const PassengerList = () => {
   const { t } = useTranslation();
   const [state, dispatch] = useReducer(passengerFilterReducer, initialState);
   const [allPassengers, setAllPassengers] = useState<Passenger[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [passengerToEdit, setPassengerToEdit] = useState("");
   const [passengerToDelete, setPassengerToDelete] = useState("");
@@ -76,6 +88,8 @@ export const PassengerList = () => {
         setAllPassengers(passengers);
       } catch (error) {
         toast.error((error as Error).message);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchPassengers();
@@ -171,6 +185,7 @@ export const PassengerList = () => {
 
   const handleOpenDeleteModal = async (passportNumber: string) => {
     setPassengerToDelete(passportNumber);
+    setIsDeleteModalOpen(true);
     const passenger = allPassengers.find(
       (item) => item.passportNumber === passportNumber,
     );
@@ -182,7 +197,6 @@ export const PassengerList = () => {
     } catch (error) {
       toast.error((error as Error).message);
     }
-    setIsDeleteModalOpen(true);
   };
 
   const handleCloseDeleteModal = () => {
@@ -318,6 +332,12 @@ export const PassengerList = () => {
           handleClose={handleCloseTicketModal}
           handleSave={handleSaveTicket}
         />
+      )}
+
+      {isLoading && <p>{t("common.loading")}</p>}
+
+      {!isLoading && allPassengers.length === 0 && (
+        <EmptyState>{t("passengers.empty")}</EmptyState>
       )}
 
       <Container>
