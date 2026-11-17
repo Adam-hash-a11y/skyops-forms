@@ -171,19 +171,29 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
   }, []);
 
   useEffect(() => {
+    let isLatestRequest = true;
+
     const fetchSeats = async () => {
       try {
         const data = await getFreeSeats(state.flightNumber);
-        setFreeSeats(data.seats);
-        setCounts(data.counts);
-        setPrices(data.prices);
+        if (isLatestRequest) {
+          setFreeSeats(data.seats);
+          setCounts(data.counts);
+          setPrices(data.prices);
+        }
       } catch (error) {
-        toast.error((error as Error).message);
+        if (isLatestRequest) {
+          toast.error((error as Error).message);
+        }
       }
     };
     if (state.flightNumber !== "") {
       fetchSeats();
     }
+
+    return () => {
+      isLatestRequest = false;
+    };
   }, [state.flightNumber]);
 
   const handleSelectChange = useCallback(
@@ -194,7 +204,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
         value: e.target.value,
       });
 
-      if (e.target.name === "flightNumber" && e.target.value === "") {
+      if (e.target.name === "flightNumber") {
         setFreeSeats([]);
         setCounts({ first: 0, business: 0, economy: 0 });
         setPrices({});
