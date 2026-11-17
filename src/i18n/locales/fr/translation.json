@@ -177,7 +177,8 @@
     "phoneNumber": "Numéro de téléphone",
     "phoneHint": "Numéro de mobile valide",
     "saveChanges": "Enregistrer",
-    "create": "Créer le passager"
+    "create": "Créer le passager",
+    "select": "Sélectionnez une nationalité"
   },
   "ticketForm": {
     "title": "Réserver un billet",
