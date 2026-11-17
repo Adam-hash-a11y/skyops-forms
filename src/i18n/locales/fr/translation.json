@@ -7,7 +7,8 @@
     "select": "Sélectionner...",
     "deletedPassenger": "Passager supprimé",
     "deletedFlight": "Vol supprimé",
-    "deletedFlightLower": "vol supprimé"
+    "deletedFlightLower": "vol supprimé",
+    "loading": "Chargement..."
   },
   "app": {
     "connecting": "Connexion en cours..."
@@ -38,19 +39,22 @@
     "subtitle": "{{total}} vols · toutes les heures en UTC, format 24 h",
     "new": "Nouveau vol",
     "deleteTitle": "Supprimer le vol",
-    "deleteButton": "Supprimer le vol"
+    "deleteButton": "Supprimer le vol",
+    "empty": "Aucun vol trouvé"
   },
   "passengers": {
     "title": "Passagers",
     "subtitle": "{{total}} passagers · enregistrés",
     "new": "Nouveau passager",
     "deleteTitle": "Supprimer le passager",
-    "deleteButton": "Supprimer le passager"
+    "deleteButton": "Supprimer le passager",
+    "empty": "Aucun passager trouvé"
   },
   "tickets": {
     "title": "Billets",
     "subtitle": "{{total}} billets",
-    "book": "Réserver un billet"
+    "book": "Réserver un billet",
+    "empty": "Aucun billet trouvé"
   },
   "toast": {
     "flightCreated": "Vol créé",
