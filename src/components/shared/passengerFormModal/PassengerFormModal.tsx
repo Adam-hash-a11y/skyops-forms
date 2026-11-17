@@ -10,6 +10,7 @@ import { Button, ButtonVariant } from "../button/Button";
 import { useCallback, useReducer } from "react";
 import { initialState, passengerReducer } from "./reducer";
 import { PassengerFormActionType } from "./action";
+import { NATIONALITY_CODES } from "../../../constants/nationalities";
 import { theme } from "../../../theme/theme";
 interface Props {
   handleSave: (
@@ -98,15 +99,10 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
 
   const nationalityOptions = [
     { value: "", label: t("passengerForm.select") },
-    { value: "TN", label: t("nationality.TN") },
-    { value: "FR", label: t("nationality.FR") },
-    { value: "DE", label: t("nationality.DE") },
-    { value: "US", label: t("nationality.US") },
-    { value: "GB", label: t("nationality.GB") },
-    { value: "IT", label: t("nationality.IT") },
-    { value: "ES", label: t("nationality.ES") },
-    { value: "CA", label: t("nationality.CA") },
-    { value: "MA", label: t("nationality.MA") },
+    ...NATIONALITY_CODES.map((code) => ({
+      value: code,
+      label: t("nationality." + code),
+    })),
   ];
 
   const startState = passenger
