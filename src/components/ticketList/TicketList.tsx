@@ -9,7 +9,8 @@ import {
 } from "../../types/ticketTypes";
 import type { Flight } from "../../types/flightTypes";
 import type { Passenger } from "../../types/passengerTypes";
-import { Button, ButtonVariant } from "../shared/button/Button";
+import { Button } from "../shared/button/Button";
+import { ButtonVariant } from "../shared/button/Button.types";
 import { LuPlus } from "react-icons/lu";
 import { TicketCard } from "../shared/ticketCard/TicketCard";
 import { TicketFormModal } from "../shared/ticketFormModal/TicketFormModal";
