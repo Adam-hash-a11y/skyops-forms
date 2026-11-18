@@ -171,9 +171,9 @@ export const PassengerFormModal: React.FunctionComponent<Props> = ({
 
   return (
     <ModalOverlay>
-      <ModalBox>
+      <ModalBox data-testid="passenger-form-modal">
         <ModalHeader>
-          <HeaderTitle>
+          <HeaderTitle data-testid="passenger-form-modal-title">
             {passenger
               ? t("passengerForm.editTitle")
               : t("passengerForm.newTitle")}

@@ -184,7 +184,7 @@ export const FlightFormModal: FunctionComponent<Props> = ({
     <ModalOverlay>
       <ModalBox>
         <ModalHeader>
-          <HeaderTitle>
+          <HeaderTitle data-testid="flight-form-modal-title">
             {flight ? t("flightForm.editTitle") : t("flightForm.newTitle")}
           </HeaderTitle>
           <IconButton handleButton={handleClose}>
