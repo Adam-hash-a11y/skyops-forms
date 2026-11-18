@@ -167,12 +167,14 @@ export const Header = () => {
         </Skyops>
         <LinkGroup>
           <StyledLink
+            data-testid="header-link-flights"
             to="/flights"
             className={location.pathname.startsWith("/flights") ? "active" : ""}
           >
             {t("header.flights")}
           </StyledLink>
           <StyledLink
+            data-testid="header-link-passengers"
             to="/passengers"
             className={
               location.pathname.startsWith("/passengers") ? "active" : ""
@@ -181,6 +183,7 @@ export const Header = () => {
             {t("header.passengers")}
           </StyledLink>
           <StyledLink
+            data-testid="header-link-tickets"
             to="/tickets"
             className={location.pathname.startsWith("/tickets") ? "active" : ""}
           >
@@ -190,6 +193,7 @@ export const Header = () => {
 
         <LanguageWrapper>
           <LanguageButton
+            data-testid="header-language-button"
             type="button"
             aria-label={t("header.language")}
             onClick={() => setIsOpen(!isOpen)}
@@ -199,9 +203,10 @@ export const Header = () => {
           </LanguageButton>
 
           {isOpen && (
-            <Dropdown>
+            <Dropdown data-testid="header-language-dropdown">
               {languages.map(({ code, Flag }) => (
                 <LanguageOption
+                  data-testid="header-language-option"
                   key={code}
                   type="button"
                   className={code === currentLanguage.code ? "active" : ""}
