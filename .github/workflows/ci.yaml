@@ -2,6 +2,9 @@ name: SkyOps
 
 on:
   push:
+    branches:
+      - main
+      - refactor/ui-redesign
   pull_request:
     branches:
       - main
