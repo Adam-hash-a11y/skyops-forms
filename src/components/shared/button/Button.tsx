@@ -148,7 +148,11 @@ export const Button: React.FunctionComponent<Props> = ({
   const StyledButton = variants[variant ?? ButtonVariant.SECONDARY];
 
   return (
-    <StyledButton disabled={disabled} onClick={handleButton}>
+    <StyledButton
+      data-testid="button"
+      disabled={disabled}
+      onClick={handleButton}
+    >
       {children}
       {label}
     </StyledButton>
