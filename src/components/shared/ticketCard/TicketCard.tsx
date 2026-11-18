@@ -160,7 +160,7 @@ export const TicketCard: React.FunctionComponent<Props> = ({
   const { t } = useTranslation();
 
   return (
-    <TicketCardContainer>
+    <TicketCardContainer data-testid="ticket-card">
       <Header>
         <HeaderInfo>
           {isDeletedPassenger ? (
