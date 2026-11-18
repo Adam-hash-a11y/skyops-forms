@@ -53,5 +53,9 @@ export const IconButton: React.FunctionComponent<Props> = ({
 }) => {
   const StyledIconButton = variants[variant ?? IconButtonVariant.DEFAULT];
 
-  return <StyledIconButton onClick={handleButton}>{children}</StyledIconButton>;
+  return (
+    <StyledIconButton data-testid="icon-button" onClick={handleButton}>
+      {children}
+    </StyledIconButton>
+  );
 };
