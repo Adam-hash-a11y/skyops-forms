@@ -50,7 +50,7 @@ export const StatusBadge: React.FunctionComponent<Props> = ({ status }) => {
   return (
     <Badge $background={background} $text={text}>
       <Dot $color={text} />
-      <Status>{t(`status.${status}`)}</Status>
+      <Status data-testid="status-badge-text">{t(`status.${status}`)}</Status>
     </Badge>
   );
 };
