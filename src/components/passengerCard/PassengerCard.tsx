@@ -1,6 +1,8 @@
 import styled from "styled-components";
-import { IconButton, IconButtonVariant } from "../shared/iconButton/IconButton";
-import { Button, ButtonVariant } from "../shared/button/Button";
+import { IconButton } from "../shared/iconButton/IconButton";
+import { IconButtonVariant } from "../shared/iconButton/IconButton.types";
+import { Button } from "../shared/button/Button";
+import { ButtonVariant } from "../shared/button/Button.types";
 import { LuArrowRight, LuPencil, LuTicket, LuTrash2 } from "react-icons/lu";
 import type { FunctionComponent } from "react";
 import { formatUtcDate } from "../../utils/formatDateTime";
