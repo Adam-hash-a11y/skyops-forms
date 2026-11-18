@@ -31,7 +31,10 @@ const ProgressBarTrack = styled.div`
 export const ProgressBar: FunctionComponent<Props> = ({ value, max }) => {
   return (
     <ProgressBarTrack>
-      <ProgressBarFill $widthPercent={(value / max) * 100} />
+      <ProgressBarFill
+        data-testid="progress-bar-fill"
+        $widthPercent={(value / max) * 100}
+      />
     </ProgressBarTrack>
   );
 };
