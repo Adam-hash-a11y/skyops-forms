@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { FlightStatus, type Flight } from "../../types/flightTypes";
 import { FligthCard } from "../flightCard/FlightCard";
-import { Button, ButtonVariant } from "../shared/button/Button";
+import { Button } from "../shared/button/Button";
+import { ButtonVariant } from "../shared/button/Button.types";
 import { LuPlus } from "react-icons/lu";
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { FlightFormModal } from "../shared/flightFormModal/FlightFormModal";
