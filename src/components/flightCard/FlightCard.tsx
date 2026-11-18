@@ -204,7 +204,7 @@ export const FligthCard: FunctionComponent<Props> = ({
   const { t } = useTranslation();
 
   return (
-    <FlightCard>
+    <FlightCard data-testid="flight-card">
       <CardHeader>
         <AirlineInfo>
           <Airline>{airline}</Airline>
@@ -248,7 +248,10 @@ export const FligthCard: FunctionComponent<Props> = ({
       </FlightSeats>
       <CardDivider></CardDivider>
       <CardFooter>
-        <FlightDetails to={"/flights/" + flightNumber}>
+        <FlightDetails
+          data-testid="flight-card-details-link"
+          to={"/flights/" + flightNumber}
+        >
           {t("flightCard.viewDetails")}
           <LuArrowRight />
         </FlightDetails>
