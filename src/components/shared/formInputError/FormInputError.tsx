@@ -20,7 +20,7 @@ export const FormInputError: React.FunctionComponent<Props> = ({ message }) => {
   const { t } = useTranslation();
 
   return (
-    <ErrorText>
+    <ErrorText data-testid="form-input-error">
       <LuTriangleAlert />
       {t(message)}
     </ErrorText>
