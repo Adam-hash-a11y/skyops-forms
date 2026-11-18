@@ -170,7 +170,7 @@ export const PassengerCard: FunctionComponent<Props> = ({
   const { t } = useTranslation();
 
   return (
-    <PassengerCardContainer>
+    <PassengerCardContainer data-testid="passenger-card">
       <CardHeader>
         <PassengerInfo>
           <Avatar>
@@ -204,7 +204,10 @@ export const PassengerCard: FunctionComponent<Props> = ({
 
       <CardDivider></CardDivider>
       <CardFooter>
-        <TicketsLink to={"/passengers/" + passportNumber}>
+        <TicketsLink
+          data-testid="passenger-card-tickets-link"
+          to={"/passengers/" + passportNumber}
+        >
           {t("passengerCard.viewTickets")}
           <LuArrowRight />
         </TicketsLink>
