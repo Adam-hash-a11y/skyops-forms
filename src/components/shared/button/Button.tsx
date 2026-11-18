@@ -1,16 +1,7 @@
 import type { ReactNode } from "react";
 import styled, { css } from "styled-components";
 import { theme } from "../../../theme/theme";
-
-export enum ButtonVariant {
-  PRIMARY = "primary",
-  SECONDARY = "secondary",
-  DANGER = "danger",
-  DANGER_OUTLINE = "dangerOutline",
-  DANGER_OUTLINE_SMALL = "dangerOutlineSmall",
-  OUTLINE_SMALL = "outlineSmall",
-  FILTER = "filter",
-}
+import { ButtonVariant } from "./Button.types";
 
 interface Props {
   label: string;
