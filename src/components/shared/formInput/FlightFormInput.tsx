@@ -6,7 +6,7 @@ import { theme } from "../../../theme/theme";
 interface Props {
   name: string;
   type: FormType;
-  value: string | number;
+  value?: string | number;
   placeholder?: string;
   id: string;
   handleInputChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -114,11 +114,14 @@ export const FormInput: React.FunctionComponent<Props> = ({
   const hasError = Boolean(touched && error);
 
   return (
-    <Field>
-      <StyledLabel htmlFor={id}>{label}</StyledLabel>
+    <Field data-testid="form-input">
+      <StyledLabel data-testid="form-input-label" htmlFor={id}>
+        {label}
+      </StyledLabel>
 
       {type === "select" ? (
         <StyledSelect
+          data-testid="form-input-select"
           name={name}
           value={value}
           onChange={handleSelectChange}
@@ -138,6 +141,7 @@ export const FormInput: React.FunctionComponent<Props> = ({
         </StyledSelect>
       ) : (
         <StyledInput
+          data-testid="form-input-input"
           $error={hasError}
           name={name}
           type={type}
@@ -153,7 +157,7 @@ export const FormInput: React.FunctionComponent<Props> = ({
       {touched && error ? (
         <FormInputError message={error} />
       ) : (
-        hint && <HintBox>{hint}</HintBox>
+        hint && <HintBox data-testid="form-input-hint">{hint}</HintBox>
       )}
     </Field>
   );
