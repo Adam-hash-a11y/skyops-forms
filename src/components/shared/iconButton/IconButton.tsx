@@ -1,11 +1,7 @@
 import type { ReactNode } from "react";
 import styled, { css } from "styled-components";
 import { theme } from "../../../theme/theme";
-
-export enum IconButtonVariant {
-  DEFAULT = "default",
-  DANGER = "danger",
-}
+import { IconButtonVariant } from "./IconButton.types";
 
 interface Props {
   handleButton?: () => void;

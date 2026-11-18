@@ -1,5 +1,6 @@
 import type React from "react";
-import { Button, ButtonVariant } from "../button/Button";
+import { Button } from "../button/Button";
+import { ButtonVariant } from "../button/Button.types";
 import styled from "styled-components";
 import { IconButton } from "../iconButton/IconButton";
 import { LuX } from "react-icons/lu";

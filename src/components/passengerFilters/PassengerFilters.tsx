@@ -2,7 +2,8 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { FormInput } from "../shared/formInput/FlightFormInput";
 import { FormType } from "../shared/flightFormModal/types";
-import { Button, ButtonVariant } from "../shared/button/Button";
+import { Button } from "../shared/button/Button";
+import { ButtonVariant } from "../shared/button/Button.types";
 import { NATIONALITY_CODES } from "../../constants/nationalities";
 import { theme } from "../../theme/theme";
 
