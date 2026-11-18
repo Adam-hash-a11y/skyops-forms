@@ -23,8 +23,10 @@ export const NotFound = () => {
 
   return (
     <Wrapper>
-      <Title>{t("notFound.title")}</Title>
-      <StyledLink to="/flights">{t("notFound.back")}</StyledLink>
+      <Title data-testid="not-found-title">{t("notFound.title")}</Title>
+      <StyledLink data-testid="not-found-link" to="/flights">
+        {t("notFound.back")}
+      </StyledLink>
     </Wrapper>
   );
 };
