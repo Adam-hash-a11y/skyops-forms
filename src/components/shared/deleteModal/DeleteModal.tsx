@@ -87,7 +87,7 @@ export const DeleteModal: React.FunctionComponent<Props> = ({
   const { t } = useTranslation();
 
   return (
-    <ModalOverlay>
+    <ModalOverlay data-testid="delete-modal">
       <ModalBox>
         <ModalHeader>
           <HeaderTitle>{title}</HeaderTitle>

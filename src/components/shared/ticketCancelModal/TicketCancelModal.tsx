@@ -79,7 +79,7 @@ export const TicketCancelModal: React.FunctionComponent<Props> = ({
   const { t } = useTranslation();
 
   return (
-    <ModalOverlay>
+    <ModalOverlay data-testid="ticket-cancel-modal">
       <ModalBox>
         <ModalHeader>
           <HeaderTitle>{t("ticketCancelModal.title")}</HeaderTitle>
