@@ -408,7 +408,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
               <PriceTitle>{t("ticketForm.ticketPrice")}</PriceTitle>
               <PriceNote>{t("ticketForm.priceNote")}</PriceNote>
             </PriceInfo>
-            <PriceValue>
+            <PriceValue data-testid="ticket-form-modal-price">
               {classPrice === undefined ? "-" : classPrice + " EUR"}
             </PriceValue>
           </PriceBox>
