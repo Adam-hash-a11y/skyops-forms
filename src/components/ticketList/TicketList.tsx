@@ -243,7 +243,7 @@ export const TicketList = () => {
       <PageHeader>
         <TitleBlock>
           <Title>{t("tickets.title")}</Title>
-          <Subtitle>
+          <Subtitle data-testid="tickets-subtitle">
             {t("tickets.subtitle", { total: allTickets.length })}
           </Subtitle>
         </TitleBlock>
@@ -285,10 +285,12 @@ export const TicketList = () => {
         />
       )}
 
-      {isLoading && <p>{t("common.loading")}</p>}
+      {isLoading && <p data-testid="tickets-loading">{t("common.loading")}</p>}
 
       {!isLoading && allTickets.length === 0 && (
-        <EmptyState>{t("tickets.empty")}</EmptyState>
+        <EmptyState data-testid="tickets-empty">
+          {t("tickets.empty")}
+        </EmptyState>
       )}
 
       <Container>

@@ -25,7 +25,7 @@ export const App = () => {
     return (
       <>
         <StyledToastContainer position="top-right" autoClose={3200} />
-        <p>Connecting...</p>
+        <p data-testid="app-connecting">Connecting...</p>
       </>
     );
   }

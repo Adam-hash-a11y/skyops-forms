@@ -282,7 +282,7 @@ export const PassengerList = () => {
       <PageHeader>
         <TitleBlock>
           <Title>{t("passengers.title")}</Title>
-          <Subtitle>
+          <Subtitle data-testid="passengers-subtitle">
             {t("passengers.subtitle", { total: allPassengers.length })}
           </Subtitle>
         </TitleBlock>
@@ -335,10 +335,14 @@ export const PassengerList = () => {
         />
       )}
 
-      {isLoading && <p>{t("common.loading")}</p>}
+      {isLoading && (
+        <p data-testid="passengers-loading">{t("common.loading")}</p>
+      )}
 
       {!isLoading && allPassengers.length === 0 && (
-        <EmptyState>{t("passengers.empty")}</EmptyState>
+        <EmptyState data-testid="passengers-empty">
+          {t("passengers.empty")}
+        </EmptyState>
       )}
 
       <Container>

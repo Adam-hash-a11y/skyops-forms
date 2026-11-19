@@ -145,6 +145,56 @@ describe("Header", () => {
       );
     });
 
+    it("should switch the navigation texts to German when the user chooses DE and back to English when the user chooses EN", async () => {
+      //ARRANGE
+      const user = userEvent.setup();
+      render(
+        <MemoryRouter initialEntries={["/flights"]}>
+          <Header />
+        </MemoryRouter>,
+      );
+      await user.click(screen.getByTestId("header-language-button"));
+
+      //ACT
+      await user.click(screen.getAllByTestId("header-language-option")[2]);
+
+      //ASSERT
+      await waitFor(() => {
+        expect(screen.getByTestId("header-link-flights")).toHaveTextContent(
+          "Flüge",
+        );
+      });
+      expect(screen.getByTestId("header-link-passengers")).toHaveTextContent(
+        "Passagiere",
+      );
+      expect(screen.getByTestId("header-link-tickets")).toHaveTextContent(
+        "Tickets",
+      );
+      expect(screen.getByTestId("header-language-button")).toHaveTextContent(
+        "DE",
+      );
+
+      //ACT
+      await user.click(screen.getByTestId("header-language-button"));
+      await user.click(screen.getAllByTestId("header-language-option")[0]);
+
+      //ASSERT
+      await waitFor(() => {
+        expect(screen.getByTestId("header-link-flights")).toHaveTextContent(
+          "Flights",
+        );
+      });
+      expect(screen.getByTestId("header-link-passengers")).toHaveTextContent(
+        "Passengers",
+      );
+      expect(screen.getByTestId("header-link-tickets")).toHaveTextContent(
+        "Tickets",
+      );
+      expect(screen.getByTestId("header-language-button")).toHaveTextContent(
+        "EN",
+      );
+    });
+
     it("should close the dropdown after the user chooses a language", async () => {
       //ARRANGE
       const user = userEvent.setup();
