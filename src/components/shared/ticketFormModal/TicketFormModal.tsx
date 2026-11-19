@@ -348,7 +348,7 @@ export const TicketFormModal: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <ModalOverlay>
+    <ModalOverlay data-testid="ticket-form-modal">
       <ModalBox>
         <ModalHeader>
           <HeaderTitle>{t("ticketForm.title")}</HeaderTitle>
