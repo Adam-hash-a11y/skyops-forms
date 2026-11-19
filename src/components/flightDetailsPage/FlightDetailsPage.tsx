@@ -148,23 +148,28 @@ export const FlightDetailsPage = () => {
     (ticket) => ticket.id === ticketToCancel,
   );
 
-  if (isLoading) return <p>{t("common.loading")}</p>;
+  if (isLoading)
+    return <p data-testid="flight-details-loading">{t("common.loading")}</p>;
 
   if (!flight) return <NotFound />;
 
   return (
     <>
-      <BackLink to="/flights">{t("flightDetails.backLink")}</BackLink>
+      <BackLink data-testid="flight-details-back-link" to="/flights">
+        {t("flightDetails.backLink")}
+      </BackLink>
       <PageHeader>
         <TitleBlock>
-          <Title>{flight.flightNumber}</Title>
-          <Subtitle>
+          <Title data-testid="flight-details-title">
+            {flight.flightNumber}
+          </Title>
+          <Subtitle data-testid="flight-details-subtitle">
             {flight.airline} · {flight.origin} → {flight.destination}
           </Subtitle>
         </TitleBlock>
       </PageHeader>
 
-      <SectionHeading>
+      <SectionHeading data-testid="flight-details-tickets-heading">
         {t("flightDetails.ticketsOnFlight", { ticketCount: tickets.length })}
       </SectionHeading>
 
@@ -178,7 +183,7 @@ export const FlightDetailsPage = () => {
       )}
 
       {tickets.length === 0 && (
-        <EmptyTickets>
+        <EmptyTickets data-testid="flight-details-empty">
           <EmptyTitle>{t("flightDetails.noTicketsTitle")}</EmptyTitle>
           <EmptyText>{t("flightDetails.noTicketsText")}</EmptyText>
         </EmptyTickets>
