@@ -279,7 +279,7 @@ export const FlightsList = () => {
       <PageHeader>
         <TitleBlock>
           <Title>{t("flights.title")}</Title>
-          <Subtitle>
+          <Subtitle data-testid="flights-subtitle">
             {t("flights.subtitle", { total: allFlights.length })}
           </Subtitle>
         </TitleBlock>
@@ -333,10 +333,12 @@ export const FlightsList = () => {
         />
       )}
 
-      {isLoading && <p>{t("common.loading")}</p>}
+      {isLoading && <p data-testid="flights-loading">{t("common.loading")}</p>}
 
       {!isLoading && allFlights.length === 0 && (
-        <EmptyState>{t("flights.empty")}</EmptyState>
+        <EmptyState data-testid="flights-empty">
+          {t("flights.empty")}
+        </EmptyState>
       )}
 
       <Container>
