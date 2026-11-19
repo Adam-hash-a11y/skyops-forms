@@ -181,7 +181,7 @@ export const FlightFormModal: FunctionComponent<Props> = ({
   };
 
   return (
-    <ModalOverlay>
+    <ModalOverlay data-testid="flight-form-modal">
       <ModalBox>
         <ModalHeader>
           <HeaderTitle data-testid="flight-form-modal-title">
