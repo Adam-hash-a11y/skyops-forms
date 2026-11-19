@@ -151,23 +151,28 @@ export const PassengerDetailsPage = () => {
     (ticket) => ticket.id === ticketToCancel,
   );
 
-  if (isLoading) return <p>{t("common.loading")}</p>;
+  if (isLoading)
+    return <p data-testid="passenger-details-loading">{t("common.loading")}</p>;
 
   if (!passenger) return <NotFound />;
 
   return (
     <>
-      <BackLink to="/passengers">{t("passengerDetails.backLink")}</BackLink>
+      <BackLink data-testid="passenger-details-back-link" to="/passengers">
+        {t("passengerDetails.backLink")}
+      </BackLink>
       <PageHeader>
         <TitleBlock>
-          <Title>{passenger.firstName + " " + passenger.lastName}</Title>
-          <Subtitle>
+          <Title data-testid="passenger-details-title">
+            {passenger.firstName + " " + passenger.lastName}
+          </Title>
+          <Subtitle data-testid="passenger-details-subtitle">
             {passenger.passportNumber} · {passenger.nationality}
           </Subtitle>
         </TitleBlock>
       </PageHeader>
 
-      <SectionHeading>
+      <SectionHeading data-testid="passenger-details-tickets-heading">
         {t("passengerDetails.ticketsOfPassenger", {
           ticketCount: tickets.length,
         })}
@@ -187,7 +192,7 @@ export const PassengerDetailsPage = () => {
       )}
 
       {tickets.length === 0 && (
-        <EmptyTickets>
+        <EmptyTickets data-testid="passenger-details-empty">
           <EmptyTitle>{t("passengerDetails.noTicketsTitle")}</EmptyTitle>
           <EmptyText>{t("passengerDetails.noTicketsText")}</EmptyText>
         </EmptyTickets>
